@@ -22,6 +22,10 @@ Fast online store for motorcycle accessories. Next.js, TypeScript, Tailwind CSS,
    ```
    Store: http://localhost:3000. Admin: http://localhost:3000/admin.
 
+## Demo mode
+
+Leave `NEXT_PUBLIC_SUPABASE_URL` empty and `npm run dev` runs the whole store without Supabase. Sign in at `/admin/login` with `admin@demo.local` / `demo1234`, or set your own login with `DEMO_ADMIN_EMAIL` and `DEMO_ADMIN_PASSWORD` in `.env.local`. Data and photos are kept in `.demo-data/`; delete that folder to start over. Demo mode never runs in `npm run build` or `npm start`.
+
 ## Before going live
 
 - Set your phone number and Facebook and Instagram links in `src/lib/site.ts`.

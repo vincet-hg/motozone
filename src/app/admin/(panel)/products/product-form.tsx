@@ -3,6 +3,7 @@
 import { createBrowserClient } from "@supabase/ssr";
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { isDemo } from "@/lib/demo";
 import { imageUrl } from "@/lib/format";
 import { keepValues } from "@/lib/keep-values";
 import type { Category, Product } from "@/lib/types";
@@ -46,16 +47,21 @@ function ImageManager({ initial }: { initial: string[] }) {
     if (files.length === 0) return;
     setUploading(true);
     setError("");
-    const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+    const storage = isDemo ? null : createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!).storage;
 
     for (const file of files) {
       try {
         const { blob, extension, type } = await prepareImage(file);
         const path = `${crypto.randomUUID()}.${extension}`;
-        const { error: uploadError } = await supabase.storage
-          .from("product-images")
-          .upload(path, blob, { contentType: type, cacheControl: "31536000" });
-        if (uploadError) throw uploadError;
+        if (storage) {
+          const { error: uploadError } = await storage
+            .from("product-images")
+            .upload(path, blob, { contentType: type, cacheControl: "31536000" });
+          if (uploadError) throw uploadError;
+        } else {
+          const response = await fetch(imageUrl(path), { method: "PUT", body: blob, headers: { "Content-Type": type } });
+          if (!response.ok) throw new Error("upload failed");
+        }
         setImages((current) => [...current, path]);
       } catch {
         setError(`ფოტო ვერ აიტვირთა: ${file.name}`);

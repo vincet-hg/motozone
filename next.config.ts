@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const supabase = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co");
+const supabase = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co");
 const isLocalSupabase = ["localhost", "127.0.0.1"].includes(supabase.hostname);
 
 const config: NextConfig = {

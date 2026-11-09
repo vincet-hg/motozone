@@ -1,8 +1,11 @@
 "use server";
 
 import { updateTag } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CATALOG_TAG } from "@/lib/catalog";
+import { DEMO_COOKIE, DEMO_SESSION, isDemo } from "@/lib/demo";
+import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/demo-data";
 import { slugify } from "@/lib/format";
 import { createAdminClient, requireAdmin } from "@/lib/supabase-server";
 import type { Spec } from "@/lib/types";
@@ -10,6 +13,8 @@ import type { Spec } from "@/lib/types";
 export type FormState = { error?: string };
 
 const BUCKET = "product-images";
+// Seeded demo photos are generated as PNG.
+const IMAGE_NAME = isDemo ? /^[\w-]+\.(webp|jpg|png)$/ : /^[\w-]+\.(webp|jpg)$/;
 
 function text(form: FormData, key: string) {
   return String(form.get(key) ?? "").trim();
@@ -44,7 +49,7 @@ function parseSpecs(raw: string): Spec[] {
 function parseImages(raw: string): string[] {
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((p) => typeof p === "string" && /^[\w-]+\.(webp|jpg)$/.test(p)) : [];
+    return Array.isArray(parsed) ? parsed.filter((p) => typeof p === "string" && IMAGE_NAME.test(p)) : [];
   } catch {
     return [];
   }
@@ -59,6 +64,14 @@ async function uniqueSlug(supabase: Admin, table: "products" | "categories", nam
 }
 
 export async function login(_previous: FormState, form: FormData): Promise<FormState> {
+  if (isDemo) {
+    if (text(form, "email") !== DEMO_EMAIL || form.get("password") !== DEMO_PASSWORD) {
+      return { error: "ელფოსტა ან პაროლი არასწორია." };
+    }
+    (await cookies()).set(DEMO_COOKIE, DEMO_SESSION, { httpOnly: true, sameSite: "lax", path: "/" });
+    redirect("/admin/orders");
+  }
+
   const supabase = await createAdminClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email: text(form, "email"),
@@ -75,6 +88,11 @@ export async function login(_previous: FormState, form: FormData): Promise<FormS
 }
 
 export async function logout() {
+  if (isDemo) {
+    (await cookies()).delete(DEMO_COOKIE);
+    redirect("/admin/login");
+  }
+
   const supabase = await createAdminClient();
   await supabase.auth.signOut();
   redirect("/admin/login");

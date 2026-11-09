@@ -3,11 +3,15 @@ import Link from "next/link";
 import { CartLink } from "@/components/cart-link";
 import { SearchIcon } from "@/components/icons";
 import { Logo } from "@/components/logo";
+import { isDemo } from "@/lib/demo";
 import { site } from "@/lib/site";
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      {isDemo && (
+        <p className="bg-accent px-3 py-1 text-center text-sm font-medium">დემო რეჟიმი: სატესტო მონაცემები, ინახება მხოლოდ ამ კომპიუტერში</p>
+      )}
       <header className="sticky top-0 z-20 border-b border-neutral-200 bg-white">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-3 sm:gap-6 sm:px-4">
           <Link href="/" prefetch={false} aria-label="MotoZone მთავარი" className="shrink-0">

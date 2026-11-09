@@ -1,4 +1,6 @@
-const IMAGE_BASE = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/`;
+import { isDemo } from "./demo";
+
+const IMAGE_BASE = isDemo ? "/demo-images/" : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/`;
 
 export function imageUrl(path: string) {
   return IMAGE_BASE + path;

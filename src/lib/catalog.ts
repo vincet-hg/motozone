@@ -1,4 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+import { isDemo } from "./demo";
+import { demoClient } from "./demo-data";
 import type { Category, Product, ProductCard } from "./types";
 
 export const CATALOG_TAG = "catalog";
@@ -12,15 +14,18 @@ const auth = { persistSession: false, autoRefreshToken: false };
 
 // Reads are cached and refreshed the moment the admin saves a change (see CATALOG_TAG).
 // The one-hour limit also picks up edits made directly in the Supabase dashboard.
-const cached = createClient(url, anonKey, {
-  auth,
-  global: {
-    fetch: (input, init) => fetch(input, { ...init, next: { tags: [CATALOG_TAG], revalidate: 3600 } }),
-  },
-});
+// `as never` keeps the real client as the only type, so normal queries stay fully checked.
+const cached = isDemo
+  ? (demoClient as never)
+  : createClient(url, anonKey, {
+      auth,
+      global: {
+        fetch: (input, init) => fetch(input, { ...init, next: { tags: [CATALOG_TAG], revalidate: 3600 } }),
+      },
+    });
 
 // For free-text search and checkout, which must not fill the cache or show old stock.
-export const live = createClient(url, anonKey, { auth });
+export const live = isDemo ? (demoClient as never) : createClient(url, anonKey, { auth });
 
 export type Sort = "newest" | "price_asc" | "price_desc";
 

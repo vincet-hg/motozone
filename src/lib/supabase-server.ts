@@ -1,8 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { isDemo, isDemoAdmin } from "./demo";
+import { demoClient } from "./demo-data";
 
 export async function createAdminClient() {
+  if (isDemo) return demoClient as never;
   const store = await cookies();
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
@@ -20,6 +23,11 @@ export async function createAdminClient() {
 
 // Every admin page and action starts here. The database enforces the same rule.
 export async function requireAdmin() {
+  if (isDemo) {
+    if (!isDemoAdmin(await cookies())) redirect("/admin/login");
+    return createAdminClient();
+  }
+
   const supabase = await createAdminClient();
   const {
     data: { user },
