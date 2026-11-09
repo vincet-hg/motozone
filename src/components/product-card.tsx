@@ -13,11 +13,11 @@ export function ProductCard({ product, eager, lcp }: { product: Card; eager: boo
   const available = product.stock > 0;
 
   return (
-    <article className="flex flex-col">
+    <article className="flex flex-col rounded-lg border border-neutral-200 bg-white p-2 hover:border-neutral-500 sm:p-3">
       <Link
         href={href}
         prefetch={false}
-        className="relative block aspect-square overflow-hidden rounded border border-neutral-200 bg-white"
+        className="relative block aspect-square overflow-hidden"
       >
         {product.images[0] ? (
           <Image
@@ -28,13 +28,13 @@ export function ProductCard({ product, eager, lcp }: { product: Card; eager: boo
             quality={75}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={lcp ? "high" : undefined}
-            className={`object-contain p-2 ${available ? "" : "opacity-40"}`}
+            className={`object-contain ${available ? "" : "opacity-40"}`}
           />
         ) : (
           <span className="flex h-full items-center justify-center text-sm text-neutral-600">ფოტო არ არის</span>
         )}
         {discount > 0 && (
-          <span className="absolute top-0 left-0 rounded-br bg-accent px-1.5 py-0.5 text-xs font-bold">-{discount}%</span>
+          <span className="absolute top-0 left-0 rounded-full bg-accent px-2 py-0.5 text-xs font-bold">-{discount}%</span>
         )}
       </Link>
       <h2 className="mt-2 line-clamp-2 min-h-10 text-sm leading-5">
@@ -42,7 +42,7 @@ export function ProductCard({ product, eager, lcp }: { product: Card; eager: boo
           {product.name}
         </Link>
       </h2>
-      <div className="mt-1 flex min-h-10 items-center justify-between gap-2">
+      <div className="mt-auto flex min-h-10 items-center justify-between gap-2 pt-1">
         <Price price={product.price} salePrice={product.sale_price} />
         {available ? (
           <AddToCart id={product.id} stock={product.stock} />

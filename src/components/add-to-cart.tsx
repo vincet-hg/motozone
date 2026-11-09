@@ -38,7 +38,7 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
       type="button"
       onClick={add}
       aria-label={added ? "დამატებულია" : "კალათაში დამატება"}
-      className="flex size-10 shrink-0 items-center justify-center rounded bg-accent hover:bg-[#e85f00]"
+      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent hover:bg-[#e85f00]"
     >
       <Icon />
     </button>

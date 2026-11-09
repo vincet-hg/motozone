@@ -17,7 +17,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <div>
-      <div className="relative aspect-square overflow-hidden rounded border border-neutral-200">
+      <div className="relative aspect-square overflow-hidden rounded border border-neutral-200 bg-white">
         <Image
           src={imageUrl(images[selected])}
           alt={alt}
@@ -37,7 +37,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
               onClick={() => setSelected(index)}
               aria-label={`ფოტო ${index + 1}`}
               aria-pressed={index === selected}
-              className={`relative size-16 shrink-0 overflow-hidden rounded border-2 ${
+              className={`relative size-16 shrink-0 overflow-hidden rounded border-2 bg-white ${
                 index === selected ? "border-accent" : "border-neutral-200"
               }`}
             >

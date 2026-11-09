@@ -9,7 +9,7 @@ import { keepValues } from "@/lib/keep-values";
 import type { ProductCard } from "@/lib/types";
 import { getCartProducts, placeOrder, type OrderState } from "./actions";
 
-const input = "h-11 w-full rounded border border-neutral-300 px-3 text-base";
+const input = "h-11 w-full rounded border border-neutral-300 bg-white px-3 text-base";
 
 export function CartView() {
   const cart = useCart();
@@ -78,7 +78,7 @@ export function CartView() {
       <ul className="divide-y divide-neutral-200">
         {lines.map(({ item, product }) => (
           <li key={item.id} className="flex gap-3 py-3">
-            <div className="relative size-20 shrink-0 overflow-hidden rounded border border-neutral-200">
+            <div className="relative size-20 shrink-0 overflow-hidden rounded border border-neutral-200 bg-white">
               {product?.images[0] && (
                 <Image src={imageUrl(product.images[0])} alt="" fill sizes="96px" quality={75} className="object-contain p-1" />
               )}

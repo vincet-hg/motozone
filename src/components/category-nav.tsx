@@ -18,7 +18,7 @@ function Pill({ href, active, children }: { href: string; active: boolean; child
 
 export function CategoryNav({ categories, active }: { categories: Category[]; active?: string }) {
   return (
-    <nav aria-label="კატეგორიები" className="border-b border-neutral-200">
+    <nav aria-label="კატეგორიები" className="border-b border-neutral-200 bg-white">
       <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-2 sm:px-4">
         <Pill href="/" active={!active}>
           ყველა

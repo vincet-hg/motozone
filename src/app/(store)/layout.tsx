@@ -33,9 +33,9 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 bg-neutral-50">{children}</div>
 
-      <footer className="mt-10 border-t border-neutral-200 bg-neutral-100 text-sm">
+      <footer className="border-t border-neutral-200 bg-neutral-100 text-sm">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-3 py-8 sm:grid-cols-3 sm:px-4">
           <div>
             <h2 className="font-bold">კონტაქტი</h2>
