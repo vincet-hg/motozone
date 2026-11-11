@@ -9,12 +9,12 @@ export function Price({
   salePrice: number | null;
   large?: boolean;
 }) {
-  const current = large ? "text-2xl font-bold" : "text-base font-bold";
+  const current = `font-bold text-accent ${large ? "text-3xl" : "text-xl"}`;
   if (salePrice === null) return <p className={current}>{formatPrice(price)}</p>;
   return (
-    <p className="flex flex-wrap items-baseline gap-x-1.5">
+    <p className="flex flex-wrap items-baseline gap-x-2">
       <span className={current}>{formatPrice(salePrice)}</span>
-      <s className={`text-neutral-600 ${large ? "text-base" : "text-xs"}`}>{formatPrice(price)}</s>
+      <s className={`text-muted ${large ? "text-lg" : "text-sm"}`}>{formatPrice(price)}</s>
     </p>
   );
 }

@@ -19,7 +19,7 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
       <form action={addCategory} className="mt-4 flex flex-wrap gap-2">
         <input name="name" required maxLength={80} placeholder="ახალი კატეგორია" className={`${field} flex-1 sm:max-w-xs`} />
         <input name="position" type="number" placeholder="რიგი" aria-label="რიგი" defaultValue={categories.length + 1} className={`${field} w-20`} />
-        <button className="h-9 rounded bg-accent px-4 text-sm font-semibold">დამატება</button>
+        <button className="h-9 rounded bg-accent px-4 text-sm font-semibold text-white">დამატება</button>
       </form>
 
       <ul className="mt-4 divide-y divide-neutral-100 rounded border border-neutral-200 bg-white">

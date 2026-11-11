@@ -7,8 +7,8 @@ function Pill({ href, active, children }: { href: string; active: boolean; child
       href={href}
       prefetch={false}
       aria-current={active ? "page" : undefined}
-      className={`shrink-0 rounded-full border px-3 py-1.5 text-sm whitespace-nowrap ${
-        active ? "border-black bg-black text-white" : "border-neutral-300 hover:border-black"
+      className={`shrink-0 rounded-btn border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+        active ? "border-accent bg-accent text-white" : "border-line bg-card text-fg hover:border-accent/70"
       }`}
     >
       {children}
@@ -18,8 +18,8 @@ function Pill({ href, active, children }: { href: string; active: boolean; child
 
 export function CategoryNav({ categories, active }: { categories: Category[]; active?: string }) {
   return (
-    <nav aria-label="კატეგორიები" className="border-b border-neutral-200">
-      <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-2 sm:px-4">
+    <nav aria-label="კატეგორიები">
+      <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-3 sm:px-4">
         <Pill href="/" active={!active}>
           ყველა
         </Pill>

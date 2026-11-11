@@ -9,7 +9,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded border border-neutral-200 text-neutral-600">
+      <div className="flex aspect-square items-center justify-center rounded-card bg-photo text-neutral-600">
         ფოტო არ არის
       </div>
     );
@@ -17,7 +17,7 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
 
   return (
     <div>
-      <div className="relative aspect-square overflow-hidden rounded border border-neutral-200">
+      <div className="relative aspect-square overflow-hidden rounded-card bg-photo">
         <Image
           src={imageUrl(images[selected])}
           alt={alt}
@@ -37,8 +37,8 @@ export function Gallery({ images, alt }: { images: string[]; alt: string }) {
               onClick={() => setSelected(index)}
               aria-label={`ფოტო ${index + 1}`}
               aria-pressed={index === selected}
-              className={`relative size-16 shrink-0 overflow-hidden rounded border-2 ${
-                index === selected ? "border-accent" : "border-neutral-200"
+              className={`relative size-16 shrink-0 overflow-hidden rounded-lg border-2 bg-photo ${
+                index === selected ? "border-accent" : "border-line"
               }`}
             >
               <Image src={imageUrl(path)} alt="" fill sizes="96px" quality={75} className="object-contain p-1" />

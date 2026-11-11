@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CategoryNav } from "@/components/category-nav";
 import { ListingHeader } from "@/components/listing-header";
 import { ProductGrid } from "@/components/product-grid";
+import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -30,14 +31,14 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <>
       <CategoryNav categories={categories} active={slug} />
-      <main className="mx-auto max-w-7xl px-3 py-4 sm:px-4">
+      <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
         <ListingHeader title={category.name} filters={{ category: slug }} />
         <ProductGrid products={products} />
         {total > PAGE_SIZE && (
           <Link
             href={`/search?category=${slug}&page=2`}
             prefetch={false}
-            className="mx-auto mt-8 block w-fit rounded border border-black px-5 py-2.5 text-sm font-medium"
+            className={moreButton}
           >
             მეტი პროდუქტი
           </Link>

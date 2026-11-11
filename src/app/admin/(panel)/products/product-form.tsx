@@ -167,7 +167,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
       </label>
       {state.error && <p role="alert" className="text-sm text-red-700">{state.error}</p>}
       <div className="flex items-center gap-4">
-        <button disabled={pending} className="h-11 rounded bg-accent px-6 font-semibold disabled:opacity-50">
+        <button disabled={pending} className="h-11 rounded bg-accent px-6 font-semibold text-white disabled:opacity-50">
           {pending ? "ინახება..." : "პროდუქტის შენახვა"}
         </button>
         <Link href="/admin/products" className="text-sm underline">

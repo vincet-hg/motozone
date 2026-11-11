@@ -36,6 +36,7 @@ export type ProductQuery = {
   max?: number;
   sort?: Sort;
   page?: number;
+  sale?: boolean;
 };
 
 export async function getCategories(): Promise<Category[]> {
@@ -49,6 +50,7 @@ export async function getProducts(query: ProductQuery = {}): Promise<{ products:
   const client = query.q ? live : cached;
   let request = client.from("products").select(CARD_COLUMNS, { count: "exact" }).eq("active", true);
 
+  if (query.sale) request = request.not("sale_price", "is", null);
   if (query.categoryId) request = request.eq("category_id", query.categoryId);
   if (query.q) request = request.ilike("name", `%${query.q.replace(/[\\%_]/g, "\\$&")}%`);
   if (query.min !== undefined) request = request.gte("final_price", query.min);

@@ -25,7 +25,7 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
       <button
         type="button"
         onClick={add}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded bg-accent font-semibold hover:bg-[#e85f00] sm:w-72"
+        className="flex h-13 w-full items-center justify-center gap-2 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(229,9,32,0.7)] transition-colors duration-200 hover:bg-accent-hover sm:w-80"
       >
         <Icon />
         {added ? "დამატებულია" : "კალათაში დამატება"}
@@ -38,7 +38,7 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
       type="button"
       onClick={add}
       aria-label={added ? "დამატებულია" : "კალათაში დამატება"}
-      className="flex size-10 shrink-0 items-center justify-center rounded bg-accent hover:bg-[#e85f00]"
+      className="flex size-11 shrink-0 items-center justify-center rounded-btn bg-accent text-white transition-all duration-200 hover:scale-105 hover:bg-accent-hover"
     >
       <Icon />
     </button>

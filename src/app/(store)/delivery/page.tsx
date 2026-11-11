@@ -6,8 +6,8 @@ export const metadata: Metadata = { title: "მიწოდება" };
 export default function DeliveryPage() {
   return (
     <main className="mx-auto max-w-2xl px-3 py-8 sm:px-4">
-      <h1 className="text-xl font-bold">მიწოდება</h1>
-      <div className="mt-4 space-y-3 leading-7">
+      <h1 className="text-2xl font-extrabold">მიწოდება</h1>
+      <div className="mt-4 space-y-3 leading-7 text-fg/85">
         <p>შეკვეთის გაფორმების შემდეგ დაგირეკავთ მითითებულ ნომერზე და დავადასტურებთ დეტალებს.</p>
         <p>მიწოდების ვადასა და ღირებულებას შეკვეთის დადასტურებისას გეტყვით.</p>
         <p>გადახდა ხდება პროდუქტის მიტანისას.</p>
