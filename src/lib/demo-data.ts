@@ -53,14 +53,15 @@ const CATEGORIES = [
   ["სხვა აქსესუარები", "skhva-aksesuarebi"],
 ];
 
+// Placeholder art in the brand palette: light gray photo background, black or red shape.
 const COLORS = [
-  [[255, 237, 213], [194, 65, 12]],
-  [[219, 234, 254], [29, 78, 216]],
-  [[220, 252, 231], [21, 128, 61]],
-  [[243, 232, 255], [126, 34, 206]],
-  [[254, 249, 195], [161, 98, 7]],
-  [[254, 226, 226], [185, 28, 28]],
-  [[229, 231, 235], [55, 65, 81]],
+  [[244, 244, 246], [21, 21, 25]],
+  [[244, 244, 246], [229, 9, 32]],
+  [[244, 244, 246], [21, 21, 25]],
+  [[244, 244, 246], [229, 9, 32]],
+  [[244, 244, 246], [21, 21, 25]],
+  [[244, 244, 246], [229, 9, 32]],
+  [[244, 244, 246], [21, 21, 25]],
 ];
 
 const SEED: [number, string, string, number, number | null, number, string, [string, string][], string][] = [
@@ -124,11 +125,11 @@ function seed() {
   const now = Date.now();
   const products = SEED.map(([category, slug, name, price, sale_price, stock, description, specs, compatibility], index): DemoProduct => {
     const [background, shape] = COLORS[category];
-    const images = [`${slug}-1.png`];
+    const images = [`${slug}-p1.png`];
     fs.writeFileSync(path.join(IMAGES, images[0]), placeholderPng(background, shape));
     if (index % 3 === 0) {
-      images.push(`${slug}-2.png`);
-      fs.writeFileSync(path.join(IMAGES, images[1]), placeholderPng(shape, background));
+      images.push(`${slug}-p2.png`);
+      fs.writeFileSync(path.join(IMAGES, images[1]), placeholderPng(background, shape[0] === 229 ? [21, 21, 25] : [229, 9, 32]));
     }
     return {
       id: seedId(8, index),
@@ -322,6 +323,10 @@ class DemoQuery {
   }
   eq(column: string, value: unknown) {
     this.filters.push((row) => String(row[column]) === String(value));
+    return this;
+  }
+  not(column: string, operator: "is", value: null) {
+    this.filters.push((row) => row[column] !== value);
     return this;
   }
   in(column: string, values: unknown[]) {

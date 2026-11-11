@@ -11,7 +11,7 @@ export function ListingHeader({
 }) {
   return (
     <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <Heading className="border-l-4 border-accent pl-2 text-lg leading-6 font-bold">{title}</Heading>
+      <Heading className="border-l-4 border-accent pl-3 text-xl leading-7 font-extrabold sm:text-2xl">{title}</Heading>
       <FilterBar values={filters} />
     </div>
   );

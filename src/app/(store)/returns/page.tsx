@@ -7,11 +7,11 @@ export const metadata: Metadata = { title: "დაბრუნების პ�
 export default function ReturnsPage() {
   return (
     <main className="mx-auto max-w-2xl px-3 py-8 sm:px-4">
-      <h1 className="text-xl font-bold">დაბრუნების პირობები</h1>
-      <div className="mt-4 space-y-3 leading-7">
+      <h1 className="text-2xl font-extrabold">დაბრუნების პირობები</h1>
+      <div className="mt-4 space-y-3 leading-7 text-fg/85">
         <p>
           პროდუქტის დასაბრუნებლად ან გასაცვლელად დაგვირეკე ნომერზე{" "}
-          <a href={site.phoneHref} className="underline">
+          <a href={site.phoneHref} className="text-accent underline hover:text-accent-hover">
             {site.phone}
           </a>{" "}
           და გვითხარი შეკვეთის ნომერი.

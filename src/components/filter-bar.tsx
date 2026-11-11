@@ -1,7 +1,7 @@
 import Form from "next/form";
 import { SortSelect } from "./sort-select";
 
-const field = "h-9 rounded border border-neutral-300 bg-white px-2 text-sm";
+const field = "h-10 rounded-btn border border-line bg-card px-3 text-sm text-fg placeholder:text-muted";
 
 export type FilterValues = {
   q?: string;
@@ -36,7 +36,7 @@ export function FilterBar({ values = {} }: { values?: FilterValues }) {
         defaultValue={values.max}
         className={`${field} w-16 sm:w-20`}
       />
-      <button type="submit" className="h-9 rounded border border-black px-2.5 text-sm font-medium hover:bg-black hover:text-white">
+      <button type="submit" className="h-10 rounded-btn bg-fg px-3 text-sm font-semibold text-bg transition-colors duration-200 hover:bg-white">
         ფილტრი
       </button>
       <SortSelect value={values.sort ?? "newest"} className={`${field} min-w-0 flex-1 sm:flex-none`} />

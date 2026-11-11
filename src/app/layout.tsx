@@ -3,7 +3,15 @@ import localFont from "next/font/local";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-// Modern Georgian letters only (10 KB). Latin and digits use the system font.
+// Both fonts are trimmed to the letters the store uses: Inter for Latin and digits (25 KB),
+// Noto Sans Georgian for Georgian, including capital Mtavruli for headlines (23 KB).
+const inter = localFont({
+  src: "./fonts/inter-latin.woff2",
+  weight: "100 900",
+  variable: "--font-inter",
+  display: "swap",
+});
+
 const georgian = localFont({
   src: "./fonts/noto-georgian.woff2",
   weight: "100 900",
@@ -17,12 +25,12 @@ export const metadata: Metadata = {
   description: site.description,
 };
 
-export const viewport: Viewport = { themeColor: "#ffffff" };
+export const viewport: Viewport = { themeColor: "#111114" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ka" className={georgian.variable}>
-      <body className="flex min-h-dvh flex-col bg-white font-sans text-black antialiased">{children}</body>
+    <html lang="ka" className={`${inter.variable} ${georgian.variable}`}>
+      <body className="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">{children}</body>
     </html>
   );
 }

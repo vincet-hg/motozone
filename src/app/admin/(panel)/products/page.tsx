@@ -31,7 +31,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
           <input name="q" defaultValue={q} placeholder="ძიება სახელით" className="h-9 rounded border border-neutral-300 bg-white px-3 text-sm" />
           <button className="h-9 rounded border border-black px-3 text-sm">ძებნა</button>
         </form>
-        <Link href="/admin/products/new" className="ml-auto flex h-9 items-center rounded bg-accent px-4 text-sm font-semibold">
+        <Link href="/admin/products/new" className="ml-auto flex h-9 items-center rounded bg-accent px-4 text-sm font-semibold text-white">
           პროდუქტის დამატება
         </Link>
       </div>

@@ -34,35 +34,35 @@ export default async function ProductPage({ params }: Props) {
   return (
     <>
       <CategoryNav categories={categories} active={category?.slug} />
-      <main className="mx-auto grid max-w-5xl gap-6 px-3 py-4 sm:px-4 md:grid-cols-2 md:gap-10 md:py-8">
+      <main className="mx-auto grid max-w-5xl gap-6 px-3 py-4 sm:px-4 md:grid-cols-2 md:gap-12 md:py-10">
         <Gallery images={product.images} alt={product.name} />
         <div>
-          <h1 className="text-xl font-bold md:text-2xl">{product.name}</h1>
-          <div className="mt-3">
+          <h1 className="text-2xl font-extrabold md:text-3xl">{product.name}</h1>
+          <div className="mt-4">
             <Price price={product.price} salePrice={product.sale_price} large />
           </div>
-          <div className="mt-4">
+          <div className="mt-6">
             {product.stock > 0 ? (
               <AddToCart id={product.id} stock={product.stock} large />
             ) : (
-              <p className="font-medium text-neutral-700">არ არის მარაგში</p>
+              <p className="font-medium text-muted">არ არის მარაგში</p>
             )}
           </div>
 
           {product.description && (
             <section className="mt-6">
-              <h2 className="font-bold">აღწერა</h2>
-              <p className="mt-1 text-sm leading-6 whitespace-pre-line">{product.description}</p>
+              <h2 className="border-l-4 border-accent pl-2 font-bold">აღწერა</h2>
+              <p className="mt-2 text-sm leading-6 whitespace-pre-line text-fg/85">{product.description}</p>
             </section>
           )}
 
           {product.specs.length > 0 && (
             <section className="mt-6">
-              <h2 className="font-bold">მახასიათებლები</h2>
+              <h2 className="border-l-4 border-accent pl-2 font-bold">მახასიათებლები</h2>
               <dl className="mt-1 text-sm">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between gap-4 border-b border-neutral-200 py-2">
-                    <dt className="text-neutral-700">{spec.label}</dt>
+                  <div key={spec.label} className="flex justify-between gap-4 border-b border-line py-2.5">
+                    <dt className="text-muted">{spec.label}</dt>
                     <dd className="text-right font-medium">{spec.value}</dd>
                   </div>
                 ))}
@@ -72,8 +72,8 @@ export default async function ProductPage({ params }: Props) {
 
           {product.compatibility && (
             <section className="mt-6">
-              <h2 className="font-bold">თავსებადობა</h2>
-              <p className="mt-1 text-sm leading-6 whitespace-pre-line">{product.compatibility}</p>
+              <h2 className="border-l-4 border-accent pl-2 font-bold">თავსებადობა</h2>
+              <p className="mt-2 text-sm leading-6 whitespace-pre-line text-fg/85">{product.compatibility}</p>
             </section>
           )}
         </div>

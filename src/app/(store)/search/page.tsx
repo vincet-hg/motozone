@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CategoryNav } from "@/components/category-nav";
 import { ListingHeader } from "@/components/listing-header";
 import { ProductGrid } from "@/components/product-grid";
+import { outlineButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE, type Sort } from "@/lib/catalog";
 
 type Params = Record<string, string | string[] | undefined>;
@@ -44,12 +45,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   };
 
   const title = q ? `ძიება: ${q}` : (category?.name ?? "ყველა პროდუქტი");
-  const pageLink = "rounded border border-black px-4 py-2 text-sm font-medium";
+  const pageLink = outlineButton;
 
   return (
     <>
       <CategoryNav categories={categories} active={category?.slug} />
-      <main className="mx-auto max-w-7xl px-3 py-4 sm:px-4">
+      <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
         <ListingHeader title={title} filters={{ q, category: category?.slug, min, max, sort }} />
         <ProductGrid products={products} />
         {total > PAGE_SIZE && (
@@ -59,7 +60,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                 წინა
               </Link>
             )}
-            <span className="text-sm">
+            <span className="text-sm text-muted">
               {page} / {Math.ceil(total / PAGE_SIZE)}
             </span>
             {page * PAGE_SIZE < total && (

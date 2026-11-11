@@ -6,7 +6,7 @@ export default function LoginLayout({ children }: { children: React.ReactNode })
   return (
     <>
       {isDemo && DEMO_LOGIN_IS_DEFAULT && (
-        <p className="bg-accent px-3 py-2 text-center text-sm font-medium">
+        <p className="bg-accent px-3 py-2 text-center text-sm font-medium text-white">
           დემო შესვლა: {DEMO_EMAIL} / {DEMO_PASSWORD}
         </p>
       )}
