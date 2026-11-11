@@ -3,10 +3,16 @@ import type { NextConfig } from "next";
 const supabase = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co");
 const isLocalSupabase = ["localhost", "127.0.0.1"].includes(supabase.hostname);
 
+// Lets someone else open the local dev server through a temporary Cloudflare link
+// (`cloudflared tunnel --url http://localhost:3000`). Has no effect in production.
+const devTunnels = process.env.NODE_ENV === "development" ? ["*.trycloudflare.com"] : [];
+
 const config: NextConfig = {
   poweredByHeader: false,
+  allowedDevOrigins: devTunnels,
   experimental: {
     inlineCss: true,
+    serverActions: { allowedOrigins: devTunnels },
   },
   images: {
     formats: ["image/avif", "image/webp"],
