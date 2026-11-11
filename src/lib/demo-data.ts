@@ -70,14 +70,21 @@ const SEED: [number, string, string, number, number | null, number, string, [str
   [1, "usb-damteni", "USB დამტენი საჭეზე", 45, null, 20, "წყალგამძლე USB დამტენი საჭეზე დასამაგრებლად.", [["სიმძლავრე", "18W"], ["დაცვა", "IP65"]], "ნებისმიერი 12V მოტოციკლი"],
   [1, "usb-c-damteni", "ორმაგი USB-C დამტენი", 69, 55, 12, "ორი USB-C პორტი სწრაფი დამუხტვით.", [["სიმძლავრე", "36W"], ["პორტები", "2"]], "ნებისმიერი 12V მოტოციკლი"],
   [2, "zapkhulis-kheltatmanebi", "საზაფხულო ხელთათმანები", 79, null, 15, "სუნთქვადი ტყავის ხელთათმანები დამცავი ჩანართებით.", [["ზომა", "M, L, XL"], ["მასალა", "ტყავი"]], "უნივერსალური"],
-  [2, "zamtris-kheltatmanebi", "ზამთრის ხელთათმანები", 139, 109, 0, "თბილი და წყალგაუმტარი ხელთათმანები ცივი სეზონისთვის.", [["ზომა", "L, XL"], ["საფარი", "წყალგაუმტარი"]], "უნივერსალური"],
+  [4, "khelis-safarebi", "ზამთრის ხელის საფარები", 79, 59, 0, "თბილი და წყალგაუმტარი საფარები საჭეზე, ცივი სეზონისთვის.", [["მასალა", "ნეილონი, ფლისი"], ["საფარი", "წყალგაუმტარი"]], "სკუტერები და მოტოციკლები"],
   [3, "telefonis-damcheri", "ალუმინის ტელეფონის დამჭერი", 59, null, 25, "მყარი ალუმინის დამჭერი ვიბრაციის შემცირებით.", [["ეკრანი", "4.7-7 ინჩი"], ["მასალა", "ალუმინი"]], "საჭე 22-32 მმ"],
   [3, "damcheri-damtenit", "დამჭერი უსადენო დამუხტვით", 129, 99, 6, "ტელეფონის დამჭერი ჩაშენებული უსადენო დამტენით.", [["სიმძლავრე", "15W"], ["ეკრანი", "4.7-6.8 ინჩი"]], "Qi დამუხტვის მქონე ტელეფონები"],
   [4, "khelis-damtsavi", "ხელის დამცავები", 95, null, 10, "იცავს ხელებს ქარისა და ქვებისგან.", [["მასალა", "პლასტიკი"], ["ფერი", "შავი"]], "საჭე 22 მმ"],
-  [5, "ukana-chikholi", "უკანა ჩიხოლი 45ლ", 249, 219, 4, "ტევადი უკანა ჩიხოლი ორი ჩაფხუტისთვის.", [["მოცულობა", "45 ლ"], ["საკეტი", "გასაღებით"]], "უნივერსალური საყრდენი ფირფიტით"],
-  [5, "avzis-chanta", "ავზის ჩანთა", 115, null, 7, "მაგნიტური ჩანთა ავზზე, ტელეფონის ჯიბით.", [["მოცულობა", "12 ლ"], ["დამაგრება", "მაგნიტი"]], "ლითონის ავზის მქონე მოტოციკლები"],
-  [6, "diskis-sakheti", "დისკის საკეტი", 65, null, 18, "ფოლადის საკეტი სამუხრუჭე დისკზე.", [["მასალა", "ფოლადი"], ["ღერო", "7 მმ"]], "დისკის ნახვრეტი 8 მმ-დან"],
+  [5, "chikholi", "მოპედის წყალგაუმტარი ჩიხოლი", 75, 59, 4, "იცავს მოპედს წვიმის, მტვრისა და მზისგან.", [["ზომა", "XL"], ["მასალა", "პოლიესტერი"]], "სკუტერები და მოპედები"],
+  [6, "tsqalgamdzle-chanta", "წყალგამძლე ტელეფონის ჩანთა", 35, 29, 15, "ტელეფონი მშრალად დარჩება წვიმაშიც, ეკრანი კი ხელმისაწვდომია.", [["ეკრანი", "7 ინჩამდე"], ["დაცვა", "IPX8"]], "ნებისმიერი ტელეფონი"],
+  [6, "chafkhuti", "დახურული ჩაფხუტი", 139, 119, 6, "მსუბუქი დახურული ჩაფხუტი გამჭვირვალე სათვალით.", [["ზომა", "M, L, XL"], ["სტანდარტი", "ECE 22.06"]], "უნივერსალური"],
 ];
+
+// Sample photos for the demo (demo-assets/), in the same order as SEED. Delete .demo-data to reseed.
+const PHOTOS: string[][] = [
+  ["grips2", "grips"], ["grips"], ["charger2"], ["charger"], ["gloves"], ["muffs"],
+  ["mount"], ["mount2"], ["guards"], ["cover", "ccover"], ["bag2"], ["helmet2", "helmet"],
+];
+const ASSETS = path.join(process.cwd(), "demo-assets");
 
 const seedId = (group: number, index: number) => `00000000-0000-4000-${group}000-${String(index + 1).padStart(12, "0")}`;
 
@@ -125,9 +132,14 @@ function seed() {
   const now = Date.now();
   const products = SEED.map(([category, slug, name, price, sale_price, stock, description, specs, compatibility], index): DemoProduct => {
     const [background, shape] = COLORS[category];
-    const images = [`${slug}-p1.png`];
-    fs.writeFileSync(path.join(IMAGES, images[0]), placeholderPng(background, shape));
-    if (index % 3 === 0) {
+    const photos = (PHOTOS[index] ?? []).filter((name) => fs.existsSync(path.join(ASSETS, `${name}.webp`)));
+    const images = photos.map((name, n) => `${slug}-${name}-${n + 1}.webp`);
+    photos.forEach((name, n) => fs.copyFileSync(path.join(ASSETS, `${name}.webp`), path.join(IMAGES, images[n])));
+    if (images.length === 0) {
+      images.push(`${slug}-p1.png`);
+      fs.writeFileSync(path.join(IMAGES, images[0]), placeholderPng(background, shape));
+    }
+    if (images.length === 1 && index % 3 === 0 && photos.length === 0) {
       images.push(`${slug}-p2.png`);
       fs.writeFileSync(path.join(IMAGES, images[1]), placeholderPng(background, shape[0] === 229 ? [21, 21, 25] : [229, 9, 32]));
     }
