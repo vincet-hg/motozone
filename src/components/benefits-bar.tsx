@@ -11,8 +11,8 @@ export function BenefitsBar() {
           const Icon = ICONS[item.icon];
           return (
             <li key={item.title} className={`border-line ${index % 2 ? "border-l" : ""} ${index > 1 ? "border-t lg:border-t-0" : ""} lg:border-l lg:first:border-l-0`}>
-              <a href={item.href} className="flex h-full items-center gap-3 p-3 transition-colors duration-200 hover:bg-line/40 sm:p-5">
-                <Icon className="size-6 shrink-0 text-accent sm:size-9 sm:text-fg" />
+              <a href={item.href} className="flex h-full flex-col gap-2 p-3 transition-colors duration-200 hover:bg-line/40 sm:flex-row sm:items-center sm:gap-3 sm:p-4 xl:p-5">
+                <Icon className="size-6 shrink-0 text-accent sm:size-8 sm:text-fg xl:size-9" />
                 <span className="min-w-0">
                   <span className="block text-[13px] leading-5 font-bold sm:text-base">{item.title}</span>
                   <span className="block text-xs text-muted sm:text-sm">{item.text}</span>

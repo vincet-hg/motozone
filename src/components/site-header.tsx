@@ -33,12 +33,12 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
   return (
     <>
       <div className="hidden border-b border-line bg-bg text-sm text-fg md:block">
-        <div className="mx-auto flex h-11 max-w-7xl items-center gap-8 px-4">
+        <div className="mx-auto flex h-11 max-w-7xl items-center gap-6 px-4 whitespace-nowrap lg:gap-8">
           <span className="flex items-center gap-2">
             <TruckIcon className="size-5" />
             მიწოდება მთელ საქართველოში
           </span>
-          <span className="flex items-center gap-2">
+          <span className="hidden items-center gap-2 lg:flex">
             <CashIcon className="size-5" />
             გადახდა მიტანისას
           </span>
@@ -72,8 +72,8 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             </nav>
           </Disclosure>
 
-          <Link href="/" prefetch={false} aria-label="MotoZone მთავარი" className="mr-auto shrink-0 px-1 text-fg lg:mr-0">
-            <Logo className="h-6 w-auto lg:h-8" />
+          <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mr-auto shrink-0 px-1 text-fg lg:mr-0">
+            <Logo className="h-12 w-auto lg:h-[60px]" sizes="(min-width: 1024px) 153px, 122px" />
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="mx-auto hidden items-center gap-1 lg:flex">

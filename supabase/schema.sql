@@ -1,4 +1,4 @@
--- MotoZone database. Run once in Supabase: SQL Editor > New query > paste > Run.
+-- Scooter Land database. Run once in Supabase: SQL Editor > New query > paste > Run.
 
 -- ---------------------------------------------------------------- tables
 

@@ -18,7 +18,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     <div className="flex-1 bg-neutral-100 text-black">
       <header className="bg-black text-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-5 px-4 py-2 text-sm">
-          <span className="font-bold">MotoZone ადმინი</span>
+          <span className="font-bold">Scooter Land ადმინი</span>
           {links.map((link) => (
             <Link key={link.href} href={link.href} prefetch={false} className="py-2 hover:underline">
               {link.label}

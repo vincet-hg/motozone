@@ -14,7 +14,7 @@ export function ProductCard({ product, eager, lcp }: { product: Card; eager: boo
   const available = product.stock > 0;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_10px_32px_-12px_rgba(229,9,32,0.55)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_10px_32px_-12px_rgba(229,9,32,0.55)]">
       <div className="relative bg-photo">
         <Link href={href} prefetch={false} className="relative block aspect-square">
           {product.images[0] ? (

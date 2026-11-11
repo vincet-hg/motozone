@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* MotoZone design tokens. Red, black, white and gray only. */
+/* Scooter Land design tokens. Red, black, white and gray only. */
 @theme inline {
   --color-bg: #0b0b0e;
   --color-header: #111114;

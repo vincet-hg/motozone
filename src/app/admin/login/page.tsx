@@ -12,7 +12,7 @@ export default function LoginPage() {
   return (
     <main className="flex flex-1 items-center justify-center bg-neutral-100 px-4 text-black">
       <form action={action} onSubmit={keepValues(action)} className="w-full max-w-sm space-y-4 rounded border border-neutral-200 bg-white p-6">
-        <h1 className="text-lg font-bold">MotoZone ადმინისტრატორი</h1>
+        <h1 className="text-lg font-bold">Scooter Land ადმინისტრატორი</h1>
         <label className="block text-sm">
           ელფოსტა
           <input name="email" type="email" required autoComplete="username" className={input} />

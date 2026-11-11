@@ -4,6 +4,7 @@ import { CategoryNav } from "@/components/category-nav";
 import { FilterBar } from "@/components/filter-bar";
 import { HomeHero } from "@/components/home-hero";
 import { ProductGrid } from "@/components/product-grid";
+import { ProductRow } from "@/components/product-row";
 import { SectionHeading } from "@/components/section-heading";
 import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
@@ -23,8 +24,8 @@ export default async function HomePage() {
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
         {sale.products.length > 0 && (
           <section className="mt-10">
-            <SectionHeading title="აქციები" link={sale.total > 5 ? { href: "/sale", label: "ყველა აქცია" } : undefined} />
-            <ProductGrid products={sale.products.slice(0, 5)} heroAbove />
+            <SectionHeading title="აქციები" link={{ href: "/sale", label: "ყველა აქცია" }} />
+            <ProductRow products={sale.products} />
           </section>
         )}
 

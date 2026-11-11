@@ -1,4 +1,4 @@
-# MotoZone
+# Scooter Land
 
 Fast online store for motorcycle accessories. Next.js, TypeScript, Tailwind CSS, Supabase.
 
