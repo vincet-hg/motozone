@@ -3,7 +3,7 @@ import { ProductGrid } from "@/components/product-grid";
 import { SectionHeading } from "@/components/section-heading";
 import { getProducts } from "@/lib/catalog";
 
-export const metadata: Metadata = { title: "აქციები" };
+export const metadata: Metadata = { title: "აქციები", alternates: { canonical: "/sale" } };
 
 export default async function SalePage() {
   const { products } = await getProducts({ sale: true });

@@ -19,6 +19,7 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
       <form action={addCategory} className="mt-4 flex flex-wrap gap-2">
         <input name="name" required maxLength={80} placeholder="ახალი კატეგორია" className={`${field} flex-1 sm:max-w-xs`} />
         <input name="position" type="number" placeholder="რიგი" aria-label="რიგი" defaultValue={categories.length + 1} className={`${field} w-20`} />
+        <input name="description" maxLength={2000} placeholder="მოკლე აღწერა (Google-ისთვის)" aria-label="აღწერა" className={`${field} w-full sm:flex-1`} />
         <button className="h-9 rounded bg-accent px-4 text-sm font-semibold text-white">დამატება</button>
       </form>
 
@@ -29,6 +30,15 @@ export default async function AdminCategoriesPage({ searchParams }: { searchPara
               <input type="hidden" name="id" value={category.id} />
               <input name="name" required maxLength={80} defaultValue={category.name} aria-label="სახელი" className={`${field} flex-1 sm:max-w-xs`} />
               <input name="position" type="number" defaultValue={category.position} aria-label="რიგი" className={`${field} w-20`} />
+              <textarea
+                name="description"
+                maxLength={2000}
+                rows={2}
+                defaultValue={category.description}
+                placeholder="აღწერა: ჩანს კატეგორიის გვერდზე და Google-ში"
+                aria-label="აღწერა"
+                className="w-full rounded border border-neutral-300 bg-white px-2 py-1 text-sm"
+              />
               <button className="h-9 rounded bg-black px-3 text-sm text-white">შენახვა</button>
             </form>
             <form action={deleteCategory}>

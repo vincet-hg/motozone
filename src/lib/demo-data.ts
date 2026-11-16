@@ -3,10 +3,10 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { crc32, deflateSync } from "node:zlib";
-import type { Category, Order, OrderItem, OrderStatus, Product } from "./types";
+import type { AuditEntry, Category, Order, OrderItem, OrderStatus, Product, ProductCost, Purchase, StockAdjustment } from "./types";
 
 // Stands in for the part of the Supabase client this app uses, backed by JSON files in .demo-data/.
-// Business rules mirror supabase/schema.sql. Every transaction is synchronous, so requests cannot
+// Business rules mirror supabase/migrations. Every transaction is synchronous, so requests cannot
 // interleave, and nothing is cached in memory because each Next.js route gets its own module copy.
 
 // A personal login belongs in .env.local, which stays out of git.
@@ -25,12 +25,32 @@ const STATUSES: OrderStatus[] = ["new", "confirmed", "shipped", "delivered", "ca
 
 type DemoProduct = Product & { created_at: string };
 type DemoOrderItem = OrderItem & { order_id: number; product_id: string | null };
-type Tables = { categories: Category[]; products: DemoProduct[]; orders: Order[]; order_items: DemoOrderItem[] };
+type Tables = {
+  categories: Category[];
+  products: DemoProduct[];
+  product_costs: ProductCost[];
+  purchases: Purchase[];
+  stock_adjustments: StockAdjustment[];
+  audit_log: AuditEntry[];
+  orders: Order[];
+  order_items: DemoOrderItem[];
+};
 type TableName = keyof Tables;
 type Row = Record<string, unknown>;
 
 // order_items is written last, so its presence means a seed finished.
-const TABLES: TableName[] = ["categories", "products", "orders", "order_items"];
+const TABLES: TableName[] = ["categories", "products", "product_costs", "purchases", "stock_adjustments", "audit_log", "orders", "order_items"];
+
+// Columns the admin may write directly, as granted in the migrations. Stock changes only through functions.
+const WRITABLE: Partial<Record<TableName, { insert?: string[]; update?: string[]; delete?: boolean }>> = {
+  products: {
+    insert: ["category_id", "name", "slug", "description", "specs", "compatibility", "price", "sale_price", "images", "active"],
+    update: ["category_id", "name", "description", "specs", "compatibility", "price", "sale_price", "images", "active"],
+    delete: true,
+  },
+  categories: { insert: ["name", "slug", "position", "description"], update: ["name", "slug", "position", "description"], delete: true },
+  product_costs: { update: ["low_stock_at"] },
+};
 
 class DbError extends Error {
   constructor(
@@ -158,10 +178,59 @@ function seed() {
       compatibility,
       active: true,
       created_at: new Date(now - index * 3600000).toISOString(),
+      updated_at: new Date(now - index * 3600000).toISOString(),
     };
   });
-  const categories = CATEGORIES.map(([name, slug], index) => ({ id: seedId(9, index), name, slug, position: index + 1 }));
-  save({ categories, products, orders: [], order_items: [] });
+  const categories = CATEGORIES.map(([name, slug], index) => ({ id: seedId(9, index), name, slug, position: index + 1, description: "" }));
+
+  // Sample purchase costs around 55% of the price, and a few past orders so the reports have numbers.
+  const product_costs = products.map((product) => ({
+    product_id: product.id,
+    avg_cost: Math.round(product.price * 0.55),
+    last_cost: Math.round(product.price * 0.55),
+    low_stock_at: 3,
+  }));
+  const purchases = products
+    .filter((product) => product.stock > 0)
+    .map((product, index) => ({
+      id: index + 1,
+      product_id: product.id,
+      qty: product.stock,
+      unit_cost: Math.round(product.price * 0.55),
+      supplier: "სატესტო მომწოდებელი",
+      note: "",
+      created_at: new Date(now - 90 * 86400000).toISOString(),
+    }));
+  const orders: Order[] = [];
+  const order_items: DemoOrderItem[] = [];
+  for (let n = 0; n < 9; n++) {
+    const id = 1001 + n;
+    const lines = [products[n % products.length], products[(n * 5 + 3) % products.length]];
+    lines.forEach((product, line) =>
+      order_items.push({
+        id: order_items.length + 1,
+        order_id: id,
+        product_id: product.id,
+        product_name: product.name,
+        price: product.final_price,
+        qty: line + 1,
+        unit_cost: Math.round(product.price * 0.55),
+      }),
+    );
+    const total = lines.reduce((sum, product, line) => sum + product.final_price * (line + 1), 0);
+    orders.push({
+      id,
+      customer_name: ["ნიკა ბერიძე", "ანა კაპანაძე", "გიორგი მელაძე"][n % 3],
+      phone: `55512345${n}`,
+      city: "თბილისი",
+      address: "სატესტო ქუჩა 1",
+      note: "",
+      total,
+      status: n === 0 ? "new" : n === 4 ? "cancelled" : "delivered",
+      created_at: new Date(now - n * 11 * 86400000).toISOString(),
+    });
+  }
+  save({ categories, products, product_costs, purchases, stock_adjustments: [], audit_log: [], orders, order_items });
 }
 
 // ---------------------------------------------------------------- storage
@@ -178,7 +247,34 @@ function save(db: Tables) {
 
 function load() {
   if (!fs.existsSync(tableFile("order_items"))) seed();
-  return Object.fromEntries(TABLES.map((table) => [table, JSON.parse(fs.readFileSync(tableFile(table), "utf8"))])) as Tables;
+  const db = Object.fromEntries(
+    TABLES.map((table) => [table, fs.existsSync(tableFile(table)) ? JSON.parse(fs.readFileSync(tableFile(table), "utf8")) : []]),
+  ) as Tables;
+  // Demo folders made before purchase costs existed: fill in what the migration adds.
+  for (const category of db.categories) category.description ??= "";
+  for (const product of db.products) {
+    product.updated_at ??= product.created_at;
+    if (!db.product_costs.some((cost) => cost.product_id === product.id)) {
+      db.product_costs.push({ product_id: product.id, avg_cost: 0, last_cost: null, low_stock_at: 3 });
+    }
+  }
+  for (const item of db.order_items) item.unit_cost ??= 0;
+  return db;
+}
+
+function audit(db: Tables, action: AuditEntry["action"], entity: string, entityId: string | null, details: Record<string, unknown>) {
+  const id = Math.max(0, ...db.audit_log.map((entry) => entry.id)) + 1;
+  // Every audited change in demo mode is made by the demo admin.
+  db.audit_log.push({ id, at: new Date().toISOString(), actor: "demo-admin", action, entity, entity_id: entityId, details });
+}
+
+function diff(before: Row, after: Row) {
+  const changes: Record<string, unknown> = {};
+  for (const key of Object.keys(after)) {
+    if (["stock", "updated_at", "final_price", "total"].includes(key)) continue;
+    if (JSON.stringify(before[key]) !== JSON.stringify(after[key])) changes[key] = { from: before[key], to: after[key] };
+  }
+  return changes;
 }
 
 // A failed transaction throws before saving, which rolls it back.
@@ -246,18 +342,26 @@ function normalizeProduct(row: Row, db: Tables) {
     throw new DbError("products_category_id_fkey");
   }
   checkUniqueSlug(db.products, row);
-  return { ...row, price, sale_price: salePrice, final_price: salePrice ?? price, stock };
+  return { ...row, price, sale_price: salePrice, final_price: salePrice ?? price, stock, updated_at: new Date().toISOString() };
 }
 
 function normalizeCategory(row: Row, db: Tables) {
   if (length(row.name) < 1 || length(row.name) > 80) throw new DbError("categories_name_check");
+  if (length(row.description) > 2000) throw new DbError("categories_description_check");
   checkUniqueSlug(db.categories, row);
-  return { ...row, position: integer(row.position) };
+  return { ...row, description: String(row.description ?? ""), position: integer(row.position) };
+}
+
+function normalizeCost(row: Row) {
+  const lowStockAt = integer(row.low_stock_at);
+  if (lowStockAt < 0 || lowStockAt > 100000) throw new DbError("product_costs_low_stock_at_check");
+  return { ...row, low_stock_at: lowStockAt };
 }
 
 const NORMALIZE: Partial<Record<TableName, (row: Row, db: Tables) => Row>> = {
   products: normalizeProduct,
   categories: normalizeCategory,
+  product_costs: normalizeCost,
 };
 
 const DEFAULTS: Partial<Record<TableName, () => Row>> = {
@@ -273,7 +377,7 @@ const DEFAULTS: Partial<Record<TableName, () => Row>> = {
     active: true,
     created_at: new Date().toISOString(),
   }),
-  categories: () => ({ id: randomUUID(), position: 0 }),
+  categories: () => ({ id: randomUUID(), position: 0, description: "" }),
 };
 
 function deleteRows(table: TableName, ids: unknown[], db: Tables) {
@@ -282,6 +386,9 @@ function deleteRows(table: TableName, ids: unknown[], db: Tables) {
   }
   if (table === "products") {
     for (const item of db.order_items) if (ids.includes(item.product_id)) item.product_id = null;
+    db.product_costs = db.product_costs.filter((row) => !ids.includes(row.product_id));
+    db.purchases = db.purchases.filter((row) => !ids.includes(row.product_id));
+    db.stock_adjustments = db.stock_adjustments.filter((row) => !ids.includes(row.product_id));
   }
 }
 
@@ -401,19 +508,32 @@ class DemoQuery {
 
   private write() {
     const normalize = NORMALIZE[this.table];
-    if (!normalize) throw new DbError("permission_denied");
+    const allowed = WRITABLE[this.table];
+    const columns = this.action === "insert" ? allowed?.insert : this.action === "update" ? allowed?.update : undefined;
+    if (!normalize || (this.action === "delete" ? !allowed?.delete : Object.keys(this.payload).some((key) => !columns?.includes(key)))) {
+      throw new DbError("permission_denied");
+    }
+    const entity = this.table;
     transaction((db) => {
       const rows = db[this.table] as unknown as Row[];
       if (this.action === "insert") {
-        rows.push(normalize({ ...DEFAULTS[this.table]!(), ...this.payload }, db));
+        const row = normalize({ ...DEFAULTS[this.table]!(), ...this.payload }, db);
+        rows.push(row);
+        if (this.table === "products") db.product_costs.push({ product_id: row.id as string, avg_cost: 0, last_cost: null, low_stock_at: 3 });
+        audit(db, "insert", entity, row.id as string, row);
       } else if (this.action === "update") {
         rows.forEach((row, index) => {
-          if (this.matches(row)) rows[index] = normalize({ ...row, ...this.payload }, db);
+          if (!this.matches(row)) return;
+          rows[index] = normalize({ ...row, ...this.payload }, db);
+          const changes = diff(row, rows[index]);
+          if (Object.keys(changes).length > 0) audit(db, "update", entity, String(row.id ?? row.product_id), changes);
         });
       } else {
-        const ids = rows.filter((row) => this.matches(row)).map((row) => row.id);
+        const removed = rows.filter((row) => this.matches(row));
+        const ids = removed.map((row) => row.id);
         deleteRows(this.table, ids, db);
         (db[this.table] as unknown as Row[]) = rows.filter((row) => !ids.includes(row.id));
+        for (const row of removed) audit(db, "delete", entity, String(row.id), row);
       }
     });
     return null;
@@ -488,6 +608,8 @@ function placeOrder(args: Row) {
     let nextItemId = Math.max(0, ...db.order_items.map((item) => item.id)) + 1;
     let total = 0;
 
+    const lines: { name: string; qty: number; price: number }[] = [];
+    const lowStock: { name: string; stock: number }[] = [];
     const products = db.products.filter((product) => merged.has(product.id)).sort((a, b) => compare(a.id, b.id));
     for (const product of products) {
       const qty = merged.get(product.id) ?? null;
@@ -496,14 +618,25 @@ function placeOrder(args: Row) {
       if (qty === null) throw new DbError("not_null_violation");
       if (product.stock < qty) throw new DbError("out_of_stock", product.name);
 
-      db.order_items.push({ id: nextItemId++, order_id: orderId, product_id: product.id, product_name: product.name, price: product.final_price, qty });
+      const cost = db.product_costs.find((row) => row.product_id === product.id);
+      db.order_items.push({
+        id: nextItemId++,
+        order_id: orderId,
+        product_id: product.id,
+        product_name: product.name,
+        price: product.final_price,
+        qty,
+        unit_cost: cost?.avg_cost ?? 0,
+      });
       product.stock -= qty;
       total = Math.round((total + product.final_price * qty) * 100) / 100;
+      lines.push({ name: product.name, qty, price: product.final_price });
+      if (product.stock <= (cost?.low_stock_at ?? 3)) lowStock.push({ name: product.name, stock: product.stock });
     }
     if (products.length !== merged.size) throw new DbError("product_unavailable");
 
     db.orders.push({ id: orderId, customer_name: name, phone, city, address, note, total, status: "new", created_at: new Date().toISOString() });
-    return { order_id: orderId, total };
+    return { order_id: orderId, total, items: lines, low_stock: lowStock };
   });
 }
 
@@ -522,12 +655,135 @@ function setOrderStatus(args: Row) {
         if (product) product.stock += item.qty;
       }
     }
+    audit(db, "update", "orders", String(order.id), { status: { from: order.status, to: status } });
     order.status = status;
     return null;
   });
 }
 
-const FUNCTIONS: Record<string, (args: Row) => unknown> = { place_order: placeOrder, set_order_status: setOrderStatus };
+const round2 = (value: number) => Math.round(value * 100) / 100;
+
+function findProduct(db: Tables, id: unknown) {
+  const product = db.products.find((item) => item.id === id);
+  if (!product) throw new DbError("product_not_found");
+  let cost = db.product_costs.find((row) => row.product_id === product.id);
+  if (!cost) {
+    cost = { product_id: product.id, avg_cost: 0, last_cost: null, low_stock_at: 3 };
+    db.product_costs.push(cost);
+  }
+  return { product, cost };
+}
+
+function receiveStock(args: Row) {
+  return transaction((db) => {
+    const qty = args.p_qty as number;
+    const unitCost = Number(args.p_unit_cost);
+    if (!Number.isInteger(qty) || qty < 1 || qty > 100000) throw new DbError("invalid_qty");
+    if (args.p_unit_cost === null || !Number.isFinite(unitCost) || unitCost < 0 || unitCost >= 1e8) throw new DbError("invalid_cost");
+    const supplier = btrim(args.p_supplier);
+    const note = btrim(args.p_note);
+    if (length(supplier) > 120 || length(note) > 500) throw new DbError("purchases_check");
+    const { product, cost } = findProduct(db, args.p_product_id);
+
+    const old = cost.avg_cost;
+    const next = product.stock <= 0 || old === 0 ? unitCost : (product.stock * old + qty * unitCost) / (product.stock + qty);
+    const id = Math.max(0, ...db.purchases.map((row) => row.id)) + 1;
+    const purchase = { id, product_id: product.id, qty, unit_cost: round2(unitCost), supplier, note, created_at: new Date().toISOString() };
+    db.purchases.push(purchase);
+    audit(db, "insert", "purchases", String(id), purchase);
+    audit(db, "update", "product_costs", product.id, { avg_cost: { from: old, to: Math.round(next * 10000) / 10000 } });
+    product.stock += qty;
+    cost.avg_cost = Math.round(next * 10000) / 10000;
+    cost.last_cost = round2(unitCost);
+    return { stock: product.stock, old_avg: round2(old), avg_cost: round2(next), price: product.final_price };
+  });
+}
+
+function adjustStock(args: Row) {
+  return transaction((db) => {
+    const delta = args.p_delta as number;
+    const reason = btrim(args.p_reason);
+    if (!Number.isInteger(delta) || delta === 0 || Math.abs(delta) > 100000) throw new DbError("invalid_qty");
+    if (length(reason) < 2 || length(reason) > 300) throw new DbError("invalid_reason");
+    const { product } = findProduct(db, args.p_product_id);
+    if (product.stock + delta < 0) throw new DbError("out_of_stock");
+    product.stock += delta;
+    const id = Math.max(0, ...db.stock_adjustments.map((row) => row.id)) + 1;
+    const row = { id, product_id: product.id, delta, reason, created_at: new Date().toISOString() };
+    db.stock_adjustments.push(row);
+    audit(db, "insert", "stock_adjustments", String(id), row);
+    return product.stock;
+  });
+}
+
+function setProductCost(args: Row) {
+  return transaction((db) => {
+    const value = Number(args.p_avg_cost);
+    if (args.p_avg_cost === null || !Number.isFinite(value) || value < 0 || value >= 1e8) throw new DbError("invalid_cost");
+    const { product, cost } = findProduct(db, args.p_product_id);
+    audit(db, "update", "product_costs", product.id, { avg_cost: { from: cost.avg_cost, to: value } });
+    cost.avg_cost = value;
+    return null;
+  });
+}
+
+// Tbilisi is UTC+4 all year.
+const TBILISI_MS = 4 * 3600000;
+const localDay = (iso: string) => new Date(Date.parse(iso) + TBILISI_MS).toISOString().slice(0, 10);
+
+function soldLines(args: Row) {
+  const db = load();
+  const from = String(args.p_from);
+  const to = String(args.p_to);
+  const orders = new Map(
+    db.orders.filter((order) => order.status !== "cancelled" && localDay(order.created_at) >= from && localDay(order.created_at) <= to).map((order) => [order.id, order]),
+  );
+  return db.order_items.filter((item) => orders.has(item.order_id)).map((item) => ({ item, order: orders.get(item.order_id)! }));
+}
+
+function salesReport(args: Row) {
+  const months = new Map<string, { month: string; orders: Set<number>; units: number; revenue: number; cost: number }>();
+  for (const { item, order } of soldLines(args)) {
+    const month = `${localDay(order.created_at).slice(0, 7)}-01`;
+    const row = months.get(month) ?? { month, orders: new Set(), units: 0, revenue: 0, cost: 0 };
+    row.orders.add(order.id);
+    row.units += item.qty;
+    row.revenue += item.price * item.qty;
+    row.cost += item.unit_cost * item.qty;
+    months.set(month, row);
+  }
+  return [...months.values()]
+    .sort((a, b) => compare(b.month, a.month))
+    .map((row) => ({ month: row.month, orders: row.orders.size, units: row.units, revenue: round2(row.revenue), cost: round2(row.cost), profit: round2(row.revenue - row.cost) }));
+}
+
+function topProducts(args: Row) {
+  const products = new Map<string, { product_name: string; units: number; revenue: number; profit: number }>();
+  for (const { item } of soldLines(args)) {
+    const row = products.get(item.product_name) ?? { product_name: item.product_name, units: 0, revenue: 0, profit: 0 };
+    row.units += item.qty;
+    row.revenue += item.price * item.qty;
+    row.profit += (item.price - item.unit_cost) * item.qty;
+    products.set(item.product_name, row);
+  }
+  const limit = Math.min(Math.max(Number(args.p_limit) || 10, 1), 100);
+  return [...products.values()]
+    .sort((a, b) => b.profit - a.profit || b.units - a.units)
+    .slice(0, limit)
+    .map((row) => ({ ...row, revenue: round2(row.revenue), profit: round2(row.profit) }));
+}
+
+const FUNCTIONS: Record<string, (args: Row) => unknown> = {
+  place_order: placeOrder,
+  set_order_status: setOrderStatus,
+  receive_stock: receiveStock,
+  adjust_stock: adjustStock,
+  set_product_cost: setProductCost,
+  sales_report: salesReport,
+  top_products: topProducts,
+  // Demo mode has one local visitor, so nothing is limited.
+  rate_limit_hit: () => true,
+};
 
 export const demoClient = {
   from: (table: TableName) => new DemoQuery(table),

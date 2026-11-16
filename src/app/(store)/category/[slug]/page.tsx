@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CategoryNav } from "@/components/category-nav";
+import { JsonLd } from "@/components/json-ld";
 import { ListingHeader } from "@/components/listing-header";
 import { ProductGrid } from "@/components/product-grid";
 import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
+import { absolute, breadcrumbs, clip } from "@/lib/seo";
+import { site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -17,7 +20,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = (await getCategories()).find((item) => item.slug === slug);
-  return { title: category?.name };
+  if (!category) return {};
+  const description = clip(category.description || `${category.name}: ფასები, მარაგი და მიწოდება მთელ საქართველოში. ${site.name}.`);
+  return {
+    title: category.name,
+    description,
+    alternates: { canonical: `/category/${category.slug}` },
+    openGraph: { title: category.name, description, url: `/category/${category.slug}` },
+  };
 }
 
 export default async function CategoryPage({ params }: Props) {
@@ -30,9 +40,24 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={breadcrumbs([{ name: category.name, path: `/category/${category.slug}` }])} />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: category.name,
+          itemListElement: products.map((product, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absolute(`/product/${product.slug}`),
+            name: product.name,
+          })),
+        }}
+      />
       <CategoryNav categories={categories} active={slug} />
       <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
         <ListingHeader title={category.name} filters={{ category: slug }} />
+        {category.description && <p className="-mt-1 mb-4 max-w-3xl text-sm leading-6 text-muted">{category.description}</p>}
         <ProductGrid products={products} />
         {total > PAGE_SIZE && (
           <Link

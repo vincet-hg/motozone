@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { AddToCart } from "@/components/add-to-cart";
 import { CategoryNav } from "@/components/category-nav";
 import { Gallery } from "@/components/gallery";
+import { JsonLd } from "@/components/json-ld";
 import { Price } from "@/components/price";
 import { getCategories, getProductBySlug, getProductSlugs } from "@/lib/catalog";
-import { imageUrl } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
+import { absoluteImage, breadcrumbs, clip, productJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -17,10 +19,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
+  const price = formatPrice(product.final_price);
+  const description = clip(product.description ? `${price}. ${product.description}` : `${product.name}, ${price}. მიწოდება მთელ საქართველოში.`);
   return {
     title: product.name,
-    description: product.description.slice(0, 160) || undefined,
-    openGraph: { title: product.name, images: product.images[0] ? [imageUrl(product.images[0])] : undefined },
+    description,
+    alternates: { canonical: `/product/${product.slug}` },
+    openGraph: {
+      title: product.name,
+      description,
+      url: `/product/${product.slug}`,
+      images: product.images.slice(0, 4).map((image) => ({ url: absoluteImage(image), alt: product.name })),
+    },
   };
 }
 
@@ -33,6 +43,13 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd data={productJsonLd(product, category)} />
+      <JsonLd
+        data={breadcrumbs([
+          ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
+          { name: product.name, path: `/product/${product.slug}` },
+        ])}
+      />
       <CategoryNav categories={categories} active={category?.slug} />
       <main className="mx-auto grid max-w-5xl gap-6 px-3 py-4 sm:px-4 md:grid-cols-2 md:gap-12 md:py-10">
         <Gallery images={product.images} alt={product.name} />

@@ -159,6 +159,11 @@ export function CartView() {
         <button type="submit" disabled={pending || unavailable} className="h-13 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(229,9,32,0.7)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-50">
           {pending ? "იგზავნება..." : "შეკვეთის გაფორმება"}
         </button>
+        <p className="text-xs leading-5 text-muted">
+          შეკვეთით ეთანხმები{" "}
+          <Link href="/terms" className="underline hover:text-fg">მომსახურების პირობებს</Link> და{" "}
+          <Link href="/privacy" className="underline hover:text-fg">კონფიდენციალურობის პოლიტიკას</Link>.
+        </p>
       </form>
     </div>
   );

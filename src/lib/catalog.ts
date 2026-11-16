@@ -1,6 +1,8 @@
+import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { isDemo } from "./demo";
 import { demoClient } from "./demo-data";
+import { env } from "./env";
 import type { Category, Product, ProductCard } from "./types";
 
 export const CATALOG_TAG = "catalog";
@@ -8,8 +10,8 @@ export const PAGE_SIZE = 40;
 
 const CARD_COLUMNS = "id,slug,name,price,sale_price,final_price,stock,images";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const url = env.supabaseUrl;
+const anonKey = env.anonKey;
 const auth = { persistSession: false, autoRefreshToken: false };
 
 // Reads are cached and refreshed the moment the admin saves a change (see CATALOG_TAG).
@@ -24,7 +26,7 @@ const cached = isDemo
       },
     });
 
-// For free-text search and checkout, which must not fill the cache or show old stock.
+// For free-text search and the cart, which must not fill the cache or show old stock.
 export const live = isDemo ? (demoClient as never) : createClient(url, anonKey, { auth });
 
 export type Sort = "newest" | "price_asc" | "price_desc";
@@ -40,7 +42,7 @@ export type ProductQuery = {
 };
 
 export async function getCategories(): Promise<Category[]> {
-  const { data, error } = await cached.from("categories").select("id,name,slug,position").order("position");
+  const { data, error } = await cached.from("categories").select("id,name,slug,position,description").order("position");
   if (error) throw new Error(error.message);
   return data;
 }
@@ -85,4 +87,17 @@ export async function getProductsByIds(ids: string[]): Promise<ProductCard[]> {
   const { data, error } = await live.from("products").select(CARD_COLUMNS).in("id", ids).eq("active", true);
   if (error) throw new Error(error.message);
   return data as ProductCard[];
+}
+
+export type SitemapProduct = { slug: string; updated_at: string; images: string[]; category_id: string | null };
+
+export async function getSitemapProducts(): Promise<SitemapProduct[]> {
+  const { data, error } = await cached
+    .from("products")
+    .select("slug,updated_at,images,category_id")
+    .eq("active", true)
+    .order("updated_at", { ascending: false })
+    .limit(5000);
+  if (error) throw new Error(error.message);
+  return data as SitemapProduct[];
 }

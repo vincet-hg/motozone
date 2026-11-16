@@ -137,11 +137,34 @@ export function ProductForm({ product, categories }: { product?: Product; catego
           ფასდაკლებით (₾)
           <input name="sale_price" type="number" min="0" step="0.01" defaultValue={product?.sale_price ?? ""} className={field} />
         </label>
-        <label className="text-sm">
-          მარაგი
-          <input name="stock" type="number" min="0" step="1" required defaultValue={product?.stock ?? 0} className={field} />
-        </label>
+        {product ? (
+          <div className="text-sm">
+            მარაგი
+            <p className="mt-1 py-2">
+              <b>{product.stock}</b>{" "}
+              <a href="#stock" className="text-neutral-700 underline">
+                შესყიდვით ან კორექციით
+              </a>
+            </p>
+          </div>
+        ) : (
+          <span />
+        )}
       </div>
+      {!product && (
+        <fieldset className="grid grid-cols-2 gap-3 rounded border border-neutral-200 p-3">
+          <legend className="px-1 text-sm font-medium">საწყისი მარაგი (არასავალდებულო)</legend>
+          <label className="text-sm">
+            რაოდენობა
+            <input name="opening_qty" type="number" min="0" step="1" className={field} />
+          </label>
+          <label className="text-sm">
+            შესყიდვის ფასი ცალზე (₾)
+            <input name="opening_cost" type="number" min="0" step="0.01" className={field} />
+          </label>
+          <p className="col-span-2 text-xs text-neutral-600">შემდეგი პარტიები პროდუქტის გვერდზე, „შესყიდვის დამატებით“ შეგყავს. ასე თვითღირებულება და მოგება ზუსტად ითვლება.</p>
+        </fieldset>
+      )}
       <ImageManager initial={product?.images ?? []} />
       <label className="block text-sm">
         აღწერა

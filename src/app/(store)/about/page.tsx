@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "შესახებ" };
+export const metadata: Metadata = { title: "შესახებ", alternates: { canonical: "/about" } };
 
 // Draft text: tell your own story here.
 export default function AboutPage() {

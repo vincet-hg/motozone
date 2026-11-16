@@ -28,6 +28,8 @@ export function SiteFooter() {
             <Link href="/delivery" prefetch={false} className={link}>მიწოდება</Link>
             <Link href="/returns" prefetch={false} className={link}>დაბრუნების პირობები</Link>
             <Link href="/contact" prefetch={false} className={link}>კონტაქტი</Link>
+            <Link href="/privacy" prefetch={false} className={link}>კონფიდენციალურობა</Link>
+            <Link href="/terms" prefetch={false} className={link}>მომსახურების პირობები</Link>
           </nav>
         </div>
         <div className="col-span-2 lg:col-span-1">

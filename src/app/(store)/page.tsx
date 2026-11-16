@@ -1,13 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BenefitsBar } from "@/components/benefits-bar";
 import { CategoryNav } from "@/components/category-nav";
 import { FilterBar } from "@/components/filter-bar";
+import { JsonLd } from "@/components/json-ld";
 import { HomeHero } from "@/components/home-hero";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductRow } from "@/components/product-row";
 import { SectionHeading } from "@/components/section-heading";
 import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
+import { absolute, organization } from "@/lib/seo";
+import { site } from "@/lib/site";
+
+export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/" } };
 
 export default async function HomePage() {
   const [categories, { products, total }, sale] = await Promise.all([
@@ -18,6 +24,27 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            organization,
+            {
+              "@type": "WebSite",
+              "@id": absolute("/#website"),
+              name: site.name,
+              url: site.url,
+              inLanguage: "ka",
+              publisher: { "@id": absolute("/#store") },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: { "@type": "EntryPoint", urlTemplate: `${absolute("/search")}?q={search_term_string}` },
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
+        }}
+      />
       <HomeHero />
       <BenefitsBar />
 

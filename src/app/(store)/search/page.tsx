@@ -8,7 +8,7 @@ import { getCategories, getProducts, PAGE_SIZE, type Sort } from "@/lib/catalog"
 
 type Params = Record<string, string | string[] | undefined>;
 
-export const metadata: Metadata = { title: "ძიება", robots: { index: false } };
+export const metadata: Metadata = { title: "ძიება", robots: { index: false, follow: true } };
 
 function text(value: string | string[] | undefined) {
   return typeof value === "string" ? value.trim().slice(0, 100) : "";

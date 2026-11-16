@@ -1,0 +1,47 @@
+import type { Metadata } from "next";
+import { site } from "@/lib/site";
+
+export const metadata: Metadata = { title: "კონფიდენციალურობის პოლიტიკა", alternates: { canonical: "/privacy" } };
+
+const h2 = "mt-6 text-lg font-bold";
+
+// Draft text written for this store's actual data flows. Have a lawyer review it before launch.
+export default function PrivacyPage() {
+  return (
+    <main className="mx-auto max-w-2xl px-3 py-8 sm:px-4">
+      <h1 className="text-2xl font-extrabold">კონფიდენციალურობის პოლიტიკა</h1>
+      <div className="mt-4 space-y-3 leading-7 text-fg/85">
+        <p>
+          ეს პოლიტიკა აღწერს, რა მონაცემებს აგროვებს {site.name} ({site.legalName}, ს/კ {site.taxId}) და როგორ იყენებს მათ.
+        </p>
+
+        <h2 className={h2}>რა მონაცემებს ვაგროვებთ</h2>
+        <p>შეკვეთის გაფორმებისას: სახელს, ტელეფონის ნომერს, ქალაქს, მისამართს და შენიშვნას, თუ მას დაწერ. ანგარიშის შექმნა საჭირო არ არის.</p>
+        <p>კალათა და სურვილების სია ინახება მხოლოდ შენს ბრაუზერში და ჩვენთან არ იგზავნება შეკვეთის გაფორმებამდე.</p>
+        <p>უსაფრთხოებისთვის დროებით ვინახავთ IP მისამართის შიფრირებულ (hash) ფორმას, რომ ავტომატური სპამი შევაჩეროთ. ის 1 დღეში იშლება.</p>
+
+        <h2 className={h2}>რისთვის ვიყენებთ</h2>
+        <p>მხოლოდ შეკვეთის დასადასტურებლად, მისატანად, დაბრუნების დასამუშავებლად და კანონით მოთხოვნილი აღრიცხვისთვის. მონაცემებს არ ვყიდით და სარეკლამოდ არ ვაზიარებთ.</p>
+
+        <h2 className={h2}>ვის გადაეცემა</h2>
+        <p>
+          მონაცემები ინახება ჩვენი ტექნიკური პარტნიორების სერვერებზე: Supabase (მონაცემთა ბაზა) და Vercel (საიტის ჰოსტინგი). შეკვეთის
+          შეტყობინება იგზავნება მაღაზიის Telegram-ში. მისამართი და ტელეფონი გადაეცემა კურიერს, რომელიც შეკვეთას მოგიტანს.
+        </p>
+
+        <h2 className={h2}>რამდენ ხანს ვინახავთ</h2>
+        <p>შეკვეთის მონაცემებს ვინახავთ იმდენ ხანს, რამდენიც საჭიროა ბუღალტრული და საგადასახადო ვალდებულებებისთვის.</p>
+
+        <h2 className={h2}>შენი უფლებები</h2>
+        <p>
+          საქართველოს კანონის „პერსონალურ მონაცემთა დაცვის შესახებ“ თანახმად, შეგიძლია მოითხოვო შენი მონაცემების ნახვა, გასწორება ან
+          წაშლა, თუ მათი შენახვა კანონით აღარ არის სავალდებულო. მოგვწერე{" "}
+          <a href={`mailto:${site.email}`} className="text-accent underline hover:text-accent-hover">{site.email}</a> ან დაგვირეკე{" "}
+          <a href={site.phoneHref} className="text-accent underline hover:text-accent-hover">{site.phone}</a>.
+        </p>
+
+        <p className="mt-6 text-sm text-muted">ბოლო განახლება: 2026 წლის ნოემბერი.</p>
+      </div>
+    </main>
+  );
+}

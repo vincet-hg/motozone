@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "დაბრუნების პირობები" };
+export const metadata: Metadata = { title: "დაბრუნების პირობები", alternates: { canonical: "/returns" } };
 
 // Draft text: replace it with your real return policy.
 export default function ReturnsPage() {

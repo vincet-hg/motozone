@@ -21,8 +21,20 @@ const georgian = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: `${site.name} - მოტო აქსესუარები`, template: `%s | ${site.name}` },
+  metadataBase: new URL(site.url),
+  title: { default: `${site.name} - მოტოციკლისა და მოპედის აქსესუარები`, template: `%s | ${site.name}` },
   description: site.description,
+  applicationName: site.name,
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "ka_GE",
+    images: [{ url: "/hero.webp", alt: site.name }],
+  },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
+  // Paste the code from Google Search Console > Settings > Ownership verification > HTML tag.
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
 
 export const viewport: Viewport = { themeColor: "#111114" };

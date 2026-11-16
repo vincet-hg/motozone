@@ -1,4 +1,4 @@
--- Scooter Land database. Run once in Supabase: SQL Editor > New query > paste > Run.
+-- Scooter Land: initial database. Applied with `supabase db push` (see README).
 
 -- ---------------------------------------------------------------- tables
 

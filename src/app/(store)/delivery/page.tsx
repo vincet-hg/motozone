@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "მიწოდება" };
+export const metadata: Metadata = { title: "მიწოდება", alternates: { canonical: "/delivery" } };
 
 // Draft text: replace it with your real delivery terms, prices and timing.
 export default function DeliveryPage() {

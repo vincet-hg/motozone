@@ -58,6 +58,19 @@ export default async function AdminOrderPage({
           <span>ჯამი</span>
           <span>{formatPrice(order.total)}</span>
         </p>
+        {(() => {
+          const lines = (items ?? []) as OrderItem[];
+          const cost = lines.reduce((sum, item) => sum + Number(item.unit_cost) * item.qty, 0);
+          const known = lines.every((item) => Number(item.unit_cost) > 0);
+          return (
+            <p className="mt-1 flex justify-between text-neutral-700">
+              <span>თვითღირებულება / მოგება</span>
+              <span>
+                {known ? `${formatPrice(Math.round(cost * 100) / 100)} / ${formatPrice(Math.round((order.total - cost) * 100) / 100)}` : "თვითღირებულება უცნობია"}
+              </span>
+            </p>
+          );
+        })()}
       </section>
 
       {order.status === "cancelled" ? (

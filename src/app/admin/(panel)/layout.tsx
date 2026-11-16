@@ -3,12 +3,14 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/supabase-server";
 import { logout } from "../actions";
 
-export const metadata: Metadata = { title: "ადმინისტრატორი", robots: { index: false } };
+export const metadata: Metadata = { title: "ადმინისტრატორი", robots: { index: false, follow: false } };
 
 const links = [
   { href: "/admin/orders", label: "შეკვეთები" },
   { href: "/admin/products", label: "პროდუქტები" },
   { href: "/admin/categories", label: "კატეგორიები" },
+  { href: "/admin/reports", label: "ანგარიშები" },
+  { href: "/admin/audit", label: "ისტორია" },
 ];
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {

@@ -3,7 +3,7 @@ import { PhoneIcon } from "@/components/icons";
 import { SocialLinks } from "@/components/social-links";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "კონტაქტი" };
+export const metadata: Metadata = { title: "კონტაქტი", alternates: { canonical: "/contact" } };
 
 export default function ContactPage() {
   return (

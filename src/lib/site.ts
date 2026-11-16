@@ -1,6 +1,13 @@
 // Business details shown across the store. Edit them here.
 export const site = {
   name: "Scooter Land",
+  // Full address of the live store, without a trailing slash. Set NEXT_PUBLIC_SITE_URL per environment.
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/+$/, ""),
+  email: "info@scooterland.ge",
+  // Shown on the privacy and terms pages. Fill in your registered details.
+  legalName: "ი/მ ...",
+  taxId: "...",
+  address: "თბილისი, საქართველო",
   description: "მოტოციკლისა და მოპედის აქსესუარები საქართველოში: გრიფსები, დამტენები, ხელთათმანები და სხვა.",
   phone: "+995 555 123 456",
   phoneHref: "tel:+995555123456",
