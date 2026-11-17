@@ -49,10 +49,12 @@ select pg_temp.check(pg_temp.fails($$update public.products set price = 1$$), 'c
 reset role;
 
 -- ---------------------------------------------------------------- the store's server
+-- It only calls functions, so the test must not depend on table privileges for service_role.
+select id as product_id from public.products \gset
 set role service_role;
 select pg_temp.check(
   (public.place_order('Nika', '555123456', 'Tbilisi', 'Street 1', '',
-    jsonb_build_array(jsonb_build_object('id', (select id from public.products), 'qty', 7))) -> 'low_stock' -> 0 ->> 'stock') = '2',
+    jsonb_build_array(jsonb_build_object('id', :'product_id', 'qty', 7))) -> 'low_stock' -> 0 ->> 'stock') = '2',
   'order lists low stock');
 select pg_temp.check(public.rate_limit_hit('k', 2, 60) and public.rate_limit_hit('k', 2, 60) and not public.rate_limit_hit('k', 2, 60), 'rate limit stops the third hit');
 reset role;
