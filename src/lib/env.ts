@@ -3,13 +3,13 @@ import { isDemo } from "./demo";
 
 // Read once on the server. A production deployment with a missing value stops with a clear message
 // instead of showing broken pages or failing checkouts.
-// Vercel previews use their own address, so only production needs NEXT_PUBLIC_SITE_URL.
-const isPreview = process.env.VERCEL_ENV === "preview";
+// NEXT_PUBLIC_SITE_URL is required only for Vercel production. Previews use their own address,
+// and without it the site is never indexed (see isLiveSite).
 const REQUIRED = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
   "SUPABASE_SECRET_KEY",
-  ...(isPreview ? [] : ["NEXT_PUBLIC_SITE_URL"]),
+  ...(process.env.VERCEL_ENV === "production" ? ["NEXT_PUBLIC_SITE_URL"] : []),
 ];
 
 if (!isDemo && process.env.NODE_ENV === "production") {
