@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { crc32, deflateSync } from "node:zlib";
-import type { AuditEntry, Category, Order, OrderItem, OrderStatus, Product, ProductCost, Purchase, StockAdjustment } from "./types";
+import type { AuditEntry, Category, Order, OrderItem, OrderStatus, Product, ProductCost, Promotion, Purchase, StockAdjustment, Subscriber } from "./types";
 
 // Stands in for the part of the Supabase client this app uses, backed by JSON files in .demo-data/.
 // Business rules mirror supabase/migrations. Every transaction is synchronous, so requests cannot
@@ -32,6 +32,8 @@ type Tables = {
   purchases: Purchase[];
   stock_adjustments: StockAdjustment[];
   audit_log: AuditEntry[];
+  promotions: Promotion[];
+  newsletter_subscribers: Subscriber[];
   orders: Order[];
   order_items: DemoOrderItem[];
 };
@@ -39,7 +41,18 @@ type TableName = keyof Tables;
 type Row = Record<string, unknown>;
 
 // order_items is written last, so its presence means a seed finished.
-const TABLES: TableName[] = ["categories", "products", "product_costs", "purchases", "stock_adjustments", "audit_log", "orders", "order_items"];
+const TABLES: TableName[] = [
+  "categories",
+  "products",
+  "product_costs",
+  "purchases",
+  "stock_adjustments",
+  "audit_log",
+  "promotions",
+  "newsletter_subscribers",
+  "orders",
+  "order_items",
+];
 
 // Columns the admin may write directly, as granted in the migrations. Stock changes only through functions.
 const WRITABLE: Partial<Record<TableName, { insert?: string[]; update?: string[]; delete?: boolean }>> = {
@@ -50,6 +63,12 @@ const WRITABLE: Partial<Record<TableName, { insert?: string[]; update?: string[]
   },
   categories: { insert: ["name", "slug", "position", "description"], update: ["name", "slug", "position", "description"], delete: true },
   product_costs: { update: ["low_stock_at"] },
+  promotions: {
+    insert: ["product_id", "title", "description", "badge", "cta_label", "ends_at", "active", "position"],
+    update: ["product_id", "title", "description", "badge", "cta_label", "ends_at", "active", "position"],
+    delete: true,
+  },
+  newsletter_subscribers: { delete: true },
 };
 
 class DbError extends Error {
@@ -230,7 +249,20 @@ function seed() {
       created_at: new Date(now - n * 11 * 86400000).toISOString(),
     });
   }
-  save({ categories, products, product_costs, purchases, stock_adjustments: [], audit_log: [], orders, order_items });
+  // Two sample slides for the homepage slider, ending in a few days.
+  const onSale = products.filter((product) => product.sale_price !== null);
+  const promotions: Promotion[] = onSale.slice(0, 2).map((product, index) => ({
+    id: seedId(8, index),
+    product_id: product.id,
+    title: index === 0 ? "ზამთრის აქცია" : "კვირის შეთავაზება",
+    description: index === 0 ? "ცივ ამინდში მართვა ბევრად კომფორტული იქნება." : "შეზღუდული რაოდენობა, სანამ მარაგია.",
+    badge: index === 0 ? "ცხელი შეთავაზება" : "",
+    cta_label: "ყიდვა",
+    ends_at: new Date(now + (index === 0 ? 3 : 9) * 86400000).toISOString(),
+    active: true,
+    position: index,
+  }));
+  save({ categories, products, product_costs, purchases, stock_adjustments: [], audit_log: [], promotions, newsletter_subscribers: [], orders, order_items });
 }
 
 // ---------------------------------------------------------------- storage
@@ -358,10 +390,20 @@ function normalizeCost(row: Row) {
   return { ...row, low_stock_at: lowStockAt };
 }
 
+function normalizePromotion(row: Row, db: Tables) {
+  if (!db.products.some((product) => product.id === row.product_id)) throw new DbError("promotions_product_id_fkey");
+  if (length(row.title) < 2 || length(row.title) > 80) throw new DbError("promotions_title_check");
+  if (length(row.description) > 240 || length(row.badge) > 30) throw new DbError("promotions_check");
+  if (length(row.cta_label) < 2 || length(row.cta_label) > 30) throw new DbError("promotions_cta_label_check");
+  return { ...row, position: integer(row.position), active: row.active !== false };
+}
+
 const NORMALIZE: Partial<Record<TableName, (row: Row, db: Tables) => Row>> = {
   products: normalizeProduct,
   categories: normalizeCategory,
   product_costs: normalizeCost,
+  promotions: normalizePromotion,
+  newsletter_subscribers: (row) => row,
 };
 
 const DEFAULTS: Partial<Record<TableName, () => Row>> = {
@@ -378,6 +420,16 @@ const DEFAULTS: Partial<Record<TableName, () => Row>> = {
     created_at: new Date().toISOString(),
   }),
   categories: () => ({ id: randomUUID(), position: 0, description: "" }),
+  promotions: () => ({
+    id: randomUUID(),
+    description: "",
+    badge: "",
+    cta_label: "ყიდვა",
+    ends_at: null,
+    active: true,
+    position: 0,
+    created_at: new Date().toISOString(),
+  }),
 };
 
 function deleteRows(table: TableName, ids: unknown[], db: Tables) {
@@ -389,6 +441,7 @@ function deleteRows(table: TableName, ids: unknown[], db: Tables) {
     db.product_costs = db.product_costs.filter((row) => !ids.includes(row.product_id));
     db.purchases = db.purchases.filter((row) => !ids.includes(row.product_id));
     db.stock_adjustments = db.stock_adjustments.filter((row) => !ids.includes(row.product_id));
+    db.promotions = db.promotions.filter((row) => !ids.includes(row.product_id));
   }
 }
 
@@ -773,6 +826,36 @@ function topProducts(args: Row) {
     .map((row) => ({ ...row, revenue: round2(row.revenue), profit: round2(row.profit) }));
 }
 
+function newsletterSubscribe(args: Row) {
+  return transaction((db) => {
+    const email = btrim(args.p_email).toLowerCase();
+    if (email.length > 254 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new DbError("invalid_email");
+    if (!db.newsletter_subscribers.some((row) => row.email === email)) {
+      const id = Math.max(0, ...db.newsletter_subscribers.map((row) => row.id)) + 1;
+      db.newsletter_subscribers.push({ id, email, created_at: new Date().toISOString() });
+    }
+    return null;
+  });
+}
+
+function popularProductIds(args: Row) {
+  const db = load();
+  const since = Date.now() - 90 * 86400000;
+  const orders = new Set(db.orders.filter((order) => order.status !== "cancelled" && Date.parse(order.created_at) > since).map((order) => order.id));
+  const active = new Set(db.products.filter((product) => product.active).map((product) => product.id));
+  const units = new Map<string, number>();
+  for (const item of db.order_items) {
+    if (item.product_id && orders.has(item.order_id) && active.has(item.product_id)) {
+      units.set(item.product_id, (units.get(item.product_id) ?? 0) + item.qty);
+    }
+  }
+  const limit = Math.min(Math.max(Number(args.p_limit) || 10, 1), 50);
+  return [...units.entries()]
+    .sort((a, b) => b[1] - a[1] || compare(a[0], b[0]))
+    .slice(0, limit)
+    .map(([id]) => id);
+}
+
 const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   place_order: placeOrder,
   set_order_status: setOrderStatus,
@@ -783,6 +866,8 @@ const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   top_products: topProducts,
   // Demo mode has one local visitor, so nothing is limited.
   rate_limit_hit: () => true,
+  newsletter_subscribe: newsletterSubscribe,
+  popular_product_ids: popularProductIds,
 };
 
 export const demoClient = {

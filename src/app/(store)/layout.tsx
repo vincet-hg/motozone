@@ -15,7 +15,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       )}
       <SiteHeader categories={categories} />
       <div className="flex-1">{children}</div>
-      <SiteFooter />
+      <SiteFooter categories={categories} />
     </>
   );
 }

@@ -11,6 +11,7 @@ const ENTITIES: Record<string, string> = {
   stock_adjustments: "მარაგის კორექცია",
   orders: "შეკვეთა",
   admins: "ადმინისტრატორი",
+  promotions: "სლაიდი",
 };
 
 const ACTIONS: Record<AuditEntry["action"], string> = { insert: "დაემატა", update: "შეიცვალა", delete: "წაიშალა" };
@@ -30,6 +31,10 @@ const FIELDS: Record<string, string> = {
   specs: "მახასიათებლები",
   compatibility: "თავსებადობა",
   position: "რიგი",
+  title: "სათაური",
+  badge: "ნიშანი",
+  ends_at: "მთავრდება",
+  cta_label: "ღილაკი",
 };
 
 function show(value: unknown) {
@@ -51,7 +56,7 @@ function summary(entry: AuditEntry) {
   }
   if (entry.entity === "purchases") return `${show(details.qty)} ცალი, ${show(details.unit_cost)} ₾/ცალი`;
   if (entry.entity === "stock_adjustments") return `${show(details.delta)} ცალი: ${show(details.reason)}`;
-  return show(details.name ?? details.product_name ?? "");
+  return show(details.name ?? details.title ?? details.product_name ?? "");
 }
 
 function link(entry: AuditEntry) {
@@ -59,6 +64,7 @@ function link(entry: AuditEntry) {
   const productId = ["products", "product_costs"].includes(entry.entity) ? entry.entity_id : (details.product_id as string | undefined);
   if (productId && entry.action !== "delete") return `/admin/products/${productId}`;
   if (entry.entity === "orders" && entry.entity_id) return `/admin/orders/${entry.entity_id}`;
+  if (entry.entity === "promotions") return "/admin/promotions";
   return null;
 }
 

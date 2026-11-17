@@ -88,3 +88,20 @@ export type AuditEntry = {
 
 export type MonthReport = { month: string; orders: number; units: number; revenue: number; cost: number; profit: number };
 export type TopProduct = { product_name: string; units: number; revenue: number; profit: number };
+
+// A homepage slide. Photo, name and price come from the linked product.
+export type Promotion = {
+  id: string;
+  product_id: string;
+  title: string;
+  description: string;
+  badge: string;
+  cta_label: string;
+  ends_at: string | null;
+  active: boolean;
+  position: number;
+};
+
+export type PromotionSlide = Promotion & { product: ProductCard };
+
+export type Subscriber = { id: number; email: string; created_at: string };

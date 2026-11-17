@@ -70,3 +70,25 @@ select pg_temp.check(pg_temp.fails($$select * from public.sales_report('2020-01-
 set request.jwt.claims = '{"aal":"aal2"}';
 select pg_temp.check((select profit from public.sales_report('2020-01-01', '2100-01-01')) = 56, 'profit 7 x (20 - 12)');
 reset role;
+
+-- ---------------------------------------------------------------- homepage
+set role authenticated;
+set request.jwt.claims = '{"aal":"aal2"}';
+insert into public.promotions (product_id, title, ends_at) values ((select id from public.products limit 1), 'Live', now() + interval '1 day');
+insert into public.promotions (product_id, title, ends_at) values ((select id from public.products limit 1), 'Ended', now() - interval '1 day');
+reset role;
+
+set role anon;
+select pg_temp.check((select count(*) from public.promotions) = 1, 'customers see only running promotions');
+select pg_temp.check(pg_temp.fails($$insert into public.promotions (product_id, title) values ((select id from public.products limit 1), 'X')$$), 'customers cannot add promotions');
+select pg_temp.check(pg_temp.fails($$select public.newsletter_subscribe('a@b.ge')$$), 'browsers cannot sign up directly');
+select pg_temp.check(pg_temp.fails($$select * from public.newsletter_subscribers$$), 'customers cannot read subscribers');
+select pg_temp.check((select count(*) from public.popular_product_ids(5)) = 1, 'popular products come from sales');
+reset role;
+
+set role service_role;
+select public.newsletter_subscribe(' A@B.ge ');
+select public.newsletter_subscribe('a@b.ge');
+select pg_temp.check(pg_temp.fails($$select public.newsletter_subscribe('not-an-email')$$), 'invalid email refused');
+reset role;
+select pg_temp.check((select count(*) from public.newsletter_subscribers) = 1, 'one subscriber, stored lowercase');

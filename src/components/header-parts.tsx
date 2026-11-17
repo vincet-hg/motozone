@@ -51,7 +51,7 @@ export function Disclosure({ className, summary, summaryLabel, summaryClassName,
   );
 }
 
-const iconButton = "relative flex size-10 items-center justify-center rounded-btn transition-colors duration-200 hover:text-accent-hover";
+const iconButton = "relative flex size-10 items-center justify-center rounded-btn transition-colors duration-200 hover:bg-card hover:text-accent-hover";
 const badge = "absolute top-0.5 right-0 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white";
 
 export function WishlistLink() {

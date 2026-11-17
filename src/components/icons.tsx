@@ -114,6 +114,35 @@ export function ReturnIcon({ className = "size-6" }: Props) {
   );
 }
 
+export function HeadsetIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+      <rect x="3" y="13" width="4" height="6" rx="1.5" />
+      <rect x="17" y="13" width="4" height="6" rx="1.5" />
+      <path d="M19 19a3 3 0 0 1-3 3h-3" />
+    </svg>
+  );
+}
+
+export function MailIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 6 9-6" />
+    </svg>
+  );
+}
+
+export function PinIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}
+
 // Brand marks, simplified.
 export function FacebookIcon({ className = "size-5" }: Props) {
   return (

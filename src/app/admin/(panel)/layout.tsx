@@ -9,7 +9,9 @@ const links = [
   { href: "/admin/orders", label: "შეკვეთები" },
   { href: "/admin/products", label: "პროდუქტები" },
   { href: "/admin/categories", label: "კატეგორიები" },
+  { href: "/admin/promotions", label: "სლაიდერი" },
   { href: "/admin/reports", label: "ანგარიშები" },
+  { href: "/admin/subscribers", label: "გამომწერები" },
   { href: "/admin/audit", label: "ისტორია" },
 ];
 

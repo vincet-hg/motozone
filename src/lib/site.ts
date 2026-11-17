@@ -22,6 +22,18 @@ export const site = {
   address: "თბილისი, საქართველო",
   description: "მოტოციკლისა და მოპედის აქსესუარები საქართველოში: გრიფსები, დამტენები, ხელთათმანები და სხვა.",
   phone: "+995 555 123 456",
+  // Short promises in the bar above the menu and in the homepage banners. Keep them true:
+  // write "უფასო მიწოდება" only if delivery really is free, and real working hours below.
+  deliveryShort: "მიწოდება მთელ საქართველოში",
+  paymentShort: "გადახდა პროდუქტის მიღებისას",
+  deliveryBanner: {
+    title: "მიწოდება მთელ საქართველოში",
+    text: "შეკვეთას დაგირეკავთ დასადასტურებლად და კურიერი პირდაპირ მისამართზე მოგიტანს.",
+  },
+  supportBanner: {
+    title: "გჭირდება დახმარება?",
+    text: "გვკითხე, რომელი აქსესუარი მოერგება შენს მოპედს. დაგვირეკე ან მოგვწერე სოციალურ ქსელებში.",
+  },
   phoneHref: "tel:+995555123456",
   // Leave a link empty ("") to hide its icon.
   facebook: "https://www.facebook.com/",
@@ -29,11 +41,3 @@ export const site = {
   tiktok: "",
   youtube: "",
 };
-
-// The four promises under the homepage banner. Keep them true for your shop.
-export const benefits = [
-  { icon: "truck", title: "მიწოდება", text: "მთელ საქართველოში", href: "/delivery" },
-  { icon: "cash", title: "გადახდა მიტანისას", text: "იხდი პროდუქტის მიღებისას", href: "/delivery" },
-  { icon: "phone", title: "კონსულტაცია", text: site.phone, href: site.phoneHref },
-  { icon: "return", title: "დაბრუნება", text: "დაბრუნების პირობები", href: "/returns" },
-] as const;

@@ -24,21 +24,21 @@ export function HomeHero() {
 
       {/* Red diagonal strokes. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <span className="absolute -top-10 left-[-40px] h-72 w-1.5 rotate-[35deg] bg-accent opacity-80 shadow-[0_0_24px_rgba(229,9,32,0.8)]" />
+        <span className="absolute -top-10 left-[-40px] h-72 w-1.5 rotate-[35deg] bg-accent opacity-80 shadow-[0_0_24px_rgba(225,29,72,0.8)]" />
         <span className="absolute -bottom-16 left-[2%] h-64 w-1 rotate-[35deg] bg-accent/70" />
-        <span className="absolute -top-8 right-[6%] hidden h-[130%] w-3 rotate-[35deg] bg-accent/80 shadow-[0_0_30px_rgba(229,9,32,0.6)] lg:block" />
+        <span className="absolute -top-8 right-[6%] hidden h-[130%] w-3 rotate-[35deg] bg-accent/80 shadow-[0_0_30px_rgba(225,29,72,0.6)] lg:block" />
         <span className="absolute -top-8 right-[3%] hidden h-[130%] w-1 rotate-[35deg] bg-accent/60 lg:block" />
       </div>
 
       <div className="mx-auto flex min-h-[260px] max-w-7xl flex-col justify-center px-4 py-8 sm:min-h-[320px] lg:min-h-[390px] lg:px-16">
         <h1 className="max-w-[14ch] text-[26px] leading-[1.2] font-extrabold italic sm:max-w-none sm:text-4xl lg:text-[50px]">
           <span className="block text-fg">{mtavruli("მოპედის აქსესუარები")}</span>
-          <span className="block text-accent [text-shadow:0_0_28px_rgba(229,9,32,0.45)]">{mtavruli("ერთ სივრცეში!")}</span>
+          <span className="block text-accent [text-shadow:0_0_28px_rgba(225,29,72,0.45)]">{mtavruli("ერთ სივრცეში!")}</span>
         </h1>
         <p className="mt-3 text-base text-fg/90 sm:text-xl">ხარისხი, სტილი, კომფორტი</p>
         <Link
           href="#products"
-          className="mt-6 flex h-12 w-fit items-center gap-2 rounded-btn bg-accent px-6 font-bold text-white shadow-[0_8px_30px_-6px_rgba(229,9,32,0.7)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover"
+          className="mt-6 flex h-12 w-fit items-center gap-2 rounded-btn bg-accent px-6 font-bold text-white shadow-[0_8px_30px_-6px_rgba(225,29,72,0.7)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover"
         >
           პროდუქტების ნახვა
           <ArrowIcon />

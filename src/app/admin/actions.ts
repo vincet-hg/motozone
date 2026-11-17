@@ -341,3 +341,65 @@ export async function setLowStock(form: FormData) {
   if (error) redirect(productPage(id, { error: "ზღვარი ვერ შეინახა." }));
   redirect(productPage(id, { saved: "გაფრთხილების ზღვარი შეინახა." }));
 }
+
+// ---------------------------------------------------------------- homepage slider
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// <input type="datetime-local"> sends Tbilisi time without a zone. Tbilisi is UTC+4 all year.
+function tbilisiTime(value: string) {
+  if (!value) return null;
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return undefined;
+  const date = new Date(`${value}:00+04:00`);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+function promotionFields(form: FormData) {
+  const productId = text(form, "product_id");
+  const title = text(form, "title");
+  const endsAt = tbilisiTime(text(form, "ends_at"));
+  if (!UUID.test(productId)) return { error: "აირჩიე პროდუქტი." };
+  if (title.length < 2 || title.length > 80) return { error: "სათაური უნდა იყოს 2-80 სიმბოლო." };
+  if (endsAt === undefined) return { error: "დასრულების თარიღი არასწორია." };
+  return {
+    fields: {
+      product_id: productId,
+      title,
+      description: text(form, "description").slice(0, 240),
+      badge: text(form, "badge").slice(0, 30),
+      cta_label: text(form, "cta_label").slice(0, 30) || "ყიდვა",
+      ends_at: endsAt,
+      active: form.get("active") === "on",
+      position: Number(text(form, "position")) || 0,
+    },
+  };
+}
+
+const promotionsPage = (params: Record<string, string>) => `/admin/promotions?${new URLSearchParams(params)}`;
+
+export async function savePromotion(form: FormData) {
+  const supabase = await requireAdmin();
+  const parsed = promotionFields(form);
+  if ("error" in parsed) redirect(promotionsPage({ error: parsed.error! }));
+  const id = text(form, "id");
+  const { error } = id
+    ? await supabase.from("promotions").update(parsed.fields!).eq("id", id)
+    : await supabase.from("promotions").insert(parsed.fields!);
+  if (error) redirect(promotionsPage({ error: "სლაიდი ვერ შეინახა." }));
+  updateTag(CATALOG_TAG);
+  redirect(promotionsPage({ saved: id ? "სლაიდი შეინახა." : "სლაიდი დაემატა." }));
+}
+
+export async function deletePromotion(form: FormData) {
+  const supabase = await requireAdmin();
+  const { error } = await supabase.from("promotions").delete().eq("id", text(form, "id"));
+  if (error) redirect(promotionsPage({ error: "სლაიდი ვერ წაიშალა." }));
+  updateTag(CATALOG_TAG);
+  redirect(promotionsPage({ saved: "სლაიდი წაიშალა." }));
+}
+
+export async function deleteSubscriber(form: FormData) {
+  const supabase = await requireAdmin();
+  await supabase.from("newsletter_subscribers").delete().eq("id", Number(text(form, "id")));
+  redirect("/admin/subscribers");
+}

@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { isDemo } from "./demo";
 import { demoClient } from "./demo-data";
 import { env } from "./env";
-import type { Category, Product, ProductCard } from "./types";
+import type { Category, Product, ProductCard, PromotionSlide } from "./types";
 
 export const CATALOG_TAG = "catalog";
 export const PAGE_SIZE = 40;
@@ -100,4 +100,81 @@ export async function getSitemapProducts(): Promise<SitemapProduct[]> {
     .limit(5000);
   if (error) throw new Error(error.message);
   return data as SitemapProduct[];
+}
+
+// ---------------------------------------------------------------- homepage
+
+const DAY = 86400000;
+
+// Running homepage slides with their products. The database already hides ended slides;
+// the slider hides one that ends while the page is open.
+export async function getPromotionSlides(): Promise<PromotionSlide[]> {
+  const { data, error } = await cached
+    .from("promotions")
+    .select("id,product_id,title,description,badge,cta_label,ends_at,active,position")
+    .eq("active", true)
+    .order("position")
+    .limit(10);
+  // The slider is optional: if it fails, the homepage shows the general banner instead of an error.
+  if (error) {
+    console.error("promotions", error.message);
+    return [];
+  }
+  const now = Date.now();
+  const promotions = (data as Omit<PromotionSlide, "product">[]).filter((row) => !row.ends_at || Date.parse(row.ends_at) > now);
+  const products = await getCachedProductsByIds(promotions.map((row) => row.product_id));
+  return promotions.flatMap((row) => {
+    const product = products.find((item) => item.id === row.product_id);
+    return product && product.images.length > 0 ? [{ ...row, product }] : [];
+  });
+}
+
+async function getCachedProductsByIds(ids: string[]): Promise<ProductCard[]> {
+  if (ids.length === 0) return [];
+  const { data, error } = await cached.from("products").select(CARD_COLUMNS).in("id", ids).eq("active", true);
+  if (error) throw new Error(error.message);
+  return data as ProductCard[];
+}
+
+// Best sellers of the last 90 days, topped up with the newest products while sales are few.
+export async function getPopularProducts(limit: number): Promise<{ products: ProductCard[]; popularIds: Set<string> }> {
+  const { data, error } = await cached.rpc("popular_product_ids", { p_limit: limit });
+  if (error) console.error("popular_product_ids", error.message);
+  const ids = (error ? [] : (data ?? [])) as string[];
+  const sold = await getCachedProductsByIds(ids);
+  const ordered = ids.flatMap((id) => sold.filter((product) => product.id === id));
+  if (ordered.length < limit) {
+    const { products: newest } = await getProducts();
+    ordered.push(...newest.filter((product) => !ids.includes(product.id)).slice(0, limit - ordered.length));
+  }
+  return { products: ordered, popularIds: new Set(ids) };
+}
+
+// Ids of products added in the last 21 days, for the "new" badge.
+export async function getNewProductIds(): Promise<Set<string>> {
+  const { data, error } = await cached
+    .from("products")
+    .select("id,created_at")
+    .eq("active", true)
+    .order("created_at", { ascending: false })
+    .limit(40);
+  if (error) throw new Error(error.message);
+  const since = Date.now() - 21 * DAY;
+  return new Set((data as { id: string; created_at: string }[]).filter((row) => Date.parse(row.created_at) > since).map((row) => row.id));
+}
+
+// One photo per category: the newest product's first photo.
+export async function getCategoryCovers(): Promise<Map<string, string>> {
+  const { data, error } = await cached
+    .from("products")
+    .select("category_id,images")
+    .eq("active", true)
+    .order("created_at", { ascending: false })
+    .limit(300);
+  if (error) throw new Error(error.message);
+  const covers = new Map<string, string>();
+  for (const row of data as { category_id: string | null; images: string[] }[]) {
+    if (row.category_id && row.images[0] && !covers.has(row.category_id)) covers.set(row.category_id, row.images[0]);
+  }
+  return covers;
 }
