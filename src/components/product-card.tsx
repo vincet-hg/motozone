@@ -12,7 +12,7 @@ export type CardBadge = "new" | "popular";
 
 const BADGES: Record<CardBadge, { label: string; className: string }> = {
   new: { label: "ახალი", className: "bg-fg text-bg" },
-  popular: { label: "პოპულარული", className: "border border-accent/50 bg-bg/80 text-accent-hover backdrop-blur" },
+  popular: { label: "პოპულარული", className: "border border-neon/40 bg-bg/80 text-neon backdrop-blur" },
 };
 
 export function ProductCard({ product, eager, lcp, badge }: { product: Card; eager: boolean; lcp: boolean; badge?: CardBadge }) {
@@ -21,7 +21,7 @@ export function ProductCard({ product, eager, lcp, badge }: { product: Card; eag
   const available = product.stock > 0;
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:bg-card-hover hover:shadow-[0_14px_36px_-16px_rgba(225,29,72,0.6)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-neon/45 hover:bg-card-hover hover:shadow-[0_0_0_1px_rgba(56,189,248,0.2),0_18px_40px_-18px_rgba(0,110,255,0.85)]">
       <div className="relative m-2 mb-0 overflow-hidden rounded-xl bg-photo">
         <Link href={href} prefetch={false} className="relative block aspect-square">
           {product.images[0] ? (
@@ -47,7 +47,7 @@ export function ProductCard({ product, eager, lcp, badge }: { product: Card; eag
       </div>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <h3 className="line-clamp-2 min-h-10 text-sm leading-5 font-semibold sm:text-[15px]">
-          <Link href={href} prefetch={false} className="transition-colors duration-200 hover:text-accent-hover">
+          <Link href={href} prefetch={false} className="transition-colors duration-200 hover:text-neon">
             {product.name}
           </Link>
         </h3>

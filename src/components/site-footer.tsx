@@ -55,19 +55,19 @@ export function SiteFooter({ categories }: { categories: Category[] }) {
           <h2 className={heading}>კონტაქტი</h2>
           <ul className="mt-3 space-y-3 text-muted">
             <li>
-              <a href={site.phoneHref} className="flex items-center gap-2.5 font-semibold text-fg transition-colors hover:text-accent-hover">
-                <PhoneIcon className="size-4 shrink-0 text-accent" />
+              <a href={site.phoneHref} className="flex items-center gap-2.5 font-semibold text-fg transition-colors hover:text-neon">
+                <PhoneIcon className="size-4 shrink-0 text-neon" />
                 {site.phone}
               </a>
             </li>
             <li>
               <a href={`mailto:${site.email}`} className="flex items-center gap-2.5 break-all transition-colors hover:text-fg">
-                <MailIcon className="size-4 shrink-0 text-accent" />
+                <MailIcon className="size-4 shrink-0 text-neon" />
                 {site.email}
               </a>
             </li>
             <li className="flex items-center gap-2.5">
-              <PinIcon className="size-4 shrink-0 text-accent" />
+              <PinIcon className="size-4 shrink-0 text-neon" />
               {site.address}
             </li>
           </ul>

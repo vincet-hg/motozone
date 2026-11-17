@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
 };
 
-const link = "text-accent-hover underline hover:text-accent";
+const link = "text-neon underline hover:text-neon";
 
 // Edit the answers to match how your shop works. Plain text answers also go to Google (FAQPage).
 const QUESTIONS: { question: string; text: string; answer: React.ReactNode }[] = [
@@ -89,7 +89,7 @@ export default function FaqPage() {
           <details key={item.question} className="group rounded-card border border-line bg-card transition-colors open:border-accent/50">
             <summary className="flex cursor-pointer items-center justify-between gap-4 p-5 font-semibold">
               {item.question}
-              <ChevronIcon className="size-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-open:text-accent-hover" />
+              <ChevronIcon className="size-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-open:text-neon" />
             </summary>
             <p className="-mt-1 px-5 pb-5 leading-7 text-fg/80">{item.answer}</p>
           </details>

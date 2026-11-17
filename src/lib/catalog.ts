@@ -163,18 +163,24 @@ export async function getNewProductIds(): Promise<Set<string>> {
   return new Set((data as { id: string; created_at: string }[]).filter((row) => Date.parse(row.created_at) > since).map((row) => row.id));
 }
 
-// One photo per category: the newest product's first photo.
-export async function getCategoryCovers(): Promise<Map<string, string>> {
+export type CategoryCover = { image: string | null; count: number };
+
+// Per category: the newest product's first photo and how many products are on sale.
+export async function getCategoryCovers(): Promise<Map<string, CategoryCover>> {
   const { data, error } = await cached
     .from("products")
     .select("category_id,images")
     .eq("active", true)
     .order("created_at", { ascending: false })
-    .limit(300);
+    .limit(1000);
   if (error) throw new Error(error.message);
-  const covers = new Map<string, string>();
+  const covers = new Map<string, CategoryCover>();
   for (const row of data as { category_id: string | null; images: string[] }[]) {
-    if (row.category_id && row.images[0] && !covers.has(row.category_id)) covers.set(row.category_id, row.images[0]);
+    if (!row.category_id) continue;
+    const cover = covers.get(row.category_id) ?? { image: null, count: 0 };
+    cover.count += 1;
+    cover.image ??= row.images[0] ?? null;
+    covers.set(row.category_id, cover);
   }
   return covers;
 }

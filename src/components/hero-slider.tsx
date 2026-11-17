@@ -6,6 +6,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { formatPrice } from "@/lib/format";
 import { ArrowIcon, ChevronIcon } from "./icons";
 
+// Browsers do not capitalize Georgian, so headline letters are switched to capital Mtavruli here.
+const mtavruli = (text: string) => text.replace(/[\u10D0-\u10FA\u10FD-\u10FF]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0xbc0));
+
 export type Slide = {
   id: string;
   title: string;
@@ -23,7 +26,7 @@ export type Slide = {
 
 const AUTOPLAY_MS = 7000;
 const arrow =
-  "flex size-9 items-center justify-center rounded-full border border-line bg-card/70 backdrop-blur transition-colors duration-200 hover:border-accent hover:text-accent-hover";
+  "flex size-9 items-center justify-center rounded-full border border-line bg-card/70 backdrop-blur transition-colors duration-200 hover:border-neon/60 hover:text-neon";
 const SWIPE_PX = 50;
 
 // Remaining time until `endsAt`, from the real clock: a refresh never restarts it.
@@ -49,8 +52,8 @@ function Countdown({ endsAt, now }: { endsAt: string; now: number }) {
   return (
     <div className="flex items-center gap-2 sm:gap-3" role="timer" aria-label={`აქცია მთავრდება ${left.days} დღეში, ${left.hours} საათში`}>
       {parts.map((part) => (
-        <div key={part.label} className="flex min-w-[52px] flex-col items-center rounded-xl border border-line bg-card/80 px-2 py-1.5 backdrop-blur sm:min-w-16 sm:py-2">
-          <span className="text-xl leading-none font-extrabold tabular-nums sm:text-2xl">{String(part.value).padStart(2, "0")}</span>
+        <div key={part.label} className="flex min-w-[52px] flex-col items-center rounded-xl border border-neon/20 bg-card/80 px-2 py-1.5 shadow-[inset_0_1px_0_rgba(56,189,248,0.15)] backdrop-blur sm:min-w-16 sm:py-2">
+          <span key={part.value} className="animate-enter-up text-xl leading-none font-extrabold tabular-nums [animation-duration:0.35s] sm:text-2xl">{String(part.value).padStart(2, "0")}</span>
           <span className="mt-1 text-[11px] text-muted">{part.label}</span>
         </div>
       ))}
@@ -124,14 +127,15 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
       }}
       style={{ touchAction: "pan-y" }}
     >
-      {/* Background: red light and slow diagonal strokes. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_45%,rgba(225,29,72,0.22),transparent_55%),radial-gradient(ellipse_at_10%_100%,rgba(225,29,72,0.12),transparent_50%)]" />
-        <div className="animate-glow absolute top-1/2 right-[8%] size-[420px] -translate-y-1/2 rounded-full bg-accent/25 blur-[120px] lg:size-[560px]" />
-        <span className="animate-drift absolute -top-24 left-[42%] h-[140%] w-px bg-gradient-to-b from-transparent via-accent/50 to-transparent" />
-        <span className="animate-drift absolute -top-24 left-[46%] h-[140%] w-[3px] bg-gradient-to-b from-transparent via-accent/30 to-transparent [animation-delay:-5s]" />
-        <span className="animate-drift absolute -top-24 right-[4%] hidden h-[140%] w-[2px] bg-gradient-to-b from-transparent via-accent-hover/40 to-transparent [animation-delay:-9s] lg:block" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-bg to-transparent" />
+      {/* Background: deep space, slow particles, a planet-like glow and a faint orbit behind the product. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgba(0,110,255,0.28),transparent_55%),radial-gradient(ellipse_at_0%_100%,rgba(56,189,248,0.12),transparent_45%),linear-gradient(180deg,#050b18,#071430_60%,#050b18)]" />
+        <div className="starfield absolute inset-0 opacity-70" />
+        <div className="absolute -top-40 -right-40 hidden size-[640px] rounded-full bg-[radial-gradient(circle_at_30%_70%,rgba(22,139,255,0.35),rgba(8,20,38,0.9)_55%,transparent_72%)] shadow-[inset_-30px_30px_80px_rgba(56,189,248,0.25)] lg:block" />
+        <div className="animate-spin-slow absolute top-1/2 right-[7%] hidden size-[560px] -translate-y-1/2 rounded-full border border-dashed border-neon/20 lg:block" />
+        <div className="absolute top-1/2 right-[12%] hidden size-[440px] -translate-y-1/2 rounded-full border border-accent/20 lg:block" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/60 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
       </div>
 
       <div
@@ -144,19 +148,20 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
         <div className="order-2 min-w-0 lg:order-1">
           <div className="flex flex-wrap items-center gap-3">
             {active.discount > 0 && (
-              <span className="animate-pop rounded-xl bg-accent px-3 py-1.5 text-2xl leading-none font-black text-white shadow-[0_10px_30px_-8px_rgba(225,29,72,0.9)] [animation-delay:250ms] sm:text-3xl">
+              <span className="animate-pop bg-gradient-to-r from-neon to-accent-hover bg-clip-text pr-1 text-4xl leading-none font-black text-transparent italic [animation-delay:250ms] sm:text-5xl">
                 -{active.discount}%
               </span>
             )}
             {active.badge && (
-              <span className="animate-enter-up rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold tracking-wide text-accent-hover uppercase [animation-delay:150ms]">
+              <span className="animate-enter-up flex items-center gap-1.5 rounded-full border border-neon/30 bg-accent/10 px-3 py-1 text-xs font-semibold tracking-wide text-neon [animation-delay:150ms]">
+                <span aria-hidden="true" className="size-1.5 rounded-full bg-neon shadow-[0_0_8px_#38bdf8]" />
                 {active.badge}
               </span>
             )}
           </div>
 
-          <h2 className="animate-enter-left mt-4 text-[32px] leading-[1.1] font-black tracking-tight text-balance sm:text-5xl lg:text-[58px]">
-            {active.title}
+          <h2 className="animate-enter-left mt-4 text-[30px] leading-[1.1] font-black tracking-tight text-balance italic sm:text-5xl lg:text-[56px]">
+            {mtavruli(active.title)}
           </h2>
           <p className="animate-enter-up mt-3 text-lg font-semibold text-fg/90 [animation-delay:200ms] sm:text-xl">{active.productName}</p>
           {active.description && (
@@ -164,13 +169,13 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
           )}
 
           <p className="animate-enter-up mt-5 flex items-baseline gap-3 [animation-delay:380ms]">
-            <span className="text-3xl font-extrabold text-accent-hover sm:text-4xl">{formatPrice(active.salePrice ?? active.price)}</span>
+            <span className="text-3xl font-extrabold text-neon sm:text-4xl">{formatPrice(active.salePrice ?? active.price)}</span>
             {active.salePrice !== null && <s className="text-lg text-muted">{formatPrice(active.price)}</s>}
           </p>
 
           {active.endsAt && now !== null && (
             <div className="animate-enter-up mt-5 [animation-delay:460ms]">
-              <p className="mb-2 text-sm font-medium text-muted">აქცია მთავრდება:</p>
+              <p className="mb-2 text-xs font-semibold tracking-wider text-neon/90">აქცია მთავრდება</p>
               <Countdown endsAt={active.endsAt} now={now} />
             </div>
           )}
@@ -179,7 +184,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
             <Link
               href={active.href}
               prefetch={false}
-              className="flex h-12 items-center gap-2 rounded-btn bg-accent px-6 font-bold text-white shadow-[0_10px_30px_-8px_rgba(225,29,72,0.8)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover"
+              className="flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-8px_rgba(0,110,255,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(56,189,248,0.55)]"
             >
               {active.ctaLabel}
               <ArrowIcon />
@@ -187,7 +192,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
             <Link
               href="/sale"
               prefetch={false}
-              className="flex h-12 items-center rounded-btn border border-line bg-card/60 px-6 font-semibold backdrop-blur transition-colors duration-200 hover:border-accent/60"
+              className="flex h-12 items-center rounded-full border border-line bg-card/60 px-6 font-semibold backdrop-blur transition-colors duration-200 hover:border-neon/60 hover:text-neon"
             >
               ყველა აქცია
             </Link>
@@ -196,8 +201,8 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
 
         <Link href={active.href} prefetch={false} tabIndex={-1} aria-hidden="true" className="animate-enter-right order-1 mx-auto block w-full max-w-[220px] [animation-delay:100ms] sm:max-w-[340px] lg:order-2 lg:max-w-[480px]">
           <div className="relative aspect-square">
-            <div className="absolute inset-[6%] rounded-full bg-gradient-to-br from-accent/40 via-accent/10 to-transparent blur-2xl" />
-            <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-photo shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]">
+            <div className="absolute inset-[4%] rounded-full bg-gradient-to-br from-neon/40 via-accent/25 to-transparent blur-3xl" />
+            <div className="animate-float relative h-full overflow-hidden rounded-[32px] border border-neon/25 bg-photo shadow-[0_40px_90px_-30px_rgba(0,110,255,0.75)]">
               <Image src={active.image} alt={active.productName} fill preload={index === 0} loading={index === 0 ? "eager" : undefined} sizes="(min-width: 1024px) 480px, (min-width: 640px) 340px, 220px" quality={75} className="object-contain p-6" />
             </div>
           </div>
@@ -223,7 +228,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
                 >
                   {current && (
                     <span
-                      className="absolute inset-0 origin-left bg-accent"
+                      className="absolute inset-0 origin-left bg-gradient-to-r from-accent to-neon"
                       style={{
                         animation: autoplaying ? `progress ${AUTOPLAY_MS}ms linear both` : undefined,
                         transform: autoplaying ? undefined : "none",

@@ -37,8 +37,8 @@ export default function PrivacyPage() {
         <p>
           საქართველოს კანონის „პერსონალურ მონაცემთა დაცვის შესახებ“ თანახმად, შეგიძლია მოითხოვო შენი მონაცემების ნახვა, გასწორება ან
           წაშლა, თუ მათი შენახვა კანონით აღარ არის სავალდებულო. მოგვწერე{" "}
-          <a href={`mailto:${site.email}`} className="text-accent underline hover:text-accent-hover">{site.email}</a> ან დაგვირეკე{" "}
-          <a href={site.phoneHref} className="text-accent underline hover:text-accent-hover">{site.phone}</a>.
+          <a href={`mailto:${site.email}`} className="text-neon underline hover:text-neon">{site.email}</a> ან დაგვირეკე{" "}
+          <a href={site.phoneHref} className="text-neon underline hover:text-neon">{site.phone}</a>.
         </p>
 
         <p className="mt-6 text-sm text-muted">ბოლო განახლება: 2026 წლის ნოემბერი.</p>

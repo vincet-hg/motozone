@@ -11,7 +11,7 @@ export default function ReturnsPage() {
       <div className="mt-4 space-y-3 leading-7 text-fg/85">
         <p>
           პროდუქტის დასაბრუნებლად ან გასაცვლელად დაგვირეკე ნომერზე{" "}
-          <a href={site.phoneHref} className="text-accent underline hover:text-accent-hover">
+          <a href={site.phoneHref} className="text-neon underline hover:text-neon">
             {site.phone}
           </a>{" "}
           და გვითხარი შეკვეთის ნომერი.

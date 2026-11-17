@@ -1,25 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CategoryCover } from "@/lib/catalog";
 import { imageUrl } from "@/lib/format";
 import type { Category } from "@/lib/types";
 import { ArrowIcon } from "./icons";
 import { SectionHeading } from "./section-heading";
 
 // Category cards with the newest product photo of each category. Swipeable on phones.
-export function CategoryShowcase({ categories, covers }: { categories: Category[]; covers: Map<string, string> }) {
+export function CategoryShowcase({ categories, covers }: { categories: Category[]; covers: Map<string, CategoryCover> }) {
   if (categories.length === 0) return null;
   return (
-    <section aria-labelledby="categories-title" className="mt-12">
+    <section aria-labelledby="categories-title" className="reveal mt-12">
       <SectionHeading id="categories-title" title="კატეგორიები" link={{ href: "/search", label: "ყველა პროდუქტი" }} />
       <ul className="no-scrollbar -mx-3 flex snap-x snap-mandatory scroll-px-3 gap-3 overflow-x-auto px-3 pb-2 sm:-mx-4 sm:scroll-px-4 sm:px-4 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 xl:grid-cols-7">
         {categories.map((category) => {
-          const cover = covers.get(category.id);
+          const cover = covers.get(category.id)?.image;
+          const count = covers.get(category.id)?.count ?? 0;
           return (
             <li key={category.id} className="w-[42%] shrink-0 snap-start sm:w-[30%] lg:w-auto">
               <Link
                 href={`/category/${category.slug}`}
                 prefetch={false}
-                className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[0_14px_36px_-16px_rgba(225,29,72,0.7)]"
+                className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-gradient-to-b from-card-hover to-card transition-all duration-300 hover:-translate-y-1 hover:border-neon/50 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.25),0_18px_40px_-18px_rgba(0,110,255,0.9)]"
               >
                 <div className="relative m-2 mb-0 aspect-square overflow-hidden rounded-xl bg-photo">
                   {cover ? (
@@ -36,8 +38,11 @@ export function CategoryShowcase({ categories, covers }: { categories: Category[
                   )}
                 </div>
                 <span className="flex flex-1 items-center justify-between gap-2 px-3 py-3">
-                  <span className="text-sm leading-5 font-semibold">{category.name}</span>
-                  <ArrowIcon className="size-4 shrink-0 text-muted transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-accent-hover" />
+                  <span className="min-w-0">
+                    <span className="block text-sm leading-5 font-semibold">{category.name}</span>
+                    {count > 0 && <span className="text-xs text-muted">{count} პროდუქტი</span>}
+                  </span>
+                  <ArrowIcon className="size-4 shrink-0 text-muted transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-neon" />
                 </span>
               </Link>
             </li>

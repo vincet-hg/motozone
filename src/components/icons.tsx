@@ -114,6 +114,24 @@ export function ReturnIcon({ className = "size-6" }: Props) {
   );
 }
 
+export function ShieldIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z" />
+      <path d="M8.5 12l2.5 2.5 4.5-5" />
+    </svg>
+  );
+}
+
+export function BadgeIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="12" cy="9" r="6" />
+      <path d="M8.5 14L7 22l5-3 5 3-1.5-8" />
+    </svg>
+  );
+}
+
 export function HeadsetIcon({ className = "size-6" }: Props) {
   return (
     <svg {...base} className={className}>

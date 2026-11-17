@@ -9,22 +9,22 @@ export function Newsletter() {
   const [state, action, pending] = useActionState<NewsletterState, FormData>(subscribe, {});
 
   return (
-    <section aria-labelledby="newsletter-title" className="relative isolate mt-14 overflow-hidden rounded-card border border-line bg-section px-5 py-8 sm:px-10 sm:py-10">
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_100%_0%,rgba(225,29,72,0.25),transparent_55%)]" />
+    <section aria-labelledby="newsletter-title" className="reveal relative isolate mt-14 overflow-hidden rounded-card border border-line bg-gradient-to-r from-section via-card to-section px-5 py-8 sm:px-10 sm:py-10">
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_100%_0%,rgba(0,110,255,0.3),transparent_55%),radial-gradient(ellipse_at_0%_100%,rgba(56,189,248,0.12),transparent_50%)]" />
       <div className="grid items-center gap-6 lg:grid-cols-2">
         <div className="flex items-start gap-4">
-          <span aria-hidden="true" className="hidden size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent-hover sm:flex">
+          <span aria-hidden="true" className="hidden size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-neon sm:flex">
             <MailIcon />
           </span>
           <div>
-            <h2 id="newsletter-title" className="text-xl font-extrabold sm:text-2xl">პირველმა გაიგე აქციების შესახებ</h2>
-            <p className="mt-1.5 text-sm leading-6 text-muted">ახალი პროდუქტები და ფასდაკლებები პირდაპირ ელფოსტაზე. სპამის გარეშე, გაუქმება ნებისმიერ დროს.</p>
+            <h2 id="newsletter-title" className="text-xl font-extrabold sm:text-2xl">იყავი საქმის კურსში</h2>
+            <p className="mt-1.5 text-sm leading-6 text-muted">ახალი პროდუქტები, ექსკლუზიური ფასდაკლებები და სპეციალური შეთავაზებები პირდაპირ ელფოსტაზე. გაუქმება ნებისმიერ დროს.</p>
           </div>
         </div>
 
         {state.ok ? (
           <p role="status" className="flex items-center gap-2 rounded-btn border border-accent/40 bg-accent/10 px-4 py-3 font-semibold">
-            <CheckIcon className="size-5 text-accent-hover" />
+            <CheckIcon className="size-5 text-neon" />
             გმადლობთ! გამოწერა დადასტურდა.
           </p>
         ) : (
@@ -38,19 +38,19 @@ export function Newsletter() {
                 autoComplete="email"
                 placeholder="შენი ელფოსტა"
                 aria-label="ელფოსტა"
-                className="h-12 min-w-0 flex-1 rounded-btn border border-line bg-card px-4 text-base text-fg placeholder:text-muted focus:border-accent focus:outline-none"
+                className="h-12 min-w-0 flex-1 rounded-full border border-line bg-bg/60 px-5 text-base text-fg placeholder:text-muted focus:border-neon/60 focus:outline-none"
               />
               <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <button
                 type="submit"
                 disabled={pending}
-                className="h-12 shrink-0 rounded-btn bg-accent px-6 font-bold text-white shadow-[0_10px_30px_-10px_rgba(225,29,72,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
+                className="h-12 shrink-0 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-10px_rgba(0,110,255,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
               >
                 {pending ? "იგზავნება..." : "გამოწერა"}
               </button>
             </div>
             {state.error && (
-              <p role="alert" className="mt-2 text-sm text-accent-hover">
+              <p role="alert" className="mt-2 text-sm text-neon">
                 {state.error}
               </p>
             )}
