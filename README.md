@@ -17,12 +17,13 @@ How a change reaches customers:
 1. Make a branch: `git checkout -b feature/new-filter`. Work locally.
 2. Push it and open a pull request. CI checks the types and runs every migration on an empty database.
    Vercel builds a preview link that uses the staging database. Test there.
-3. If the change adds a migration, apply it to staging: `npm run db:push:staging`.
-4. Merge the pull request. Apply the migration to production (`npm run db:push:prod`) and Vercel deploys `main`.
+3. If the change adds a migration, apply it to staging: `npx supabase link` (pick staging), then
+   `npx supabase db push --remote`.
+4. Link production the same way, run `npx supabase db push --remote`, then merge the pull request.
+   Vercel deploys `main`.
 
-Apply a migration to production **before** merging code that needs it. The two `db:push` scripts read
-the database address from `STAGING_DB_URL` and `PROD_DB_URL` in your terminal (Supabase > **Connect** >
-connection string). Keep them out of git.
+Apply a migration to production **before** merging code that needs it. The CLI always shows the target project
+before it changes anything: check the name before you answer Yes.
 
 ## Demo mode
 
@@ -43,11 +44,11 @@ Do this once per environment.
 2. Link this folder and apply the migrations:
    ```bash
    npx supabase login
-   npx supabase link --project-ref YOUR_PROJECT_REF
-   npx supabase db push
+   npx supabase link              # pick the project from the list
+   npx supabase db push --remote  # CLI v3 targets a local database without --remote
    ```
    If you already ran the old `schema.sql` on this project by hand, first mark it as applied:
-   `npx supabase migration repair --status applied 20261101000000`, then run `db push`.
+   `npx supabase migration repair --status applied 20261101000000 --remote`, then run `db push --remote`.
 3. Create your admin login:
    - In **Authentication > Users**, click **Add user** and enter your email and a strong password.
    - In **SQL Editor**, run this with your email:
