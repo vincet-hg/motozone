@@ -1,11 +1,19 @@
+const vercelAddress = (host: string | undefined) => (host ? `https://${host}` : "http://localhost:3000");
+
+// Search engines index only the live store: the domain is set and this is not a Vercel preview.
+export const isLiveSite =
+  Boolean(process.env.NEXT_PUBLIC_SITE_URL) &&
+  !["preview", "development"].includes(process.env.VERCEL_ENV ?? "") &&
+  process.env.NEXT_PUBLIC_ALLOW_INDEXING !== "false";
+
 // Business details shown across the store. Edit them here.
 export const site = {
   name: "Scooter Land",
   // Full address of the store, without a trailing slash. Production sets NEXT_PUBLIC_SITE_URL to the domain.
-  // Vercel previews fall back to their own branch address, so links and the sitemap point at the preview.
+  // Vercel previews fall back to their own address, so links and the sitemap point at the preview.
   url: (
     process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL}` : "http://localhost:3000")
+    vercelAddress(process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL || process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL)
   ).replace(/\/+$/, ""),
   email: "info@scooterland.ge",
   // Shown on the privacy and terms pages. Fill in your registered details.

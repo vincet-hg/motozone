@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { site } from "@/lib/site";
+import { isLiveSite, site } from "@/lib/site";
 import "./globals.css";
 
 // Both fonts are trimmed to the letters the store uses: Inter for Latin and digits (25 KB),
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
   formatDetection: { telephone: false },
   // Previews must never show up in Google, even if robots.txt is ignored.
-  robots: process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production" ? { index: false, follow: false } : undefined,
+  robots: isLiveSite ? undefined : { index: false, follow: false },
   // Paste the code from Google Search Console > Settings > Ownership verification > HTML tag.
   verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
