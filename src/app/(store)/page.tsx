@@ -47,7 +47,6 @@ export default async function HomePage() {
       />
       <HomeHero />
       <BenefitsBar />
-
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
         {sale.products.length > 0 && (
           <section className="mt-10">
@@ -63,6 +62,7 @@ export default async function HomePage() {
               <FilterBar />
             </div>
           </div>
+
           <div className="-mx-3 sm:-mx-4">
             <CategoryNav categories={categories} />
           </div>
