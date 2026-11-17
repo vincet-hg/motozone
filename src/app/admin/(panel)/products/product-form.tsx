@@ -47,7 +47,7 @@ function ImageManager({ initial }: { initial: string[] }) {
     if (files.length === 0) return;
     setUploading(true);
     setError("");
-    const storage = isDemo ? null : createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!).storage;
+    const storage = isDemo ? null : createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!).storage;
 
     for (const file of files) {
       try {

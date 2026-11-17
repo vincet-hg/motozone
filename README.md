@@ -69,13 +69,13 @@ the staging values and **Production** the production values:
 
 | Name | Preview (staging) | Production |
 |---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | staging project | production project |
-| `SUPABASE_SERVICE_ROLE_KEY` | staging service_role key | production service_role key |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | staging project | production project |
+| `SUPABASE_SECRET_KEY` | staging secret key (`sb_secret_...`) | production secret key |
 | `NEXT_PUBLIC_SITE_URL` | your staging address | `https://your-domain.ge` |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | `false` | `true` |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | optional, a test chat | your shop chat |
 
-The service_role key bypasses all access rules. It is read only on the server; never give it a
+The secret key bypasses all access rules. It is read only on the server; never give it a
 `NEXT_PUBLIC_` prefix, never paste it in chat, and rotate it in Supabase if it leaks. A production build
 stops with an error if a required variable is missing.
 
@@ -106,7 +106,7 @@ order brings a product down to its low-stock level, the message says so.
 
 - Admin: password plus authenticator code, checked by the app and by the database (`is_admin()`
   requires `aal2`). Sign-in attempts are limited per address and per account.
-- Checkout: the browser cannot call the order function. The server does it with the service_role key,
+- Checkout: the browser cannot call the order function. The server does it with the secret key,
   after limiting orders per IP. The database still checks prices, stock and phone numbers itself.
 - Every admin change (prices, products, categories, stock, costs, order status) is written to an
   audit log that the admin can read but cannot change. See **History** in the admin.
