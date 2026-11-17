@@ -43,7 +43,6 @@ Do this once per environment.
 2. Link this folder and apply the migrations:
    ```bash
    npx supabase login
-   npx supabase init            # once, if supabase/config.toml does not exist yet
    npx supabase link --project-ref YOUR_PROJECT_REF
    npx supabase db push
    ```
