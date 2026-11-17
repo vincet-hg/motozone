@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 
-// Preview and staging deployments set NEXT_PUBLIC_ALLOW_INDEXING=false, so only the live site is indexed.
+// Only the live site is indexed. Vercel previews are blocked automatically,
+// and any other test deployment can set NEXT_PUBLIC_ALLOW_INDEXING=false.
 export default function robots(): MetadataRoute.Robots {
-  if (process.env.NEXT_PUBLIC_ALLOW_INDEXING === "false") {
+  const isVercelPreview = Boolean(process.env.VERCEL_ENV) && process.env.VERCEL_ENV !== "production";
+  if (isVercelPreview || process.env.NEXT_PUBLIC_ALLOW_INDEXING === "false") {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
   return {

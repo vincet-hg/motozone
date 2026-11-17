@@ -71,8 +71,7 @@ the staging values and **Production** the production values:
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | staging project | production project |
 | `SUPABASE_SECRET_KEY` | staging secret key (`sb_secret_...`) | production secret key |
-| `NEXT_PUBLIC_SITE_URL` | your staging address | `https://your-domain.ge` |
-| `NEXT_PUBLIC_ALLOW_INDEXING` | `false` | `true` |
+| `NEXT_PUBLIC_SITE_URL` | not needed: previews use their own address | `https://your-domain.ge` |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | optional, a test chat | your shop chat |
 
 The secret key bypasses all access rules. It is read only on the server; never give it a
@@ -131,7 +130,7 @@ order brings a product down to its low-stock level, the message says so.
 - Every product and category page has its own title, description, canonical link and share image.
 - Google gets structured data: products with price and stock, breadcrumbs, the store and site search.
 - `sitemap.xml` lists all categories and products with their photos and refreshes when you save in the admin.
-- `robots.txt` keeps the admin, cart and wishlist out of search. Staging and previews are not indexed at all.
+- `robots.txt` keeps the admin, cart and wishlist out of search. Vercel previews are never indexed.
 - Category descriptions (admin > Categories) appear on the category page and in Google. Write 1-3
   sentences for each: what is in it and who it is for.
 

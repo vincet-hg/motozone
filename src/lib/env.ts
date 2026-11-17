@@ -3,7 +3,14 @@ import { isDemo } from "./demo";
 
 // Read once on the server. A production deployment with a missing value stops with a clear message
 // instead of showing broken pages or failing checkouts.
-const REQUIRED = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "SUPABASE_SECRET_KEY", "NEXT_PUBLIC_SITE_URL"] as const;
+// Vercel previews use their own address, so only production needs NEXT_PUBLIC_SITE_URL.
+const isPreview = process.env.VERCEL_ENV === "preview";
+const REQUIRED = [
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+  "SUPABASE_SECRET_KEY",
+  ...(isPreview ? [] : ["NEXT_PUBLIC_SITE_URL"]),
+];
 
 if (!isDemo && process.env.NODE_ENV === "production") {
   const missing = REQUIRED.filter((name) => !process.env[name]);
