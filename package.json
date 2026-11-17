@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "share": "cloudflared tunnel --url http://localhost:3000",
     "db:push:staging": "npx supabase db push --db-url \"$STAGING_DB_URL\"",
     "db:push:prod": "npx supabase db push --db-url \"$PROD_DB_URL\""
