@@ -70,3 +70,27 @@ select pg_temp.check(pg_temp.fails($$select * from public.sales_report('2020-01-
 set request.jwt.claims = '{"aal":"aal2"}';
 select pg_temp.check((select profit from public.sales_report('2020-01-01', '2100-01-01')) = 56, 'profit 7 x (20 - 12)');
 reset role;
+
+-- ---------------------------------------------------------------- admin roles
+insert into auth.users (id, email) values ('33333333-3333-3333-3333-333333333333', 'helper@test');
+-- On a new project the first admin is added as owner by hand (see README).
+update public.admins set role = 'owner';
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+set request.jwt.claims = '{"aal":"aal2"}';
+select pg_temp.check(public.is_owner(), 'the first admin is the owner');
+select public.grant_admin('HELPER@test');
+select pg_temp.check((select count(*) from public.list_admins()) = 2, 'owner sees both admins');
+select pg_temp.check(pg_temp.fails($$select public.revoke_admin('11111111-1111-1111-1111-111111111111')$$), 'owner cannot be removed');
+select pg_temp.check(pg_temp.fails($$insert into public.admins (user_id) values ('22222222-2222-2222-2222-222222222222')$$), 'admins cannot be added directly');
+
+set request.jwt.claim.sub = '33333333-3333-3333-3333-333333333333';
+select pg_temp.check(public.is_admin() and not public.is_owner(), 'helper is admin but not owner');
+select pg_temp.check(pg_temp.fails($$select public.grant_admin('user@test')$$), 'admins cannot add admins');
+select pg_temp.check(pg_temp.fails($$select public.revoke_admin('11111111-1111-1111-1111-111111111111')$$), 'admins cannot remove admins');
+select pg_temp.check(pg_temp.fails($$select * from public.list_admins()$$), 'admins cannot list admins');
+
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select public.revoke_admin('33333333-3333-3333-3333-333333333333');
+select pg_temp.check((select count(*) from public.admins) = 1, 'owner removed the helper');
+reset role;

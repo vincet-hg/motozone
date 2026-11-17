@@ -58,8 +58,8 @@ Do this once per environment.
    - In **Authentication > Users**, click **Add user** and enter your email and a strong password.
    - In **SQL Editor**, run this with your email:
      ```sql
-     insert into public.admins (user_id)
-     select id from auth.users where email = 'you@example.com';
+     insert into public.admins (user_id, role)
+     select id, 'owner' from auth.users where email = 'you@example.com';
      ```
 4. In **Authentication > Sign In / Providers**, turn off **Allow new users to sign up**.
 5. In **Authentication > Multi-Factor**, make sure **TOTP (App Authenticator)** is enabled.
@@ -105,6 +105,15 @@ order brings a product down to its low-stock level, the message says so.
   orders are left out.
 - For stock you had before purchases were recorded, enter its cost once on the product page under
   **Set cost by hand**. Orders placed before this have no cost and count as full profit in reports.
+
+## Admins and the owner
+
+The shop has one **owner** and any number of **admins**. Admins manage orders, products, stock and the
+homepage. Only the owner sees **Team** in the admin, where they add an admin by email (the store creates
+the account and shows a temporary password once), remove an admin, or reset an admin who lost their
+password or phone. The database enforces this: `grant_admin` and `revoke_admin` refuse anyone but the
+owner, the admins table cannot be written directly, and an owner cannot be removed. Every admin can
+change their own password under **My account**.
 
 ## Security
 

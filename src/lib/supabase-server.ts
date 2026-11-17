@@ -53,3 +53,20 @@ export async function requireAdmin() {
 
   return supabase;
 }
+
+// The shop owner: the only admin who can add and remove admins. The database enforces this too.
+export async function requireOwner() {
+  const supabase = await requireAdmin();
+  if (isDemo) return supabase;
+  if ((await adminRole(supabase)) !== "owner") redirect("/admin/orders");
+  return supabase;
+}
+
+export async function adminRole(supabase: Awaited<ReturnType<typeof createAdminClient>>) {
+  if (isDemo) return "owner";
+  const { data: auth } = await supabase.auth.getClaims();
+  const id = auth?.claims?.sub;
+  if (!id) return null;
+  const { data } = await supabase.from("admins").select("role").eq("user_id", id).maybeSingle();
+  return (data?.role as "owner" | "admin" | undefined) ?? null;
+}

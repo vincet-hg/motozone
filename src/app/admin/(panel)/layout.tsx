@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { requireAdmin } from "@/lib/supabase-server";
+import { adminRole, requireAdmin } from "@/lib/supabase-server";
 import { logout } from "../actions";
 
 export const metadata: Metadata = { title: "ადმინისტრატორი", robots: { index: false, follow: false } };
@@ -14,7 +14,8 @@ const links = [
 ];
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
-  await requireAdmin();
+  const supabase = await requireAdmin();
+  const owner = (await adminRole(supabase)) === "owner";
 
   return (
     <div className="flex-1 bg-neutral-100 text-black">
@@ -26,7 +27,15 @@ export default async function PanelLayout({ children }: { children: React.ReactN
               {link.label}
             </Link>
           ))}
+          {owner && (
+            <Link href="/admin/team" prefetch={false} className="py-2 hover:underline">
+              გუნდი
+            </Link>
+          )}
           <div className="ml-auto flex items-center gap-4">
+            <Link href="/admin/account" prefetch={false} className="py-2 hover:underline">
+              ჩემი ანგარიში
+            </Link>
             <a href="/" target="_blank" className="py-2 hover:underline">
               მაღაზია
             </a>

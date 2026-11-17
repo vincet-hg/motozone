@@ -9,10 +9,11 @@ import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/demo-data";
 import { slugify } from "@/lib/format";
 import { costChangeNotice } from "@/lib/margin";
 import { allow, clientIp } from "@/lib/request-guard";
-import { createAdminClient, requireAdmin, requirePasswordSession } from "@/lib/supabase-server";
+import { createAdminClient, requireAdmin, requireOwner, requirePasswordSession } from "@/lib/supabase-server";
+import { service } from "@/lib/supabase-service";
 import type { Spec } from "@/lib/types";
 
-export type FormState = { error?: string };
+export type FormState = { error?: string; ok?: string };
 
 const BUCKET = "product-images";
 // Seeded demo photos are generated as PNG.
@@ -340,4 +341,74 @@ export async function setLowStock(form: FormData) {
   const { error } = await supabase.from("product_costs").update({ low_stock_at: value }).eq("product_id", id);
   if (error) redirect(productPage(id, { error: "ზღვარი ვერ შეინახა." }));
   redirect(productPage(id, { saved: "გაფრთხილების ზღვარი შეინახა." }));
+}
+
+// ---------------------------------------------------------------- team (owner only)
+
+export type TeamState = { error?: string; saved?: string; password?: string; email?: string };
+
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+// 16 characters from an alphabet without look-alike letters. Shown to the owner once.
+function temporaryPassword() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join("");
+}
+
+export async function addAdmin(_previous: TeamState, form: FormData): Promise<TeamState> {
+  const supabase = await requireOwner();
+  if (isDemo) return { error: "დემო რეჟიმში ადმინების დამატება შეუძლებელია." };
+  const email = text(form, "email").toLowerCase();
+  if (!EMAIL.test(email) || email.length > 254) return { error: "შეიყვანე სწორი ელფოსტა." };
+
+  // Reuse the account if this person already has one; otherwise create it with a temporary password.
+  const { data: existing } = await service.rpc("auth_user_id_by_email", { p_email: email });
+  let password: string | undefined;
+  if (!existing) {
+    password = temporaryPassword();
+    const { error } = await service.auth.admin.createUser({ email, password, email_confirm: true });
+    if (error) return { error: "ანგარიში ვერ შეიქმნა. სცადე თავიდან." };
+  }
+
+  // The owner's own session grants the role, so the database checks that the caller is the owner.
+  const { error } = await supabase.rpc("grant_admin", { p_email: email });
+  if (error) return { error: error.message === "not_owner" ? "მხოლოდ მფლობელს შეუძლია ადმინის დამატება." : "ადმინი ვერ დაემატა." };
+  return password ? { saved: "ადმინი დაემატა.", email, password } : { saved: `${email} უკვე იყო რეგისტრირებული და ახლა ადმინია. პაროლი არ შეცვლილა.` };
+}
+
+export async function removeAdmin(form: FormData) {
+  const supabase = await requireOwner();
+  const { error } = await supabase.rpc("revoke_admin", { p_user_id: text(form, "user_id") });
+  const message = error ? (error.message === "cannot_remove_owner" ? "მფლობელის წაშლა შეუძლებელია." : "ადმინი ვერ წაიშალა.") : "";
+  redirect(error ? `/admin/team?error=${encodeURIComponent(message)}` : `/admin/team?saved=${encodeURIComponent("ადმინის უფლება მოიხსნა.")}`);
+}
+
+// For an admin who forgot the password or lost the phone: new temporary password, authenticator removed.
+export async function resetAdminAccess(_previous: TeamState, form: FormData): Promise<TeamState> {
+  const supabase = await requireOwner();
+  if (isDemo) return { error: "დემო რეჟიმში შეუძლებელია." };
+  const userId = text(form, "user_id");
+  const { data: team } = await supabase.rpc("list_admins");
+  const member = (team as { user_id: string; email: string; role: string }[] | null)?.find((row) => row.user_id === userId);
+  if (!member) return { error: "ადმინი ვერ მოიძებნა." };
+  if (member.role === "owner") return { error: "საკუთარი წვდომა „ჩემი ანგარიშის“ გვერდზე შეცვალე." };
+
+  const password = temporaryPassword();
+  const { error } = await service.auth.admin.updateUserById(userId, { password });
+  if (error) return { error: "პაროლი ვერ შეიცვალა." };
+  const { data: factors } = await service.auth.admin.mfa.listFactors({ userId });
+  for (const factor of factors?.factors ?? []) await service.auth.admin.mfa.deleteFactor({ userId, id: factor.id });
+  return { saved: "წვდომა განახლდა.", email: member.email, password };
+}
+
+export async function changeOwnPassword(_previous: FormState, form: FormData): Promise<FormState> {
+  const supabase = await requireAdmin();
+  if (isDemo) return { error: "დემო რეჟიმში პაროლი .env.local-ში იცვლება." };
+  const password = String(form.get("password") ?? "");
+  if (password.length < 12) return { error: "პაროლი მინიმუმ 12 სიმბოლო უნდა იყოს." };
+  if (password !== String(form.get("confirm") ?? "")) return { error: "პაროლები არ ემთხვევა." };
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: "პაროლი ვერ შეიცვალა. სცადე სხვა პაროლი." };
+  return { ok: "პაროლი შეიცვალა." };
 }
