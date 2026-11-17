@@ -23,11 +23,11 @@ export async function proxy(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Verifies the session token locally with Supabase's public signing key and refreshes it when
+  // it expires, so most requests need no round trip to the Auth server.
+  const { data } = await supabase.auth.getClaims();
 
-  if (!user && request.nextUrl.pathname !== "/admin/login") {
+  if (!data?.claims?.sub && request.nextUrl.pathname !== "/admin/login") {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
   return response;

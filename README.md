@@ -8,22 +8,27 @@ database checks every admin action again on its own.
 
 | Environment | What it is for | Database | Git branch |
 |---|---|---|---|
-| Local | Everyday work on your computer | Demo mode, or a local Supabase | any |
-| Staging | Testing a change with real rules before customers see it | Its own Supabase project with test data | any branch except `main` |
+| Local | Everyday work on your computer | Demo mode, or a local Supabase | your own |
+| Staging | Testing a change with real rules before customers see it | Its own Supabase project with test data | `staging` |
 | Production | Real customers | The main Supabase project | `main` |
+
+Vercel builds every branch. `main` goes to the store's address; `staging` and any other branch get their
+own preview address, never indexed by Google. `staging` always has the same address:
+`scooter-land-git-staging-<your Vercel account>.vercel.app` (Vercel > Deployments > a staging build > Domains).
 
 How a change reaches customers:
 
-1. Make a branch: `git checkout -b feature/new-filter`. Work locally.
-2. Push it and open a pull request. CI checks the types and runs every migration on an empty database.
-   Vercel builds a preview link that uses the staging database. Test there.
-3. If the change adds a migration, apply it to staging: `npx supabase link` (pick staging), then
-   `npx supabase db push --remote`.
-4. Link production the same way, run `npx supabase db push --remote`, then merge the pull request.
-   Vercel deploys `main`.
+1. Start from `staging`: `git checkout staging && git pull`.
+   For a bigger change, branch off it: `git checkout -b feature/new-filter`, then merge back into `staging`.
+2. Push to `staging`. CI checks the types and runs every migration on an empty database, and Vercel
+   updates the staging address. Test there.
+3. If the change adds a migration, apply it to the staging database: `npx supabase link` (pick staging),
+   then `npx supabase db push --remote`.
+4. When staging works, apply the migration to production the same way (link production, `db push --remote`).
+5. On GitHub, open a pull request from `staging` to `main` and press **Merge**. Vercel deploys `main`.
 
-Apply a migration to production **before** merging code that needs it. The CLI always shows the target project
-before it changes anything: check the name before you answer Yes.
+Never commit to `main` directly. Apply a migration to production **before** merging code that needs it.
+The CLI always shows the target project before it changes anything: check the name before you answer Yes.
 
 ## Demo mode
 
