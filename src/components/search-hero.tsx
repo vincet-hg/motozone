@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { discountPercent, formatPrice, imageUrl } from "@/lib/format";
 import type { Category, ProductCard, PromotionSlide } from "@/lib/types";
+import { CategoryIcon } from "./category-icons";
 import { ArrowIcon, SearchIcon } from "./icons";
 
 // Browsers do not capitalize Georgian, so the headline is switched to capital Mtavruli letters here.
@@ -89,8 +90,9 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
                 key={category.id}
                 href={`/category/${category.slug}`}
                 prefetch={false}
-                className="rounded-full border border-line bg-card/40 px-3 py-1 text-fg/85 transition-colors hover:border-neon/50 hover:text-white"
+                className="group/pill flex items-center gap-1.5 rounded-full border border-line bg-card/40 py-1 pr-3 pl-2.5 text-fg/85 transition-colors hover:border-neon/50 hover:text-white"
               >
+                <CategoryIcon slug={category.slug} className="size-4 shrink-0 text-neon/80 transition-colors group-hover/pill:text-neon" />
                 {category.name}
               </Link>
             ))}
