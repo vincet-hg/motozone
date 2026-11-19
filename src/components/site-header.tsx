@@ -134,7 +134,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                 <ChevronIcon className="size-4 text-neon transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180" />
               </button>
               <div className="invisible absolute top-full left-0 z-40 w-[420px] translate-y-2 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <div className="overflow-hidden rounded-2xl border border-line bg-card/95 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(0,110,255,0.6)] backdrop-blur-xl">
+                <div className="overflow-hidden rounded-2xl border border-neon/20 bg-card shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(0,110,255,0.6)]">
                   <div className="h-0.5 bg-gradient-to-r from-accent via-neon to-accent" />
                   <div className="grid grid-cols-2 gap-1 p-2">
                     {categories.map((category) => (
@@ -152,7 +152,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                   <Link
                     href="/search"
                     prefetch={false}
-                    className="flex items-center justify-between border-t border-line bg-section/60 px-5 py-3 text-sm font-semibold text-neon transition-colors hover:text-white"
+                    className="flex items-center justify-between border-t border-line bg-section px-5 py-3 text-sm font-semibold text-neon transition-colors hover:text-white"
                   >
                     ყველა პროდუქტი
                     <ArrowIcon className="size-4" />
