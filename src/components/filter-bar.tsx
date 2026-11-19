@@ -13,7 +13,7 @@ export type FilterValues = {
 
 export function FilterBar({ values = {} }: { values?: FilterValues }) {
   return (
-    <Form action="/search" prefetch={false} className="grid grid-cols-[1fr_1fr_auto] items-center gap-1.5 sm:flex">
+    <Form action="/search" prefetch={false} className="grid grid-cols-[1fr_1fr_auto] items-center gap-1.5 sm:flex sm:flex-wrap">
       {values.q && <input type="hidden" name="q" value={values.q} />}
       {values.category && <input type="hidden" name="category" value={values.category} />}
       <input

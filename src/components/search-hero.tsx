@@ -4,7 +4,7 @@ import Link from "next/link";
 import { discountPercent, formatPrice, imageUrl } from "@/lib/format";
 import type { Category, ProductCard, PromotionSlide } from "@/lib/types";
 import { CategoryIcon } from "./category-icons";
-import { ArrowIcon, SearchIcon } from "./icons";
+import { SearchIcon } from "./icons";
 
 // Browsers do not capitalize Georgian, so the headline is switched to capital Mtavruli letters here.
 const mtavruli = (text: string) => text.replace(/[ა-ჺჽ-ჿ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0xbc0));
@@ -18,13 +18,12 @@ const FAN = [
   "hidden sm:block lg:translate-y-6 lg:rotate-[5deg]",
 ];
 
-// Search-first home hero. The pill and the middle card come from the first active promotion
-// (Admin › Slider); without one they point to the sale page and the best seller.
+// Search-first home hero. The middle card is the product of the first active promotion
+// (Admin › Slider); without one it is the biggest discount or the best seller.
 export function SearchHero({ promotion, products, categories }: { promotion?: PromotionSlide; products: ProductCard[]; categories: Category[] }) {
   const featured = promotion?.product ?? products[0];
   const others = products.filter((product) => product.id !== featured?.id).slice(0, 4);
   const fan = featured ? [others[0], others[1], featured, others[2], others[3]] : [];
-  const promoDiscount = promotion ? discountPercent(promotion.product.price, promotion.product.sale_price) : 0;
 
   return (
     <section aria-label="ძიება და შეთავაზებები" className="relative isolate overflow-hidden border-b border-line">

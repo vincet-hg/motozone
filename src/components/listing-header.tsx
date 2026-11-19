@@ -13,7 +13,7 @@ export function ListingHeader({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
       {icon ? (
         <Heading className="flex items-center gap-3 text-xl leading-7 font-extrabold sm:text-2xl">
           <HeadingIcon>{icon}</HeadingIcon>
