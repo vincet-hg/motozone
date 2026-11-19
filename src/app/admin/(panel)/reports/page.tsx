@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
+import { tab } from "../../styles";
 import type { MonthReport, Product, ProductCost, TopProduct } from "@/lib/types";
 
 type Search = { range?: string; from?: string; to?: string };
@@ -66,12 +67,10 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
     .sort((a, b) => a.stock - b.stock);
   const unknownCost = ((products ?? []) as Product[]).filter((product) => !(Number(costs.get(product.id)?.avg_cost) > 0)).length;
 
-  const tab = (selected: boolean) =>
-    `rounded-full border px-3 py-1 text-sm ${selected ? "border-black bg-black text-white" : "border-neutral-300 bg-white"}`;
 
   return (
     <>
-      <h1 className="text-xl font-bold">ანგარიშები</h1>
+      <h1 className="text-2xl font-bold tracking-tight">ანგარიშები</h1>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         {RANGES.map((item) => (
           <Link key={item.key} href={`/admin/reports?range=${item.key}`} prefetch={false} className={tab(range.key === item.key)}>
@@ -79,9 +78,9 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
           </Link>
         ))}
         <form className="flex flex-wrap items-center gap-2 text-sm">
-          <input type="date" name="from" defaultValue={range.from} aria-label="დან" className="h-8 rounded border border-neutral-300 bg-white px-2" />
+          <input type="date" name="from" defaultValue={range.from} aria-label="დან" className="h-9 rounded-xl border px-3" />
           <span>-</span>
-          <input type="date" name="to" defaultValue={range.to} aria-label="მდე" className="h-8 rounded border border-neutral-300 bg-white px-2" />
+          <input type="date" name="to" defaultValue={range.to} aria-label="მდე" className="h-9 rounded-xl border px-3" />
           <button className={tab(range.key === "custom")}>ჩვენება</button>
         </form>
       </div>
@@ -93,49 +92,49 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
           ["თვითღირებულება", money(totals.cost)],
           ["მოგება", `${money(totals.profit)} (${percent(totals.profit, totals.revenue)})`],
         ].map(([label, value]) => (
-          <div key={label} className="rounded border border-neutral-200 bg-white p-3">
-            <dt className="text-sm text-neutral-700">{label}</dt>
-            <dd className="mt-1 text-xl font-bold">{value}</dd>
+          <div key={label} className="rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)] sm:p-5">
+            <dt className="text-sm text-a-soft">{label}</dt>
+            <dd className="mt-2 text-xl font-bold tracking-tight sm:text-2xl">{value}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-2 text-xs text-neutral-600">
+      <p className="mt-2 text-xs text-a-muted">
         გაუქმებული შეკვეთები არ ითვლება. ახალი, დადასტურებული და გაგზავნილი შეკვეთებიც ითვლება.
         {unknownCost > 0 && ` ${unknownCost} პროდუქტს თვითღირებულება არ აქვს მითითებული, ამიტომ მათზე მოგება გაზრდილად ჩანს.`}
       </p>
       {Number(newOrders) > 0 && (
-        <p className="mt-3 rounded bg-amber-100 p-2 text-sm text-amber-950">
+        <p className="mt-3 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3 text-sm text-amber-200">
           <Link href="/admin/orders?status=new" className="underline">{newOrders} ახალი შეკვეთა</Link> ელოდება დადასტურებას.
         </p>
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <section>
-          <h2 className="font-bold">თვეების მიხედვით</h2>
-          <div className="mt-2 overflow-x-auto rounded border border-neutral-200 bg-white">
+          <h2 className="font-semibold text-a-text">თვეების მიხედვით</h2>
+          <div className="mt-2 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-neutral-200 text-neutral-700">
+              <thead>
                 <tr>
-                  <th className="p-2 font-medium">თვე</th>
-                  <th className="p-2 font-medium">შეკვ.</th>
-                  <th className="p-2 font-medium">შემოსავალი</th>
-                  <th className="p-2 font-medium">მოგება</th>
-                  <th className="p-2 font-medium">მარჟა</th>
+                  <th className="px-4 py-3 font-medium">თვე</th>
+                  <th className="px-4 py-3 font-medium">შეკვ.</th>
+                  <th className="px-4 py-3 font-medium">შემოსავალი</th>
+                  <th className="px-4 py-3 font-medium">მოგება</th>
+                  <th className="px-4 py-3 font-medium">მარჟა</th>
                 </tr>
               </thead>
               <tbody>
                 {months.map((row) => (
-                  <tr key={row.month} className="border-b border-neutral-100">
-                    <td className="p-2">{MONTHS[Number(row.month.slice(5, 7)) - 1]} {row.month.slice(0, 4)}</td>
-                    <td className="p-2">{row.orders}</td>
-                    <td className="p-2">{money(row.revenue)}</td>
-                    <td className="p-2 font-medium">{money(row.profit)}</td>
-                    <td className="p-2">{percent(Number(row.profit), Number(row.revenue))}</td>
+                  <tr key={row.month} className="border-b border-a-line/60">
+                    <td className="px-4 py-3">{MONTHS[Number(row.month.slice(5, 7)) - 1]} {row.month.slice(0, 4)}</td>
+                    <td className="px-4 py-3">{row.orders}</td>
+                    <td className="px-4 py-3">{money(row.revenue)}</td>
+                    <td className="px-4 py-3 font-medium">{money(row.profit)}</td>
+                    <td className="px-4 py-3">{percent(Number(row.profit), Number(row.revenue))}</td>
                   </tr>
                 ))}
                 {months.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-6 text-center text-neutral-700">ამ პერიოდში გაყიდვა არ ყოფილა.</td>
+                    <td colSpan={5} className="p-6 text-center text-a-soft">ამ პერიოდში გაყიდვა არ ყოფილა.</td>
                   </tr>
                 )}
               </tbody>
@@ -144,29 +143,29 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
         </section>
 
         <section>
-          <h2 className="font-bold">ყველაზე მომგებიანი პროდუქტები</h2>
-          <div className="mt-2 overflow-x-auto rounded border border-neutral-200 bg-white">
+          <h2 className="font-semibold text-a-text">ყველაზე მომგებიანი პროდუქტები</h2>
+          <div className="mt-2 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-neutral-200 text-neutral-700">
+              <thead>
                 <tr>
-                  <th className="p-2 font-medium">პროდუქტი</th>
-                  <th className="p-2 font-medium">ცალი</th>
-                  <th className="p-2 font-medium">შემოსავალი</th>
-                  <th className="p-2 font-medium">მოგება</th>
+                  <th className="px-4 py-3 font-medium">პროდუქტი</th>
+                  <th className="px-4 py-3 font-medium">ცალი</th>
+                  <th className="px-4 py-3 font-medium">შემოსავალი</th>
+                  <th className="px-4 py-3 font-medium">მოგება</th>
                 </tr>
               </thead>
               <tbody>
                 {top.map((row) => (
-                  <tr key={row.product_name} className="border-b border-neutral-100">
-                    <td className="p-2">{row.product_name}</td>
-                    <td className="p-2">{row.units}</td>
-                    <td className="p-2">{money(row.revenue)}</td>
-                    <td className="p-2 font-medium">{money(row.profit)}</td>
+                  <tr key={row.product_name} className="border-b border-a-line/60">
+                    <td className="px-4 py-3">{row.product_name}</td>
+                    <td className="px-4 py-3">{row.units}</td>
+                    <td className="px-4 py-3">{money(row.revenue)}</td>
+                    <td className="px-4 py-3 font-medium">{money(row.profit)}</td>
                   </tr>
                 ))}
                 {top.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="p-6 text-center text-neutral-700">ჯერ მონაცემი არ არის.</td>
+                    <td colSpan={4} className="p-6 text-center text-a-soft">ჯერ მონაცემი არ არის.</td>
                   </tr>
                 )}
               </tbody>
@@ -176,15 +175,15 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
       </div>
 
       <section className="mt-6">
-        <h2 className="font-bold">მარაგი იწურება ({low.length})</h2>
+        <h2 className="font-semibold text-a-text">მარაგი იწურება ({low.length})</h2>
         {low.length === 0 ? (
-          <p className="mt-1 text-sm text-neutral-700">ყველა პროდუქტის მარაგი საკმარისია.</p>
+          <p className="mt-1 text-sm text-a-soft">ყველა პროდუქტის მარაგი საკმარისია.</p>
         ) : (
-          <ul className="mt-2 divide-y divide-neutral-100 rounded border border-neutral-200 bg-white text-sm">
+          <ul className="mt-2 divide-y divide-a-line/60 rounded-2xl border border-a-line bg-a-card text-sm shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
             {low.map((product) => (
-              <li key={product.id} className="flex justify-between gap-4 p-2">
+              <li key={product.id} className="flex justify-between gap-4 px-4 py-3">
                 <Link href={`/admin/products/${product.id}#stock`} className="underline">{product.name}</Link>
-                <span className={product.stock === 0 ? "font-bold text-red-700" : "font-medium"}>
+                <span className={product.stock === 0 ? "font-semibold text-[#ff6b77]" : "font-medium text-amber-200"}>
                   {product.stock === 0 ? "ამოიწურა" : `დარჩა ${product.stock}`}
                 </span>
               </li>

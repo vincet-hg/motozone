@@ -9,7 +9,7 @@ import { keepValues } from "@/lib/keep-values";
 import type { Category, Product } from "@/lib/types";
 import { saveProduct, type FormState } from "../../actions";
 
-const field = "mt-1 w-full rounded border border-neutral-300 bg-white px-3 py-2";
+const field = "mt-1.5 w-full rounded-xl border px-3.5 py-2.5 font-normal";
 const MAX_IMAGES = 8;
 const MAX_SIDE = 1600;
 
@@ -73,14 +73,14 @@ function ImageManager({ initial }: { initial: string[] }) {
 
   return (
     <div>
-      <p className="text-sm">ფოტოები (პირველი ფოტო მთავარია)</p>
+      <p className="text-sm font-medium text-a-soft">ფოტოები (პირველი ფოტო მთავარია)</p>
       <input type="hidden" name="images" value={JSON.stringify(images)} />
       <div className="mt-1 flex flex-wrap gap-2">
         {images.map((path, index) => (
           <div key={path} className="w-24">
             {/* Admin-only preview of a just-uploaded file. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imageUrl(path)} alt="" className={`size-24 rounded border-2 object-contain bg-white ${index === 0 ? "border-accent" : "border-neutral-200"}`} />
+            <img src={imageUrl(path)} alt="" className={`size-24 rounded-lg border-2 object-contain bg-white ${index === 0 ? "border-a-violet" : "border-a-line"}`} />
             <div className="mt-1 flex justify-between text-xs">
               {index > 0 ? (
                 <button type="button" className="underline" onClick={() => setImages([path, ...images.filter((p) => p !== path)])}>
@@ -89,7 +89,7 @@ function ImageManager({ initial }: { initial: string[] }) {
               ) : (
                 <span />
               )}
-              <button type="button" className="text-red-700 underline" onClick={() => setImages(images.filter((p) => p !== path))}>
+              <button type="button" className="text-[#ff6b77] underline" onClick={() => setImages(images.filter((p) => p !== path))}>
                 წაშლა
               </button>
             </div>
@@ -97,12 +97,12 @@ function ImageManager({ initial }: { initial: string[] }) {
         ))}
       </div>
       {images.length < MAX_IMAGES && (
-        <label className="mt-2 inline-block cursor-pointer rounded border border-black px-3 py-2 text-sm">
+        <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-a-violet/50 bg-a-purple/10 px-4 py-3 text-sm font-medium text-[#c4b0ff] transition-colors hover:border-a-violet hover:bg-a-purple/20">
           {uploading ? "იტვირთება..." : "ფოტოს ატვირთვა"}
           <input type="file" accept="image/*" multiple disabled={uploading} onChange={upload} className="sr-only" />
         </label>
       )}
-      {error && <p role="alert" className="mt-1 text-sm text-red-700">{error}</p>}
+      {error && <p role="alert" className="mt-1 text-sm text-[#ff6b77]">{error}</p>}
     </div>
   );
 }
@@ -111,13 +111,13 @@ export function ProductForm({ product, categories }: { product?: Product; catego
   const [state, action, pending] = useActionState<FormState, FormData>(saveProduct, {});
 
   return (
-    <form action={action} onSubmit={keepValues(action)} className="max-w-3xl space-y-4 rounded border border-neutral-200 bg-white p-4">
+    <form action={action} onSubmit={keepValues(action)} className="max-w-3xl space-y-4 rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
       {product && <input type="hidden" name="id" value={product.id} />}
-      <label className="block text-sm">
+      <label className="block text-sm font-medium text-a-soft">
         სახელი
         <input name="name" required maxLength={200} defaultValue={product?.name} className={field} />
       </label>
-      <label className="block text-sm">
+      <label className="block text-sm font-medium text-a-soft">
         კატეგორია
         <select name="category_id" defaultValue={product?.category_id ?? ""} className={field}>
           <option value="">კატეგორიის გარეშე</option>
@@ -129,11 +129,11 @@ export function ProductForm({ product, categories }: { product?: Product; catego
         </select>
       </label>
       <div className="grid grid-cols-3 gap-3">
-        <label className="text-sm">
+        <label className="text-sm font-medium text-a-soft">
           ფასი (₾)
           <input name="price" type="number" min="0" step="0.01" required defaultValue={product?.price} className={field} />
         </label>
-        <label className="text-sm">
+        <label className="text-sm font-medium text-a-soft">
           ფასდაკლებით (₾)
           <input name="sale_price" type="number" min="0" step="0.01" defaultValue={product?.sale_price ?? ""} className={field} />
         </label>
@@ -142,7 +142,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
             მარაგი
             <p className="mt-1 py-2">
               <b>{product.stock}</b>{" "}
-              <a href="#stock" className="text-neutral-700 underline">
+              <a href="#stock" className="text-a-soft underline">
                 შესყიდვით ან კორექციით
               </a>
             </p>
@@ -152,25 +152,25 @@ export function ProductForm({ product, categories }: { product?: Product; catego
         )}
       </div>
       {!product && (
-        <fieldset className="grid grid-cols-2 gap-3 rounded border border-neutral-200 p-3">
+        <fieldset className="grid grid-cols-2 gap-3 rounded-xl border border-a-line bg-a-panel/60 p-3">
           <legend className="px-1 text-sm font-medium">საწყისი მარაგი (არასავალდებულო)</legend>
-          <label className="text-sm">
+          <label className="text-sm font-medium text-a-soft">
             რაოდენობა
             <input name="opening_qty" type="number" min="0" step="1" className={field} />
           </label>
-          <label className="text-sm">
+          <label className="text-sm font-medium text-a-soft">
             შესყიდვის ფასი ცალზე (₾)
             <input name="opening_cost" type="number" min="0" step="0.01" className={field} />
           </label>
-          <p className="col-span-2 text-xs text-neutral-600">შემდეგი პარტიები პროდუქტის გვერდზე, „შესყიდვის დამატებით“ შეგყავს. ასე თვითღირებულება და მოგება ზუსტად ითვლება.</p>
+          <p className="col-span-2 text-xs text-a-muted">შემდეგი პარტიები პროდუქტის გვერდზე, „შესყიდვის დამატებით“ შეგყავს. ასე თვითღირებულება და მოგება ზუსტად ითვლება.</p>
         </fieldset>
       )}
       <ImageManager initial={product?.images ?? []} />
-      <label className="block text-sm">
+      <label className="block text-sm font-medium text-a-soft">
         აღწერა
         <textarea name="description" rows={5} defaultValue={product?.description} className={field} />
       </label>
-      <label className="block text-sm">
+      <label className="block text-sm font-medium text-a-soft">
         მახასიათებლები (თითო ხაზზე: სახელი: მნიშვნელობა)
         <textarea
           name="specs"
@@ -180,7 +180,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
           className={field}
         />
       </label>
-      <label className="block text-sm">
+      <label className="block text-sm font-medium text-a-soft">
         თავსებადობა
         <textarea name="compatibility" rows={2} defaultValue={product?.compatibility} className={field} />
       </label>
@@ -188,9 +188,9 @@ export function ProductForm({ product, categories }: { product?: Product; catego
         <input name="active" type="checkbox" defaultChecked={product?.active ?? true} className="size-4" />
         ჩანს მაღაზიაში
       </label>
-      {state.error && <p role="alert" className="text-sm text-red-700">{state.error}</p>}
+      {state.error && <p role="alert" className="text-sm text-[#ff6b77]">{state.error}</p>}
       <div className="flex items-center gap-4">
-        <button disabled={pending} className="h-11 rounded bg-accent px-6 font-semibold text-white disabled:opacity-50">
+        <button disabled={pending} className="h-11 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(139,92,246,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.8)] px-6 font-semibold text-white disabled:opacity-50">
           {pending ? "ინახება..." : "პროდუქტის შენახვა"}
         </button>
         <Link href="/admin/products" className="text-sm underline">

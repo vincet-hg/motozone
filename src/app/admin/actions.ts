@@ -92,7 +92,7 @@ export async function login(_previous: FormState, form: FormData): Promise<FormS
       return { error: "ელფოსტა ან პაროლი არასწორია." };
     }
     (await cookies()).set(DEMO_COOKIE, DEMO_SESSION, { httpOnly: true, sameSite: "lax", path: "/" });
-    redirect("/admin/orders");
+    redirect("/admin");
   }
 
   const supabase = await createAdminClient();
@@ -140,7 +140,7 @@ export async function verifyMfa(_previous: FormState, form: FormData): Promise<F
 
   const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId: factor.id, code });
   if (error) return { error: "კოდი არასწორია ან ვადა გაუვიდა." };
-  redirect("/admin/orders");
+  redirect("/admin");
 }
 
 export async function logout() {

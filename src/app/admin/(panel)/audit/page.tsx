@@ -75,26 +75,26 @@ export default async function AuditPage() {
 
   return (
     <>
-      <h1 className="text-xl font-bold">ცვლილებების ისტორია</h1>
-      <p className="mt-1 text-sm text-neutral-700">ბოლო 300 ცვლილება: ვინ, როდის და რა შეცვალა. ჩანაწერის წაშლა ადმინიდან შეუძლებელია.</p>
-      <div className="mt-4 overflow-x-auto rounded border border-neutral-200 bg-white">
+      <h1 className="text-2xl font-bold tracking-tight">ცვლილებების ისტორია</h1>
+      <p className="mt-1 text-sm text-a-soft">ბოლო 300 ცვლილება: ვინ, როდის და რა შეცვალა. ჩანაწერის წაშლა ადმინიდან შეუძლებელია.</p>
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-neutral-200 text-neutral-700">
+          <thead>
             <tr>
-              <th className="p-2 font-medium">დრო</th>
-              <th className="p-2 font-medium">ვინ</th>
-              <th className="p-2 font-medium">რა</th>
-              <th className="p-2 font-medium">დეტალები</th>
+              <th className="px-4 py-3 font-medium">დრო</th>
+              <th className="px-4 py-3 font-medium">ვინ</th>
+              <th className="px-4 py-3 font-medium">რა</th>
+              <th className="px-4 py-3 font-medium">დეტალები</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry) => {
               const href = link(entry);
               return (
-                <tr key={entry.id} className="border-b border-neutral-100 align-top">
-                  <td className="p-2 whitespace-nowrap text-neutral-700">{formatDate(entry.at)}</td>
-                  <td className="p-2">{entry.actor ? "ადმინი" : "სისტემა"}</td>
-                  <td className="p-2 whitespace-nowrap">
+                <tr key={entry.id} className="border-b border-a-line/60 align-top">
+                  <td className="px-4 py-3 whitespace-nowrap text-a-soft">{formatDate(entry.at)}</td>
+                  <td className="px-4 py-3">{entry.actor ? "ადმინი" : "სისტემა"}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {href ? (
                       <Link href={href} className="underline">
                         {ENTITIES[entry.entity] ?? entry.entity}
@@ -104,13 +104,13 @@ export default async function AuditPage() {
                     )}{" "}
                     {ACTIONS[entry.action]}
                   </td>
-                  <td className="p-2">{summary(entry)}</td>
+                  <td className="px-4 py-3">{summary(entry)}</td>
                 </tr>
               );
             })}
             {entries.length === 0 && (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-neutral-700">ჯერ ცვლილება არ ყოფილა.</td>
+                <td colSpan={4} className="p-8 text-center text-a-soft">ჯერ ცვლილება არ ყოფილა.</td>
               </tr>
             )}
           </tbody>
