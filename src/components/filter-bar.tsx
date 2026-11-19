@@ -39,7 +39,7 @@ export function FilterBar({ values = {} }: { values?: FilterValues }) {
       <button type="submit" className="h-10 rounded-btn bg-fg px-3 text-sm font-semibold text-bg transition-colors duration-200 hover:bg-white">
         ფილტრი
       </button>
-      <SortSelect value={values.sort ?? "newest"} className={`${field} col-span-3 w-full min-w-0 sm:w-auto`} />
+      <SortSelect value={values.sort ?? ""} className="col-span-3 w-full min-w-0 sm:w-52" />
     </Form>
   );
 }
