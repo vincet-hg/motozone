@@ -18,7 +18,7 @@ export default async function MfaPage() {
   const verified = factors?.totp.find((factor) => factor.status === "verified");
 
   return (
-    <main className="admin flex flex-1 items-center justify-center bg-a-bg bg-[radial-gradient(ellipse_at_50%_20%,rgba(101,56,216,0.25),transparent_55%)] px-4 py-10 text-a-text">
+    <main className="admin flex flex-1 items-center justify-center bg-a-bg bg-[radial-gradient(ellipse_at_50%_20%,rgba(0,110,255,0.25),transparent_55%)] px-4 py-10 text-a-text">
       <div className="w-full max-w-sm space-y-4 rounded-3xl border border-a-line bg-a-card/90 p-7 backdrop-blur shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <h1 className="text-lg font-bold">ორფაქტორიანი შესვლა</h1>
         {verified ? <MfaChallenge factorId={verified.id} /> : <MfaSetupForm />}

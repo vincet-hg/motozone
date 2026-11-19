@@ -97,7 +97,7 @@ function ImageManager({ initial }: { initial: string[] }) {
         ))}
       </div>
       {images.length < MAX_IMAGES && (
-        <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-a-violet/50 bg-a-purple/10 px-4 py-3 text-sm font-medium text-[#c4b0ff] transition-colors hover:border-a-violet hover:bg-a-purple/20">
+        <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-a-violet/50 bg-a-purple/10 px-4 py-3 text-sm font-medium text-[#7dd3fc] transition-colors hover:border-a-violet hover:bg-a-purple/20">
           {uploading ? "იტვირთება..." : "ფოტოს ატვირთვა"}
           <input type="file" accept="image/*" multiple disabled={uploading} onChange={upload} className="sr-only" />
         </label>
@@ -190,7 +190,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
       </label>
       {state.error && <p role="alert" className="text-sm text-[#ff6b77]">{state.error}</p>}
       <div className="flex items-center gap-4">
-        <button disabled={pending} className="h-11 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(139,92,246,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.8)] px-6 font-semibold text-white disabled:opacity-50">
+        <button disabled={pending} className="h-11 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(56,189,248,0.55)] px-6 font-semibold text-white disabled:opacity-50">
           {pending ? "ინახება..." : "პროდუქტის შენახვა"}
         </button>
         <Link href="/admin/products" className="text-sm underline">

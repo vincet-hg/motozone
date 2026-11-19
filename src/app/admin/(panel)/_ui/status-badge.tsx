@@ -1,11 +1,11 @@
 import type { OrderStatus } from "@/lib/types";
 import { STATUS_LABELS } from "../orders/status";
 
-// New = purple, in progress = blue, delivered = green, cancelled = red.
+// New = amber (needs attention), in progress = blue, delivered = green, cancelled = red.
 const TONES: Record<OrderStatus, string> = {
-  new: "border-a-violet/40 bg-a-violet/15 text-[#c4b0ff]",
-  confirmed: "border-a-blue/40 bg-a-blue/15 text-[#7cbcff]",
-  shipped: "border-a-blue/40 bg-a-blue/15 text-[#7cbcff]",
+  new: "border-amber-400/40 bg-amber-400/15 text-amber-200",
+  confirmed: "border-a-blue/40 bg-a-blue/15 text-[#7dd3fc]",
+  shipped: "border-a-blue/40 bg-a-blue/15 text-[#7dd3fc]",
   delivered: "border-a-green/40 bg-a-green/15 text-[#5fe0a0]",
   cancelled: "border-a-red/40 bg-a-red/15 text-[#ff8a94]",
 };

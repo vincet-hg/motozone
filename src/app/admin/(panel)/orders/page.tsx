@@ -47,7 +47,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
             {orders.map((order) => (
               <tr key={order.id} className="border-b border-a-line/60 last:border-0">
                 <td className="px-4 py-3">
-                  <Link href={`/admin/orders/${order.id}`} className="font-semibold text-[#c4b0ff] transition-colors hover:text-white">
+                  <Link href={`/admin/orders/${order.id}`} className="font-semibold text-[#7dd3fc] transition-colors hover:text-white">
                     #{order.id}
                   </Link>
                 </td>

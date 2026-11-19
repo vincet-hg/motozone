@@ -19,7 +19,7 @@ function CodeForm({ factorId, label }: { factorId: string; label: string }) {
           {state.error}
         </p>
       )}
-      <button disabled={pending} className="h-11 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(139,92,246,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.8)] font-medium text-white disabled:opacity-50">
+      <button disabled={pending} className="h-11 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(56,189,248,0.55)] font-medium text-white disabled:opacity-50">
         {pending ? "მოწმდება..." : "დადასტურება"}
       </button>
     </form>
@@ -44,7 +44,7 @@ export function MfaSetupForm() {
           type="button"
           disabled={pending}
           onClick={() => startTransition(async () => setSetup(await startMfaSetup()))}
-          className="h-11 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(139,92,246,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(139,92,246,0.8)] font-medium text-white disabled:opacity-50"
+          className="h-11 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(56,189,248,0.55)] font-medium text-white disabled:opacity-50"
         >
           {pending ? "იქმნება..." : "დაყენების დაწყება"}
         </button>

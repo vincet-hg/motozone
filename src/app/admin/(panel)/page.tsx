@@ -48,7 +48,7 @@ export default async function AdminOverviewPage() {
     .sort((a, b) => a.stock - b.stock);
 
   const stats = [
-    { label: "შემოსავალი ამ თვეში", value: money(revenue), delta: change(revenue, Number(previous?.revenue ?? 0)), icon: Icons.wallet, tone: "from-a-purple/30 text-[#c4b0ff]" },
+    { label: "შემოსავალი ამ თვეში", value: money(revenue), delta: change(revenue, Number(previous?.revenue ?? 0)), icon: Icons.wallet, tone: "from-a-purple/30 text-[#7dd3fc]" },
     { label: "მოგება ამ თვეში", value: money(profit), delta: change(profit, Number(previous?.profit ?? 0)), icon: Icons.trend, tone: "from-a-green/25 text-[#5fe0a0]" },
     { label: "შეკვეთები ამ თვეში", value: String(orders), delta: change(orders, Number(previous?.orders ?? 0)), icon: Icons.orders, tone: "from-a-blue/25 text-[#7cbcff]" },
     { label: "მარაგი იწურება", value: String(low.length), delta: null, icon: Icons.alert, tone: "from-a-red/25 text-[#ff8a94]" },
@@ -73,13 +73,13 @@ export default async function AdminOverviewPage() {
           prefetch={false}
           className="mt-5 flex items-center gap-3 rounded-2xl border border-a-violet/40 bg-gradient-to-r from-a-purple/25 to-transparent p-4 text-sm transition-colors hover:border-a-violet"
         >
-          <span className="flex size-9 items-center justify-center rounded-xl bg-a-violet/25 text-[#c4b0ff]">
+          <span className="flex size-9 items-center justify-center rounded-xl bg-a-violet/25 text-[#7dd3fc]">
             <Icons.bell className="size-5" />
           </span>
           <span>
             <b className="text-white">{newCount} ახალი შეკვეთა</b> <span className="text-a-soft">ელოდება დადასტურებას</span>
           </span>
-          <span className="ml-auto font-semibold whitespace-nowrap text-[#c4b0ff]">ნახვა →</span>
+          <span className="ml-auto font-semibold whitespace-nowrap text-[#7dd3fc]">ნახვა →</span>
         </Link>
       )}
 
@@ -106,7 +106,7 @@ export default async function AdminOverviewPage() {
         <section className={`${card} p-4 sm:p-6`}>
           <div className="flex items-center justify-between gap-3">
             <h2 className={sectionTitle}>შემოსავალი, ბოლო 6 თვე</h2>
-            <Link href="/admin/reports" prefetch={false} className="text-sm font-medium text-[#b9a3ff] hover:text-white">
+            <Link href="/admin/reports" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
               ანგარიშები →
             </Link>
           </div>
@@ -121,7 +121,7 @@ export default async function AdminOverviewPage() {
         <section className={`${card} p-4 sm:p-6`}>
           <div className="flex items-center justify-between gap-3">
             <h2 className={sectionTitle}>მარაგი იწურება</h2>
-            <Link href="/admin/products?low=1" prefetch={false} className="text-sm font-medium text-[#b9a3ff] hover:text-white">
+            <Link href="/admin/products?low=1" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
               ყველა →
             </Link>
           </div>
@@ -131,7 +131,7 @@ export default async function AdminOverviewPage() {
             <ul className="mt-3 divide-y divide-a-line/60">
               {low.slice(0, 6).map((product) => (
                 <li key={product.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
-                  <Link href={`/admin/products/${product.id}#stock`} prefetch={false} className="min-w-0 truncate text-a-text hover:text-[#c4b0ff]">
+                  <Link href={`/admin/products/${product.id}#stock`} prefetch={false} className="min-w-0 truncate text-a-text hover:text-[#7dd3fc]">
                     {product.name}
                   </Link>
                   <span
@@ -151,7 +151,7 @@ export default async function AdminOverviewPage() {
       <section className="mt-6">
         <div className="flex items-center justify-between gap-3">
           <h2 className={sectionTitle}>ბოლო შეკვეთები</h2>
-          <Link href="/admin/orders" prefetch={false} className="text-sm font-medium text-[#b9a3ff] hover:text-white">
+          <Link href="/admin/orders" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
             ყველა შეკვეთა →
           </Link>
         </div>
@@ -170,7 +170,7 @@ export default async function AdminOverviewPage() {
               {((recent ?? []) as Order[]).map((order) => (
                 <tr key={order.id}>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/orders/${order.id}`} prefetch={false} className="font-semibold text-[#c4b0ff] hover:text-white">
+                    <Link href={`/admin/orders/${order.id}`} prefetch={false} className="font-semibold text-[#7dd3fc] hover:text-white">
                       #{order.id}
                     </Link>
                   </td>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { isDemo } from "@/lib/demo";
 import { DEMO_EMAIL } from "@/lib/demo-data";
 import { requireAdmin } from "@/lib/supabase-server";
+import { Logo } from "@/components/logo";
 import { logout } from "../actions";
 import { Icons } from "./_ui/icons";
 import { AdminNav, MobileMenu } from "./_ui/nav";
@@ -19,14 +20,9 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   const initial = (email || "A").charAt(0).toUpperCase();
 
   const brand = (
-    <Link href="/admin" prefetch={false} className="flex items-center gap-3 px-2">
-      <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-a-purple to-a-violet text-lg font-black text-white italic shadow-[0_0_24px_-4px_rgba(139,92,246,0.8)]">
-        S
-      </span>
-      <span className="leading-tight">
-        <span className="block font-bold text-a-text">Scooter Land</span>
-        <span className="block text-xs text-a-muted">მართვის პანელი</span>
-      </span>
+    <Link href="/admin" prefetch={false} aria-label="მიმოხილვა" className="flex items-center gap-2 px-1">
+      <Logo className="h-10 w-auto drop-shadow-[0_0_14px_rgba(0,110,255,0.35)] lg:h-14" sizes="143px" />
+      <span className="hidden rounded-md border border-a-line bg-a-card px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-a-soft uppercase sm:inline">Admin</span>
     </Link>
   );
 
@@ -46,7 +42,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   );
 
   return (
-    <div className="admin flex flex-1 bg-a-bg bg-[radial-gradient(ellipse_at_top_right,rgba(101,56,216,0.12),transparent_45%)] text-a-text">
+    <div className="admin flex flex-1 bg-a-bg bg-[radial-gradient(ellipse_at_top_right,rgba(0,110,255,0.14),transparent_45%)] text-a-text">
       <aside className="sticky top-0 hidden h-dvh self-start w-64 shrink-0 flex-col gap-6 border-r border-a-line bg-a-panel px-3 py-5 lg:flex">
         {brand}
         <div className="flex-1 overflow-y-auto">

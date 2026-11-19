@@ -15,12 +15,12 @@ export function LineChart({ points, format }: { points: { label: string; value: 
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="შემოსავალი თვეების მიხედვით">
       <defs>
         <linearGradient id="chart-line" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#6538d8" />
-          <stop offset="1" stopColor="#a78bfa" />
+          <stop offset="0" stopColor="#006eff" />
+          <stop offset="1" stopColor="#38bdf8" />
         </linearGradient>
         <linearGradient id="chart-area" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#8b5cf6" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#8b5cf6" stopOpacity="0" />
+          <stop offset="0" stopColor="#168bff" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#168bff" stopOpacity="0" />
         </linearGradient>
         <filter id="chart-glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="4" result="blur" />
@@ -32,8 +32,8 @@ export function LineChart({ points, format }: { points: { label: string; value: 
       </defs>
       {ticks.map((t) => (
         <g key={t}>
-          <line x1={pad.left} x2={W - pad.right} y1={y(t)} y2={y(t)} stroke="#2a3647" strokeDasharray={t ? "4 6" : undefined} />
-          <text x={pad.left - 10} y={y(t) + 4} textAnchor="end" fontSize="11" fill="#75758e">
+          <line x1={pad.left} x2={W - pad.right} y1={y(t)} y2={y(t)} stroke="#16294a" strokeDasharray={t ? "4 6" : undefined} />
+          <text x={pad.left - 10} y={y(t) + 4} textAnchor="end" fontSize="11" fill="#6b7f9e">
             {format(t)}
           </text>
         </g>
@@ -42,11 +42,11 @@ export function LineChart({ points, format }: { points: { label: string; value: 
       <path d={line} fill="none" stroke="url(#chart-line)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" filter="url(#chart-glow)" />
       {points.map((p, i) => (
         <g key={p.label}>
-          <circle cx={x(i)} cy={y(p.value)} r="9" fill="#8b5cf6" opacity="0.2" />
-          <circle cx={x(i)} cy={y(p.value)} r="4.5" fill="#0e111d" stroke="#a78bfa" strokeWidth="2.5">
+          <circle cx={x(i)} cy={y(p.value)} r="9" fill="#168bff" opacity="0.2" />
+          <circle cx={x(i)} cy={y(p.value)} r="4.5" fill="#050b18" stroke="#38bdf8" strokeWidth="2.5">
             <title>{`${p.label}: ${format(p.value)}`}</title>
           </circle>
-          <text x={x(i)} y={H - 8} textAnchor="middle" fontSize="11" fill="#75758e">
+          <text x={x(i)} y={H - 8} textAnchor="middle" fontSize="11" fill="#6b7f9e">
             {p.label}
           </text>
         </g>

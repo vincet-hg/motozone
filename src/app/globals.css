@@ -14,20 +14,20 @@
   --color-muted: #94a9c5;
   --color-line: rgb(80 150 255 / 0.15);
   --color-photo: #eef3fb;
-  /* Admin panel: dark navy with purple as the main accent; blue, green and red mark statuses. */
-  --color-a-bg: #0e111d;
-  --color-a-panel: #121625;
-  --color-a-card: #1a1f34;
-  --color-a-hover: #23245c;
-  --color-a-purple: #6538d8;
-  --color-a-violet: #8b5cf6;
-  --color-a-blue: #1f88f7;
+  /* Admin panel: the store's Space Blue. "purple"/"violet" are the admin's main accent pair (blue and neon). */
+  --color-a-bg: #050b18;
+  --color-a-panel: #081426;
+  --color-a-card: #0d1b30;
+  --color-a-hover: #12294a;
+  --color-a-purple: #006eff;
+  --color-a-violet: #38bdf8;
+  --color-a-blue: #168bff;
   --color-a-green: #1ab269;
   --color-a-red: #f04452;
-  --color-a-text: #f4f4f6;
-  --color-a-soft: #ac9fae;
-  --color-a-muted: #75758e;
-  --color-a-line: #2a3647;
+  --color-a-text: #f0f6ff;
+  --color-a-soft: #94a9c5;
+  --color-a-muted: #6b7f9e;
+  --color-a-line: rgb(80 150 255 / 0.16);
   --radius-btn: 12px;
   --radius-card: 16px;
   --font-sans: var(--font-inter), var(--font-noto-georgian), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -202,7 +202,7 @@ summary::-webkit-details-marker {
 
 .admin :is(input, select, textarea):focus {
   border-color: var(--color-a-violet);
-  box-shadow: 0 0 0 3px rgb(139 92 246 / 0.22);
+  box-shadow: 0 0 0 3px rgb(0 110 255 / 0.25);
   outline: none;
 }
 
@@ -215,7 +215,7 @@ summary::-webkit-details-marker {
 }
 
 .admin table thead {
-  background: rgb(18 22 37 / 0.7);
+  background: rgb(8 20 38 / 0.8);
   color: var(--color-a-muted);
   font-size: 12px;
   letter-spacing: 0.02em;
@@ -226,18 +226,18 @@ summary::-webkit-details-marker {
 }
 
 .admin table tbody tr:hover {
-  background: rgb(35 36 92 / 0.28);
+  background: rgb(18 41 74 / 0.45);
 }
 
 .admin a.underline:not([class*="ff6b77"]),
 .admin button.underline:not([class*="ff6b77"]) {
-  color: #b9a3ff;
-  text-decoration-color: rgb(139 92 246 / 0.45);
+  color: #7dd3fc;
+  text-decoration-color: rgb(56 189 248 / 0.4);
   text-underline-offset: 3px;
   transition: color 0.15s;
 }
 
 .admin a.underline:not([class*="ff6b77"]):hover,
 .admin button.underline:not([class*="ff6b77"]):hover {
-  color: #ddd2ff;
+  color: #e0f2fe;
 }

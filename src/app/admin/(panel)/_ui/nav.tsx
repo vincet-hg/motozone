@@ -29,14 +29,14 @@ export function AdminNav({ newOrders }: { newOrders: number }) {
             aria-current={active ? "page" : undefined}
             className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
               active
-                ? "bg-gradient-to-r from-a-purple to-a-violet/80 text-white shadow-[0_8px_24px_-10px_rgba(139,92,246,0.9)]"
+                ? "bg-gradient-to-r from-a-purple to-a-violet/80 text-white shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)]"
                 : "text-a-soft hover:bg-a-card hover:text-a-text"
             }`}
           >
             <Icon className={`size-5 shrink-0 ${active ? "text-white" : "text-a-muted transition-colors group-hover:text-a-violet"}`} />
             {label}
             {href === "/admin/orders" && newOrders > 0 && (
-              <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-bold ${active ? "bg-white/20 text-white" : "bg-a-violet/20 text-[#c4b0ff]"}`}>{newOrders}</span>
+              <span className={`ml-auto rounded-full px-2 py-0.5 text-xs font-bold ${active ? "bg-white/20 text-white" : "bg-a-violet/20 text-[#7dd3fc]"}`}>{newOrders}</span>
             )}
           </Link>
         );
