@@ -22,34 +22,34 @@ export function HomeHero() {
 
       <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 pt-8 pb-12 sm:px-6 lg:min-h-[500px] lg:grid-cols-[1.25fr_1fr] lg:gap-10 lg:px-8 lg:pt-12 lg:pb-20">
         <div className="min-w-0">
-          <span className="animate-enter-up inline-flex items-center gap-2 rounded-full border border-neon/30 bg-accent/10 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-neon">
+          <span className="animate-enter-up inline-flex items-center gap-2.5 rounded-full border border-neon/25 bg-accent/10 py-1.5 pr-4 pl-3 text-xs font-semibold text-neon sm:text-[13px]">
             <span aria-hidden="true" className="size-1.5 rounded-full bg-neon shadow-[0_0_8px_#38bdf8]" />
             ყველაფერი შენი მოპედისთვის
           </span>
 
-          <h1 className="animate-enter-left mt-5 text-[32px] leading-[1.1] font-black tracking-tight italic sm:text-5xl lg:text-[40px] xl:text-[48px]">
+          <h1 className="animate-enter-left mt-6 text-[30px] leading-[1.06] font-extrabold tracking-[-0.01em] italic min-[400px]:text-[34px] sm:text-[44px] lg:text-[42px] xl:text-[52px]">
             <span className="block text-fg lg:whitespace-nowrap">{mtavruli("მოპედის აქსესუარები")}</span>
-            <span className="block bg-gradient-to-r from-neon via-accent-hover to-neon bg-clip-text pr-2 text-transparent [filter:drop-shadow(0_0_24px_rgba(0,110,255,0.45))]">
+            <span className="mt-1 block bg-gradient-to-r from-neon to-accent-hover bg-clip-text pr-3 pb-1 text-transparent [filter:drop-shadow(0_0_22px_rgba(0,110,255,0.4))]">
               {mtavruli("ერთ სივრცეში!")}
             </span>
           </h1>
 
-          <p className="animate-enter-up mt-5 max-w-md text-base leading-7 text-muted [animation-delay:150ms] sm:text-lg">
-            ხარისხი, სტილი და კომფორტი ყოველ მგზავრობაში. აირჩიე შენი მოპედისთვის საჭირო ყველაფერი ერთ ადგილას.
+          <p className="animate-enter-up mt-6 max-w-[27rem] text-[15px] leading-[1.75] text-muted [animation-delay:150ms] sm:text-[17px]">
+            ჩაფხუტები, ხელთათმანები, დამტენები და სხვა აქსესუარები. ხარისხი და კომფორტი ყოველ მგზავრობაში.
           </p>
 
-          <div className="animate-enter-up mt-8 flex flex-wrap gap-2.5 sm:gap-3 [animation-delay:250ms]">
+          <div className="animate-enter-up mt-8 flex flex-wrap gap-2.5 [animation-delay:250ms] sm:mt-9 sm:gap-3">
             <Link
               href="#products"
-              className="flex h-11 items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-hover px-5 text-[15px] font-bold sm:h-12 sm:text-base text-white sm:px-7 shadow-[0_10px_30px_-8px_rgba(0,110,255,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(56,189,248,0.55)]"
+              className="group flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-hover px-6 text-[15px] font-semibold text-white sm:h-[52px] sm:px-7 shadow-[0_10px_30px_-8px_rgba(0,110,255,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(56,189,248,0.55)]"
             >
               პროდუქტების ნახვა
-              <ArrowIcon />
+              <ArrowIcon className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="/sale"
               prefetch={false}
-              className="flex h-11 items-center rounded-full border border-line bg-card/60 px-5 text-[15px] font-semibold sm:h-12 sm:text-base sm:px-6 backdrop-blur transition-colors duration-200 hover:border-neon/60 hover:text-neon"
+              className="flex h-12 items-center rounded-full border border-line bg-card/60 px-6 text-[15px] font-semibold sm:h-[52px] sm:px-7 backdrop-blur transition-colors duration-200 hover:border-neon/60 hover:text-neon"
             >
               აქციები
             </Link>
