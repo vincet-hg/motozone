@@ -1,25 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CategoryShowcase } from "@/components/category-showcase";
-import { HeroSlider, type Slide } from "@/components/hero-slider";
-import { HomeHero } from "@/components/home-hero";
 import { JsonLd } from "@/components/json-ld";
 import { Newsletter } from "@/components/newsletter";
 import type { CardBadge } from "@/components/product-card";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductRow } from "@/components/product-row";
 import { PromoBanners } from "@/components/promo-banners";
+import { SearchHero } from "@/components/search-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { moreButton } from "@/components/styles";
 import { getCategories, getCategoryCovers, getNewProductIds, getPopularProducts, getProducts, getPromotionSlides } from "@/lib/catalog";
-import { discountPercent, imageUrl } from "@/lib/format";
+import { discountPercent } from "@/lib/format";
 import { absolute, organization } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/" } };
 
 const POPULAR_COUNT = 10;
-const MAX_SLIDES = 8;
+const HERO_CARDS = 5;
 
 export default async function HomePage() {
   const [promotions, categories, covers, popular, newIds, newest, sale] = await Promise.all([
@@ -32,42 +31,16 @@ export default async function HomePage() {
     getProducts({ sale: true }),
   ]);
 
-  const promoSlides: Slide[] = promotions.map((promotion) => ({
-    id: promotion.id,
-    title: promotion.title,
-    description: promotion.description,
-    badge: promotion.badge,
-    ctaLabel: promotion.cta_label,
-    endsAt: promotion.ends_at,
-    href: `/product/${promotion.product.slug}`,
-    image: imageUrl(promotion.product.images[0]),
-    productName: promotion.product.name,
-    price: promotion.product.price,
-    salePrice: promotion.product.sale_price,
-    discount: discountPercent(promotion.product.price, promotion.product.sale_price),
-  }));
+  // The cached page can outlive a promotion's end, so expired ones are skipped here too.
+  const promotion = promotions.find((item) => !item.ends_at || new Date(item.ends_at).getTime() > Date.now());
 
-  // After the promotions made in Admin › Slider, every discounted product in stock gets a slide of its own,
-  // biggest discount first. Products that already have a promotion are not repeated.
-  const promoted = new Set(promotions.map((promotion) => promotion.product.id));
-  const saleSlides: Slide[] = sale.products
-    .filter((product) => product.stock > 0 && !promoted.has(product.id) && product.images.length > 0)
-    .map((product) => ({
-      id: `sale-${product.id}`,
-      title: product.name,
-      description: "",
-      badge: "ფასდაკლება",
-      ctaLabel: "ყიდვა",
-      endsAt: null,
-      href: `/product/${product.slug}`,
-      image: imageUrl(product.images[0]),
-      productName: "",
-      price: product.price,
-      salePrice: product.sale_price,
-      discount: discountPercent(product.price, product.sale_price),
-    }))
-    .sort((a, b) => b.discount - a.discount);
-  const slides = [...promoSlides, ...saleSlides].slice(0, MAX_SLIDES);
+  // Hero cards: discounted products in stock first (biggest discount first), topped up to five with best sellers.
+  const discounted = sale.products
+    .filter((product) => product.stock > 0)
+    .sort((a, b) => discountPercent(b.price, b.sale_price) - discountPercent(a.price, a.sale_price));
+  const heroProducts = [...discounted, ...popular.products.filter((product) => product.sale_price === null)]
+    .filter((product, i, list) => product.images.length > 0 && list.findIndex((other) => other.id === product.id) === i)
+    .slice(0, HERO_CARDS);
 
   const badgeFor = (id: string): CardBadge | undefined => (popular.popularIds.has(id) ? "popular" : newIds.has(id) ? "new" : undefined);
   const shown = new Set(popular.products.map((product) => product.id));
@@ -97,7 +70,7 @@ export default async function HomePage() {
         }}
       />
       <h1 className="sr-only">{site.name}: მოტოციკლისა და მოპედის აქსესუარები</h1>
-      <HeroSlider slides={slides} fallback={<HomeHero />} />
+      <SearchHero promotion={promotion} products={heroProducts} categories={categories} />
 
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
         <CategoryShowcase categories={categories} covers={covers} />
