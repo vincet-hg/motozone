@@ -2,7 +2,7 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { ActiveButton, CartLink, Disclosure, NavLink, WishlistLink } from "./header-parts";
+import { ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
 import { ArrowIcon, CashIcon, ChevronIcon, MenuIcon, PhoneIcon, SearchIcon, TruckIcon } from "./icons";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
@@ -126,7 +126,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             </nav>
           </Disclosure>
 
-          <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 lg:mx-0 lg:mr-2">
+          <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 rounded-xl lg:mx-0 lg:mr-2">
             <Logo className="h-10 w-auto min-[360px]:h-12 drop-shadow-[0_0_14px_rgba(0,110,255,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
           </Link>
 
@@ -175,12 +175,15 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </nav>
 
           <div className="flex items-center gap-1.5 min-[360px]:gap-2 lg:ml-auto">
-            <SearchForm className="hidden w-[250px] xl:flex" />
-            <Disclosure className="xl:hidden" summaryLabel="ძიება" summaryClassName={`${iconButton}`} summary={<SearchIcon className="size-5" />}>
-              <div className="absolute inset-x-0 top-full border-y border-line bg-bg p-3">
-                <SearchForm className="mx-auto max-w-2xl" autoFocus />
-              </div>
-            </Disclosure>
+            {/* The homepage has its own large search in the hero, so the header one is left out there. */}
+            <HiddenOnHome>
+              <SearchForm className="hidden w-[250px] xl:flex" />
+              <Disclosure className="xl:hidden" summaryLabel="ძიება" summaryClassName={`${iconButton}`} summary={<SearchIcon className="size-5" />}>
+                <div className="absolute inset-x-0 top-full border-y border-line bg-bg p-3">
+                  <SearchForm className="mx-auto max-w-2xl" autoFocus />
+                </div>
+              </Disclosure>
+            </HiddenOnHome>
             <WishlistLink />
             <CartLink />
           </div>

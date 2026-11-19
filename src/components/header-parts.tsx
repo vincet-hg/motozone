@@ -43,6 +43,11 @@ export function ActiveButton({ prefix, className, activeClassName, children }: {
   );
 }
 
+// Renders its children on every page except the homepage.
+export function HiddenOnHome({ children }: { children: React.ReactNode }) {
+  return usePathname() === "/" ? null : <>{children}</>;
+}
+
 // A <details> menu that works without JavaScript and closes itself after navigation.
 export function Disclosure({ className, summary, summaryLabel, summaryClassName, children }: {
   className?: string;
