@@ -9,7 +9,7 @@ export function Price({
   salePrice: number | null;
   large?: boolean;
 }) {
-  const current = `font-extrabold text-accent-hover ${large ? "text-3xl" : "text-xl"}`;
+  const current = `font-extrabold text-neon ${large ? "text-3xl" : "text-xl"}`;
   if (salePrice === null) return <p className={current}>{formatPrice(price)}</p>;
   return (
     <p className="flex flex-wrap items-baseline gap-x-2">

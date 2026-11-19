@@ -26,7 +26,7 @@ export function WishlistView() {
     return (
       <p className="py-12 text-center text-muted">
         სურვილების სია ცარიელია. პროდუქტზე გულის ნიშანს დააჭირე და აქ შეინახება.{" "}
-        <Link href="/" className="text-accent underline">
+        <Link href="/" className="text-neon underline">
           პროდუქტების ნახვა
         </Link>
       </p>

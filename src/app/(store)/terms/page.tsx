@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = { title: "მომსახურების პირობები", alternates: { canonical: "/terms" } };
 
 const h2 = "mt-6 text-lg font-bold";
-const link = "text-accent underline hover:text-accent-hover";
+const link = "text-neon underline hover:text-neon";
 
 // Draft text. Fill in your delivery times and fees, and have a lawyer review it before launch.
 export default function TermsPage() {

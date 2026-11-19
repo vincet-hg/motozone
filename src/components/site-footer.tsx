@@ -51,23 +51,23 @@ export function SiteFooter({ categories }: { categories: Category[] }) {
           </div>
         </nav>
 
-        <div>
+        <div className="max-[419px]:col-span-2">
           <h2 className={heading}>კონტაქტი</h2>
           <ul className="mt-3 space-y-3 text-muted">
             <li>
-              <a href={site.phoneHref} className="flex items-center gap-2.5 font-semibold text-fg transition-colors hover:text-accent-hover">
-                <PhoneIcon className="size-4 shrink-0 text-accent" />
+              <a href={site.phoneHref} className="flex items-center gap-2.5 font-semibold whitespace-nowrap text-fg transition-colors hover:text-neon">
+                <PhoneIcon className="size-4 shrink-0 text-neon" />
                 {site.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${site.email}`} className="flex items-center gap-2.5 break-all transition-colors hover:text-fg">
-                <MailIcon className="size-4 shrink-0 text-accent" />
+              <a href={`mailto:${site.email}`} className="flex items-center gap-2.5 [overflow-wrap:anywhere] transition-colors hover:text-fg">
+                <MailIcon className="size-4 shrink-0 text-neon" />
                 {site.email}
               </a>
             </li>
             <li className="flex items-center gap-2.5">
-              <PinIcon className="size-4 shrink-0 text-accent" />
+              <PinIcon className="size-4 shrink-0 text-neon" />
               {site.address}
             </li>
           </ul>
@@ -75,7 +75,7 @@ export function SiteFooter({ categories }: { categories: Category[] }) {
       </div>
 
       <div className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-muted sm:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-center text-xs text-muted sm:flex-row sm:text-left">
           <p>© {new Date().getFullYear()} {site.name}. ყველა უფლება დაცულია.</p>
           <p>გადახდა პროდუქტის მიღებისას</p>
         </div>

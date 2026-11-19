@@ -13,7 +13,7 @@ export default function AboutPage() {
         <p>ვყიდით იმას, რაც ყოველდღიურ სიარულს უფრო კომფორტულს და უსაფრთხოს ხდის: გათბობად გრიფსებს, დამტენებს, ხელთათმანებს, ტელეფონის დამჭერებს და სხვა აქსესუარებს.</p>
         <p>
           კითხვა თუ გაქვს,{" "}
-          <Link href="/contact" className="text-accent underline hover:text-accent-hover">
+          <Link href="/contact" className="text-neon underline hover:text-neon">
             დაგვიკავშირდი
           </Link>
           .

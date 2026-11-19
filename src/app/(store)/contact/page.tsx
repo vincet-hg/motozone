@@ -11,8 +11,8 @@ export default function ContactPage() {
       <h1 className="border-l-4 border-accent pl-3 text-2xl font-extrabold">კონტაქტი</h1>
       <div className="mt-6 rounded-card border border-line bg-card p-6">
         <p className="text-muted">დაგვირეკე პროდუქტის, შეკვეთის ან მიწოდების შესახებ</p>
-        <a href={site.phoneHref} className="mt-2 flex items-center gap-3 text-2xl font-bold hover:text-accent-hover">
-          <PhoneIcon className="size-7 text-accent" />
+        <a href={site.phoneHref} className="mt-2 flex items-center gap-3 text-xl font-bold whitespace-nowrap hover:text-neon min-[360px]:text-2xl">
+          <PhoneIcon className="size-7 text-neon" />
           {site.phone}
         </a>
         <p className="mt-6 text-muted">ან მოგვწერე სოციალურ ქსელში</p>

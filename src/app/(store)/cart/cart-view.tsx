@@ -44,11 +44,11 @@ export function CartView() {
   if (state.orderId) {
     return (
       <div className="mt-6 max-w-md rounded-card border border-line bg-card p-6">
-        <h2 className="text-xl font-extrabold text-accent">შეკვეთა მიღებულია</h2>
+        <h2 className="text-xl font-extrabold text-neon">შეკვეთა მიღებულია</h2>
         <p className="mt-2">შეკვეთის ნომერი: #{state.orderId}</p>
         <p>ჯამი: {formatPrice(state.total ?? 0)}</p>
         <p className="mt-2 text-sm text-muted">დასადასტურებლად დაგირეკავთ მითითებულ ნომერზე.</p>
-        <Link href="/" className="mt-4 inline-block text-accent underline">
+        <Link href="/" className="mt-4 inline-block text-neon underline">
           პროდუქტებზე დაბრუნება
         </Link>
       </div>
@@ -59,7 +59,7 @@ export function CartView() {
     return (
       <p className="mt-6">
         კალათა ცარიელია.{" "}
-        <Link href="/" className="text-accent underline">
+        <Link href="/" className="text-neon underline">
           პროდუქტების ნახვა
         </Link>
       </p>
@@ -85,7 +85,7 @@ export function CartView() {
             </div>
             <div className="min-w-0 flex-1">
               {product ? (
-                <Link href={`/product/${product.slug}`} prefetch={false} className="line-clamp-2 text-sm font-semibold hover:text-accent-hover">
+                <Link href={`/product/${product.slug}`} prefetch={false} className="line-clamp-2 text-sm font-semibold hover:text-neon">
                   {product.name}
                 </Link>
               ) : (
@@ -112,7 +112,7 @@ export function CartView() {
                 ) : (
                   <span />
                 )}
-                {product && <span className="font-bold text-accent">{formatPrice(product.final_price * item.qty)}</span>}
+                {product && <span className="font-bold text-neon">{formatPrice(product.final_price * item.qty)}</span>}
               </div>
               <button type="button" className="mt-1 py-1 text-sm text-muted underline hover:text-fg" onClick={() => setCartQty(item.id, 0)}>
                 წაშლა
@@ -125,7 +125,7 @@ export function CartView() {
       <form action={action} onSubmit={keepValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
         <div className="flex items-baseline justify-between">
           <h2 className="font-bold">ჯამი</h2>
-          <span className="text-2xl font-bold text-accent">{formatPrice(total)}</span>
+          <span className="text-2xl font-bold text-neon">{formatPrice(total)}</span>
         </div>
         <input type="hidden" name="items" value={JSON.stringify(cart)} />
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />

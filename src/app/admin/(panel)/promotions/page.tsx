@@ -7,17 +7,17 @@ import { formatDate } from "../orders/status";
 
 type Search = { saved?: string; error?: string };
 
-const field = "mt-1 h-9 w-full rounded border border-neutral-300 bg-white px-2 text-sm";
+const field = "mt-1 h-9 w-full rounded-lg border border-a-line bg-a-card px-2 text-sm";
 
 // The value for <input type="datetime-local">, in Tbilisi time (UTC+4).
 const localValue = (iso: string | null) => (iso ? new Date(Date.parse(iso) + 4 * 3600000).toISOString().slice(0, 16) : "");
 
 function status(promotion: Promotion, product: ProductCard | undefined) {
-  if (!product) return { label: "პროდუქტი წაშლილია ან დამალულია", tone: "text-red-700" };
-  if (!promotion.active) return { label: "გამორთულია", tone: "text-neutral-600" };
-  if (promotion.ends_at && Date.parse(promotion.ends_at) <= Date.now()) return { label: "დასრულდა", tone: "text-neutral-600" };
-  if (product.images.length === 0) return { label: "პროდუქტს ფოტო არ აქვს, არ ჩანს", tone: "text-red-700" };
-  return { label: "ჩანს მთავარ გვერდზე", tone: "text-green-800" };
+  if (!product) return { label: "პროდუქტი წაშლილია ან დამალულია", tone: "text-[#ff6b77]" };
+  if (!promotion.active) return { label: "გამორთულია", tone: "text-a-muted" };
+  if (promotion.ends_at && Date.parse(promotion.ends_at) <= Date.now()) return { label: "დასრულდა", tone: "text-a-muted" };
+  if (product.images.length === 0) return { label: "პროდუქტს ფოტო არ აქვს, არ ჩანს", tone: "text-[#ff6b77]" };
+  return { label: "ჩანს მთავარ გვერდზე", tone: "text-a-green" };
 }
 
 function PromotionFields({ promotion, products }: { promotion?: Promotion; products: ProductCard[] }) {
@@ -37,11 +37,11 @@ function PromotionFields({ promotion, products }: { promotion?: Promotion; produ
           })}
         </select>
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-a-soft">
         სათაური
         <input name="title" required minLength={2} maxLength={80} defaultValue={promotion?.title} placeholder="ზამთრის აქცია" className={field} />
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-a-soft">
         ნიშანი (არასავალდებულო)
         <input name="badge" maxLength={30} defaultValue={promotion?.badge} placeholder="ცხელი შეთავაზება" className={field} />
       </label>
@@ -49,15 +49,15 @@ function PromotionFields({ promotion, products }: { promotion?: Promotion; produ
         მოკლე აღწერა
         <input name="description" maxLength={240} defaultValue={promotion?.description} className={field} />
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-a-soft">
         ღილაკის ტექსტი
         <input name="cta_label" maxLength={30} defaultValue={promotion?.cta_label ?? "ყიდვა"} className={field} />
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-a-soft">
         მთავრდება (თბილისის დროით, ცარიელი = უვადო)
         <input name="ends_at" type="datetime-local" defaultValue={localValue(promotion?.ends_at ?? null)} className={field} />
       </label>
-      <label className="text-sm">
+      <label className="text-sm font-medium text-a-soft">
         რიგი
         <input name="position" type="number" defaultValue={promotion?.position ?? 0} className={field} />
       </label>
@@ -81,43 +81,43 @@ export default async function PromotionsPage({ searchParams }: { searchParams: P
 
   return (
     <>
-      <h1 className="text-xl font-bold">მთავარი გვერდის სლაიდერი</h1>
-      <p className="mt-1 max-w-3xl text-sm text-neutral-700">
+      <h1 className="text-2xl font-bold tracking-tight">მთავარი გვერდის სლაიდერი</h1>
+      <p className="mt-1 max-w-3xl text-sm text-a-soft">
         თითო სლაიდი ერთ პროდუქტს აჩვენებს: მის ფოტოს, ფასს და ფასდაკლებას. ფასდაკლება პროდუქტის გვერდზე იცვლება. დასრულების დროის შემდეგ სლაიდი
         თავისით ქრება, ტაიმერი კი ზუსტ დროს ითვლის, გვერდის განახლებისას თავიდან არ იწყება.
       </p>
-      {notice.saved && <p role="status" className="mt-3 rounded bg-green-100 p-2 text-sm text-green-900">{notice.saved}</p>}
-      {notice.error && <p role="alert" className="mt-3 rounded bg-red-100 p-2 text-sm text-red-800">{notice.error}</p>}
+      {notice.saved && <p role="status" className="mt-3 rounded-xl border border-a-green/30 bg-a-green/10 p-3 text-sm text-[#5fe0a0]">{notice.saved}</p>}
+      {notice.error && <p role="alert" className="mt-3 rounded-xl border border-a-red/30 bg-a-red/10 p-3 text-sm text-[#ff8a94]">{notice.error}</p>}
 
-      <form action={savePromotion} className="mt-4 max-w-3xl space-y-3 rounded border border-neutral-200 bg-white p-4">
-        <h2 className="font-bold">ახალი სლაიდი</h2>
+      <form action={savePromotion} className="mt-4 max-w-3xl space-y-3 rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
+        <h2 className="font-semibold text-a-text">ახალი სლაიდი</h2>
         <PromotionFields products={products} />
-        <button className="h-9 rounded bg-accent px-4 text-sm font-semibold text-white">დამატება</button>
+        <button className="h-9 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(225,29,72,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(251,113,133,0.55)] px-4 text-sm font-semibold text-white">დამატება</button>
       </form>
 
       <div className="mt-6 max-w-3xl space-y-3">
-        {promotions.length === 0 && <p className="text-sm text-neutral-700">სლაიდები ჯერ არ არის. მანამდე მთავარ გვერდზე ზოგადი ბანერი ჩანს.</p>}
+        {promotions.length === 0 && <p className="text-sm text-a-soft">სლაიდები ჯერ არ არის. მანამდე მთავარ გვერდზე ზოგადი ბანერი ჩანს.</p>}
         {promotions.map((promotion) => {
           const product = products.find((item) => item.id === promotion.product_id);
           const state = status(promotion, product);
           return (
-            <details key={promotion.id} className="rounded border border-neutral-200 bg-white">
+            <details key={promotion.id} className="rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
               <summary className="flex cursor-pointer flex-wrap items-center justify-between gap-2 p-3">
                 <span className="font-semibold">{promotion.title}</span>
-                <span className="text-sm text-neutral-700">
+                <span className="text-sm text-a-soft">
                   {product?.name ?? "-"} · {promotion.ends_at ? `მთავრდება ${formatDate(promotion.ends_at)}` : "უვადო"} ·{" "}
                   <span className={state.tone}>{state.label}</span>
                 </span>
               </summary>
-              <div className="border-t border-neutral-200 p-3">
+              <div className="border-t border-a-line p-3">
                 <form action={savePromotion} className="space-y-3">
                   <input type="hidden" name="id" value={promotion.id} />
                   <PromotionFields promotion={promotion} products={products} />
-                  <button className="h-9 rounded bg-black px-3 text-sm text-white">შენახვა</button>
+                  <button className="h-9 rounded-xl border border-a-line bg-a-hover/70 transition-colors duration-200 hover:border-a-violet/60 hover:bg-a-hover px-3 text-sm text-white">შენახვა</button>
                 </form>
                 <form action={deletePromotion} className="mt-3">
                   <input type="hidden" name="id" value={promotion.id} />
-                  <ConfirmButton message={`წავშალო სლაიდი „${promotion.title}“?`} className="text-sm text-red-700 underline">
+                  <ConfirmButton message={`წავშალო სლაიდი „${promotion.title}“?`} className="text-sm text-[#ff6b77] underline">
                     წაშლა
                   </ConfirmButton>
                 </form>

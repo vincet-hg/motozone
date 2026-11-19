@@ -13,7 +13,7 @@ export type FilterValues = {
 
 export function FilterBar({ values = {} }: { values?: FilterValues }) {
   return (
-    <Form action="/search" prefetch={false} className="grid grid-cols-[1fr_1fr_auto] items-center gap-1.5 sm:flex">
+    <Form action="/search" prefetch={false} className="grid grid-cols-[1fr_1fr_auto] items-center gap-1.5 sm:flex sm:flex-wrap">
       {values.q && <input type="hidden" name="q" value={values.q} />}
       {values.category && <input type="hidden" name="category" value={values.category} />}
       <input
@@ -39,7 +39,7 @@ export function FilterBar({ values = {} }: { values?: FilterValues }) {
       <button type="submit" className="h-10 rounded-btn bg-fg px-3 text-sm font-semibold text-bg transition-colors duration-200 hover:bg-white">
         ფილტრი
       </button>
-      <SortSelect value={values.sort ?? "newest"} className={`${field} col-span-3 w-full min-w-0 sm:w-auto`} />
+      <SortSelect value={values.sort ?? ""} className="col-span-3 w-full min-w-0 sm:w-52" />
     </Form>
   );
 }

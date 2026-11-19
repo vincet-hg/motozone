@@ -8,7 +8,7 @@ export default async function NewProductPage() {
 
   return (
     <>
-      <h1 className="mb-4 text-xl font-bold">პროდუქტის დამატება</h1>
+      <h1 className="mb-5 text-2xl font-bold tracking-tight">პროდუქტის დამატება</h1>
       <ProductForm categories={(data ?? []) as Category[]} />
     </>
   );

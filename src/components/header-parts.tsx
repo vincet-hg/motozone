@@ -6,10 +6,11 @@ import { useEffect, useRef } from "react";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { CartIcon, HeartIcon } from "./icons";
+import { iconButton } from "./styles";
 
 export function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
-  if (href === "/search") return ["/search", "/category", "/product"].some((prefix) => pathname.startsWith(prefix));
+  if (href === "/search") return ["/search", "/product"].some((prefix) => pathname.startsWith(prefix));
   return pathname.startsWith(href);
 }
 
@@ -25,6 +26,26 @@ export function NavLink({ href, className, activeClassName, children }: {
       {children}
     </Link>
   );
+}
+
+// A button that looks active while the current page starts with prefix (the categories menu on a category page).
+export function ActiveButton({ prefix, className, activeClassName, children }: {
+  prefix: string;
+  className: string;
+  activeClassName: string;
+  children: React.ReactNode;
+}) {
+  const active = usePathname().startsWith(prefix);
+  return (
+    <button type="button" aria-haspopup="true" className={`${className} ${active ? activeClassName : ""}`}>
+      {children}
+    </button>
+  );
+}
+
+// Renders its children on every page except the homepage.
+export function HiddenOnHome({ children }: { children: React.ReactNode }) {
+  return usePathname() === "/" ? null : <>{children}</>;
 }
 
 // A <details> menu that works without JavaScript and closes itself after navigation.
@@ -51,8 +72,7 @@ export function Disclosure({ className, summary, summaryLabel, summaryClassName,
   );
 }
 
-const iconButton = "relative flex size-10 items-center justify-center rounded-btn transition-colors duration-200 hover:bg-card hover:text-accent-hover";
-const badge = "absolute top-0.5 right-0 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white";
+const badge = "absolute -top-1.5 -right-1.5 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white shadow-[0_0_12px_rgba(225,29,72,0.8)]";
 
 export function WishlistLink() {
   const count = useWishlist().length;
