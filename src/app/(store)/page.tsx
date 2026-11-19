@@ -73,6 +73,14 @@ export default async function HomePage() {
       <SearchHero promotion={promotion} products={heroProducts} categories={categories} />
 
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
+        {/* Discounts come first. Without any, the section is left out rather than shown empty. */}
+        {sale.products.length > 0 && (
+          <section aria-labelledby="sale-title" className="reveal mt-10">
+            <SectionHeading id="sale-title" title="ფასდაკლებები" subtitle="აქციაზე მყოფი პროდუქტები" link={{ href: "/sale", label: "ყველა აქცია" }} />
+            <ProductRow products={sale.products} badgeFor={badgeFor} />
+          </section>
+        )}
+
         <CategoryShowcase categories={categories} covers={covers} />
 
         <section aria-labelledby="popular-title" className="reveal mt-14">
@@ -81,17 +89,6 @@ export default async function HomePage() {
         </section>
 
         <PromoBanners />
-
-        <section aria-labelledby="sale-title" className="reveal mt-14">
-          <SectionHeading id="sale-title" title="სპეციალური შეთავაზებები" link={sale.products.length > 0 ? { href: "/sale", label: "ყველა აქცია" } : undefined} />
-          {sale.products.length > 0 ? (
-            <ProductRow products={sale.products} badgeFor={badgeFor} />
-          ) : (
-            <p className="rounded-card border border-dashed border-line bg-card/50 px-6 py-10 text-center text-muted">
-              ახლა აქციები არ მიმდინარეობს. გამოიწერე სიახლეები ქვემოთ და პირველმა გაიგე ახალი ფასდაკლებების შესახებ.
-            </p>
-          )}
-        </section>
 
         {arrivals.length > 0 && (
           <section aria-labelledby="new-title" className="reveal mt-14">
