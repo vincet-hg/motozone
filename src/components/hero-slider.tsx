@@ -163,7 +163,9 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
           <h2 className="animate-enter-left mt-4 text-[30px] leading-[1.1] font-black tracking-tight text-balance italic sm:text-5xl lg:text-[56px]">
             {mtavruli(active.title)}
           </h2>
-          <p className="animate-enter-up mt-3 text-lg font-semibold text-fg/90 [animation-delay:200ms] sm:text-xl">{active.productName}</p>
+          {active.productName && (
+            <p className="animate-enter-up mt-3 text-lg font-semibold text-fg/90 [animation-delay:200ms] sm:text-xl">{active.productName}</p>
+          )}
           {active.description && (
             <p className="animate-enter-up mt-2 max-w-xl text-base leading-7 text-muted [animation-delay:300ms]">{active.description}</p>
           )}

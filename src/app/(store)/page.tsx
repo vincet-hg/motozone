@@ -19,6 +19,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/" } };
 
 const POPULAR_COUNT = 10;
+const MAX_SLIDES = 8;
 
 export default async function HomePage() {
   const [promotions, categories, covers, popular, newIds, newest, sale] = await Promise.all([
@@ -31,7 +32,7 @@ export default async function HomePage() {
     getProducts({ sale: true }),
   ]);
 
-  const slides: Slide[] = promotions.map((promotion) => ({
+  const promoSlides: Slide[] = promotions.map((promotion) => ({
     id: promotion.id,
     title: promotion.title,
     description: promotion.description,
@@ -45,6 +46,28 @@ export default async function HomePage() {
     salePrice: promotion.product.sale_price,
     discount: discountPercent(promotion.product.price, promotion.product.sale_price),
   }));
+
+  // After the promotions made in Admin › Slider, every discounted product in stock gets a slide of its own,
+  // biggest discount first. Products that already have a promotion are not repeated.
+  const promoted = new Set(promotions.map((promotion) => promotion.product.id));
+  const saleSlides: Slide[] = sale.products
+    .filter((product) => product.stock > 0 && !promoted.has(product.id) && product.images.length > 0)
+    .map((product) => ({
+      id: `sale-${product.id}`,
+      title: product.name,
+      description: "",
+      badge: "ფასდაკლება",
+      ctaLabel: "ყიდვა",
+      endsAt: null,
+      href: `/product/${product.slug}`,
+      image: imageUrl(product.images[0]),
+      productName: "",
+      price: product.price,
+      salePrice: product.sale_price,
+      discount: discountPercent(product.price, product.sale_price),
+    }))
+    .sort((a, b) => b.discount - a.discount);
+  const slides = [...promoSlides, ...saleSlides].slice(0, MAX_SLIDES);
 
   const badgeFor = (id: string): CardBadge | undefined => (popular.popularIds.has(id) ? "popular" : newIds.has(id) ? "new" : undefined);
   const shown = new Set(popular.products.map((product) => product.id));
