@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { CartIcon, HeartIcon } from "./icons";
+import { iconButton } from "./styles";
 
 export function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
@@ -51,8 +52,7 @@ export function Disclosure({ className, summary, summaryLabel, summaryClassName,
   );
 }
 
-const iconButton = "relative flex size-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-card hover:text-neon";
-const badge = "absolute -top-0.5 -right-0.5 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white shadow-[0_0_12px_rgba(0,110,255,0.8)]";
+const badge = "absolute -top-1.5 -right-1.5 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white shadow-[0_0_12px_rgba(0,110,255,0.8)]";
 
 export function WishlistLink() {
   const count = useWishlist().length;
