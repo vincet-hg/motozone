@@ -57,7 +57,7 @@ export default async function CategoryPage({ params }: Props) {
       />
       <CategoryNav categories={categories} active={slug} />
       <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
-        <ListingHeader title={category.name} icon={<CategoryIcon slug={category.slug} className="size-5" variant="filled" />} filters={{ category: slug }} />
+        <ListingHeader title={category.name} icon={<CategoryIcon slug={category.slug} className="size-5" />} filters={{ category: slug }} />
         {category.description && <p className="-mt-1 mb-4 max-w-3xl text-sm leading-6 text-muted">{category.description}</p>}
         <ProductGrid products={products} />
         {total > PAGE_SIZE && (

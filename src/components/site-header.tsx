@@ -108,8 +108,8 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                     activeClassName=""
                     className="flex items-center gap-2 rounded-xl border border-line bg-card/50 px-3 py-2.5 text-sm text-fg/90 transition-colors hover:border-neon/40 hover:text-white aria-[current=page]:border-neon/50 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white"
                   >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[radial-gradient(circle_at_50%_35%,rgba(56,189,248,0.25),#0d1b30_70%)] text-[#7dd3fc]">
-                      <CategoryIcon slug={category.slug} variant="filled" className="size-[18px]" />
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line bg-section text-neon">
+                      <CategoryIcon slug={category.slug} className="size-[18px]" />
                     </span>
                     {category.name}
                   </NavLink>
@@ -156,8 +156,8 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                         className={dropdownItem}
                       >
                         <span className="flex items-center gap-3">
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-neon/25 bg-[radial-gradient(circle_at_50%_35%,rgba(56,189,248,0.25),#0d1b30_70%)] text-[#7dd3fc] transition-all duration-200 group-hover/item:border-transparent group-hover/item:bg-gradient-to-br group-hover/item:from-neon group-hover/item:to-accent group-hover/item:text-white group-hover/item:shadow-[0_8px_20px_-8px_rgba(0,110,255,0.9)] group-aria-[current=page]/item:border-transparent group-aria-[current=page]/item:bg-gradient-to-br group-aria-[current=page]/item:from-neon group-aria-[current=page]/item:to-accent group-aria-[current=page]/item:text-white group-aria-[current=page]/item:shadow-[0_8px_20px_-8px_rgba(0,110,255,0.9)]">
-                            <CategoryIcon slug={category.slug} variant="filled" className="size-5" />
+                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-line bg-section text-muted transition-colors duration-200 group-hover/item:border-neon/40 group-hover/item:text-neon group-aria-[current=page]/item:border-neon/50 group-aria-[current=page]/item:bg-accent/20 group-aria-[current=page]/item:text-neon">
+                            <CategoryIcon slug={category.slug} className="size-5" />
                           </span>
                           {category.name}
                         </span>

@@ -1,9 +1,10 @@
-// The tile in front of a section or page title: a filled icon in a lit gradient square.
+// The tile in front of a section or page title: a neon line icon in a dark square with a blue tint,
+// the same look as the current category in the header menu.
 export function HeadingIcon({ children }: { children: React.ReactNode }) {
   return (
     <span
       aria-hidden="true"
-      className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-neon to-accent text-white shadow-[0_8px_22px_-8px_rgba(0,110,255,0.95),inset_0_1px_0_rgba(255,255,255,0.3)] sm:size-10"
+      className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-neon/50 bg-accent/20 text-neon shadow-[0_0_18px_-6px_rgba(56,189,248,0.6)] sm:size-10"
     >
       {children}
     </span>

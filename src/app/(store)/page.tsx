@@ -77,7 +77,7 @@ export default async function HomePage() {
         {/* Discounts come first. Without any, the section is left out rather than shown empty. */}
         {sale.products.length > 0 && (
           <section aria-labelledby="sale-title" className="reveal mt-10">
-            <SectionHeading id="sale-title" icon={<SaleIcon className="size-5" variant="filled" />} title="ფასდაკლებები" link={{ href: "/sale", label: "ყველა აქცია" }} />
+            <SectionHeading id="sale-title" icon={<SaleIcon className="size-5" />} title="ფასდაკლებები" link={{ href: "/sale", label: "ყველა აქცია" }} />
             <ProductRow products={sale.products} badgeFor={badgeFor} />
           </section>
         )}
@@ -85,7 +85,7 @@ export default async function HomePage() {
         <CategoryShowcase categories={categories} covers={covers} />
 
         <section aria-labelledby="popular-title" className="reveal mt-14">
-          <SectionHeading id="popular-title" icon={<StarIcon className="size-5" variant="filled" />} title="ყველაზე გაყიდვადი" subtitle="ჩვენი ყველაზე პოპულარული აქსესუარები" link={{ href: "/search", label: "ყველა" }} />
+          <SectionHeading id="popular-title" icon={<StarIcon className="size-5" />} title="ყველაზე გაყიდვადი" subtitle="ჩვენი ყველაზე პოპულარული აქსესუარები" link={{ href: "/search", label: "ყველა" }} />
           <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
         </section>
 
@@ -93,7 +93,7 @@ export default async function HomePage() {
 
         {arrivals.length > 0 && (
           <section aria-labelledby="new-title" className="reveal mt-14">
-            <SectionHeading id="new-title" icon={<SparklesIcon className="size-5" variant="filled" />} title="ახალი პროდუქტები" link={{ href: "/search", label: "ყველა" }} />
+            <SectionHeading id="new-title" icon={<SparklesIcon className="size-5" />} title="ახალი პროდუქტები" link={{ href: "/search", label: "ყველა" }} />
             <ProductRow products={arrivals} badgeFor={badgeFor} />
           </section>
         )}

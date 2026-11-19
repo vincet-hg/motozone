@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     <>
       <CategoryNav categories={categories} active={category?.slug} />
       <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
-        <ListingHeader title={title} icon={q ? <SearchIcon className="size-5" variant="filled" /> : category ? <CategoryIcon slug={category.slug} className="size-5" variant="filled" /> : <GridIcon className="size-5" variant="filled" />} filters={{ q, category: category?.slug, min, max, sort }} />
+        <ListingHeader title={title} icon={q ? <SearchIcon className="size-5" /> : category ? <CategoryIcon slug={category.slug} className="size-5" /> : <GridIcon className="size-5" />} filters={{ q, category: category?.slug, min, max, sort }} />
         <ProductGrid products={products} />
         {total > PAGE_SIZE && (
           <div className="mt-8 flex items-center justify-center gap-4">

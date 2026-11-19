@@ -12,7 +12,7 @@ export default async function SalePage() {
   return (
     <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
       <h1 className="sr-only">აქციები</h1>
-      <SectionHeading icon={<SaleIcon className="size-5" variant="filled" />} title="ფასდაკლებული პროდუქტები" />
+      <SectionHeading icon={<SaleIcon className="size-5" />} title="ფასდაკლებული პროდუქტები" />
       {products.length > 0 ? (
         <ProductGrid products={products} />
       ) : (
