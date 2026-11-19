@@ -37,6 +37,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Long Georgian words wrap instead of pushing the page sideways on narrow phones. */
+:where(h1, h2, h3, p, li, dd, dt, td, th, label, blockquote) {
+  overflow-wrap: break-word;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-accent-hover);
   outline-offset: 2px;

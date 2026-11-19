@@ -77,11 +77,11 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
             {item.label}
           </Link>
         ))}
-        <form className="flex flex-wrap items-center gap-2 text-sm">
-          <input type="date" name="from" defaultValue={range.from} aria-label="დან" className="h-9 rounded-xl border px-3" />
-          <span>-</span>
-          <input type="date" name="to" defaultValue={range.to} aria-label="მდე" className="h-9 rounded-xl border px-3" />
-          <button className={tab(range.key === "custom")}>ჩვენება</button>
+        <form className="grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm sm:flex sm:w-auto">
+          <input type="date" name="from" defaultValue={range.from} aria-label="დან" className="h-9 min-w-0 rounded-xl border px-3" />
+          <span className="text-a-muted">-</span>
+          <input type="date" name="to" defaultValue={range.to} aria-label="მდე" className="h-9 min-w-0 rounded-xl border px-3" />
+          <button className={`${tab(range.key === "custom")} col-span-3`}>ჩვენება</button>
         </form>
       </div>
 
@@ -109,7 +109,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <section>
+        <section className="min-w-0">
           <h2 className="font-semibold text-a-text">თვეების მიხედვით</h2>
           <div className="mt-2 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
             <table className="w-full text-left text-sm">
@@ -142,7 +142,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
           </div>
         </section>
 
-        <section>
+        <section className="min-w-0">
           <h2 className="font-semibold text-a-text">ყველაზე მომგებიანი პროდუქტები</h2>
           <div className="mt-2 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
             <table className="w-full text-left text-sm">

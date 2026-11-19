@@ -5,6 +5,7 @@ import type { MonthReport, Order, Product, ProductCost } from "@/lib/types";
 import { card, pageTitle, primaryButton, sectionTitle, tableWrap } from "../styles";
 import { LineChart } from "./_ui/line-chart";
 import { Icons } from "./_ui/icons";
+import { OrderCards } from "./_ui/order-cards";
 import { StatusBadge } from "./_ui/status-badge";
 import { formatDate } from "./orders/status";
 
@@ -88,7 +89,7 @@ export default async function AdminOverviewPage() {
           <div key={label} className={`${card} group relative overflow-hidden p-4 transition-colors duration-200 hover:bg-a-hover/40 sm:p-5`}>
             <div className="flex items-start justify-between gap-3">
               <dt className="text-xs font-medium text-a-soft sm:text-sm">{label}</dt>
-              <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br to-transparent sm:size-10 ${tone}`}>
+              <span className={`hidden size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br to-transparent min-[400px]:flex sm:size-10 ${tone}`}>
                 <Icon className="size-5" />
               </span>
             </div>
@@ -103,10 +104,10 @@ export default async function AdminOverviewPage() {
       </dl>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <section className={`${card} p-4 sm:p-6`}>
+        <section className={`${card} min-w-0 p-4 sm:p-6`}>
           <div className="flex items-center justify-between gap-3">
-            <h2 className={sectionTitle}>შემოსავალი, ბოლო 6 თვე</h2>
-            <Link href="/admin/reports" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
+            <h2 className={sectionTitle}>შემოსავალი, 6 თვე</h2>
+            <Link href="/admin/reports" prefetch={false} className="shrink-0 text-sm font-medium whitespace-nowrap text-[#7dd3fc] hover:text-white">
               ანგარიშები →
             </Link>
           </div>
@@ -118,10 +119,10 @@ export default async function AdminOverviewPage() {
           </div>
         </section>
 
-        <section className={`${card} p-4 sm:p-6`}>
+        <section className={`${card} min-w-0 p-4 sm:p-6`}>
           <div className="flex items-center justify-between gap-3">
             <h2 className={sectionTitle}>მარაგი იწურება</h2>
-            <Link href="/admin/products?low=1" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
+            <Link href="/admin/products?low=1" prefetch={false} className="shrink-0 text-sm font-medium whitespace-nowrap text-[#7dd3fc] hover:text-white">
               ყველა →
             </Link>
           </div>
@@ -151,11 +152,14 @@ export default async function AdminOverviewPage() {
       <section className="mt-6">
         <div className="flex items-center justify-between gap-3">
           <h2 className={sectionTitle}>ბოლო შეკვეთები</h2>
-          <Link href="/admin/orders" prefetch={false} className="text-sm font-medium text-[#7dd3fc] hover:text-white">
+          <Link href="/admin/orders" prefetch={false} className="shrink-0 text-sm font-medium whitespace-nowrap text-[#7dd3fc] hover:text-white">
             ყველა შეკვეთა →
           </Link>
         </div>
-        <div className={`${tableWrap} mt-3`}>
+        <div className="mt-3 sm:hidden">
+          <OrderCards orders={(recent ?? []) as Order[]} empty="შეკვეთა ჯერ არ არის." />
+        </div>
+        <div className={`${tableWrap} mt-3 hidden sm:block`}>
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead>
               <tr>

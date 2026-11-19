@@ -75,13 +75,13 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             </span>
           </span>
           <div className="ml-auto hidden items-center gap-4 md:flex lg:gap-5">
-            <Link href="/faq" prefetch={false} className="transition-colors hover:text-neon">ხშირი კითხვები</Link>
-            <Dot />
+            <Link href="/faq" prefetch={false} className="hidden transition-colors hover:text-neon xl:block">ხშირი კითხვები</Link>
+            <span className="hidden xl:contents"><Dot /></span>
             <a href={site.phoneHref} className="flex items-center gap-2 font-semibold text-fg transition-colors hover:text-neon">
               <PhoneIcon className="size-4 text-neon" />
               {site.phone}
             </a>
-            <SocialLinks className="-mr-2 flex" />
+            <div className="hidden lg:block"><SocialLinks className="-mr-2" /></div>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         {/* Neon hairline along the bottom edge. */}
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/45 to-transparent" />
 
-        <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-2 px-3 sm:px-4 lg:h-[76px] lg:gap-3">
+        <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-1.5 px-2.5 min-[360px]:gap-2 sm:px-4 lg:h-[76px] lg:gap-3">
           <Disclosure className="lg:hidden" summaryLabel="მენიუ" summaryClassName={`${iconButton}`} summary={<MenuIcon className="size-5" />}>
             <nav aria-label="მენიუ" className="absolute inset-x-0 top-full max-h-[80dvh] overflow-y-auto border-y border-line bg-bg px-3 pt-3 pb-5 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.9)] backdrop-blur-xl">
               <NavLink href="/" className={mobileLink} activeClassName="bg-card text-neon">მთავარი</NavLink>
@@ -123,7 +123,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </Disclosure>
 
           <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 lg:mx-0 lg:mr-2">
-            <Logo className="h-12 w-auto drop-shadow-[0_0_14px_rgba(0,110,255,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
+            <Logo className="h-10 w-auto min-[360px]:h-12 drop-shadow-[0_0_14px_rgba(0,110,255,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
@@ -167,7 +167,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 lg:ml-auto">
+          <div className="flex items-center gap-1.5 min-[360px]:gap-2 lg:ml-auto">
             <SearchForm className="hidden w-[250px] xl:flex" />
             <Disclosure className="xl:hidden" summaryLabel="ძიება" summaryClassName={`${iconButton}`} summary={<SearchIcon className="size-5" />}>
               <div className="absolute inset-x-0 top-full border-y border-line bg-bg p-3">

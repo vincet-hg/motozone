@@ -39,10 +39,14 @@ export function ProductCard({ product, eager, lcp, badge }: { product: Card; eag
             <span className="flex h-full items-center justify-center text-sm text-neutral-600">ფოტო არ არის</span>
           )}
         </Link>
-        <div className="absolute top-2 left-2 flex flex-col items-start gap-1">
-          {discount > 0 && <span className="rounded-lg bg-accent px-2 py-0.5 text-sm font-bold text-white shadow-md">-{discount}%</span>}
-          {badge && <span className={`rounded-lg px-2 py-0.5 text-xs font-semibold ${BADGES[badge].className}`}>{BADGES[badge].label}</span>}
-        </div>
+        {discount > 0 && (
+          <span className="absolute top-2 left-2 rounded-lg bg-accent px-1.5 py-0.5 text-xs font-bold text-white shadow-md min-[400px]:px-2 min-[400px]:text-sm">-{discount}%</span>
+        )}
+        {badge && (
+          <span className={`absolute bottom-2 left-2 max-w-[calc(100%-1rem)] truncate rounded-lg px-1.5 py-0.5 text-[11px] font-semibold min-[400px]:px-2 min-[400px]:text-xs ${BADGES[badge].className}`}>
+            {BADGES[badge].label}
+          </span>
+        )}
         <WishlistButton id={product.id} className="absolute top-1.5 right-1.5" />
       </div>
       <div className="flex flex-1 flex-col p-3 sm:p-4">

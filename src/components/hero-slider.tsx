@@ -143,7 +143,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
         role="group"
         aria-roledescription="slide"
         aria-label={`${(index % count) + 1} / ${count}`}
-        className="mx-auto grid max-w-7xl items-center gap-5 px-4 pt-6 pb-20 sm:px-6 lg:min-h-[520px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-8 lg:py-14"
+        className="mx-auto grid max-w-7xl items-center gap-5 px-4 pt-6 pb-20 sm:px-6 lg:min-h-[520px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-8 lg:pt-14 lg:pb-24"
       >
         <div className="order-2 min-w-0 lg:order-1">
           <div className="flex flex-wrap items-center gap-3">
@@ -180,11 +180,11 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
             </div>
           )}
 
-          <div className="animate-enter-up mt-7 flex flex-wrap gap-3 [animation-delay:540ms]">
+          <div className="animate-enter-up mt-7 flex flex-wrap gap-2.5 [animation-delay:540ms] sm:gap-3">
             <Link
               href={active.href}
               prefetch={false}
-              className="flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-8px_rgba(0,110,255,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(56,189,248,0.55)]"
+              className="flex h-11 items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-hover px-5 text-[15px] font-bold text-white sm:h-12 sm:px-7 sm:text-base shadow-[0_10px_30px_-8px_rgba(0,110,255,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_rgba(56,189,248,0.55)]"
             >
               {active.ctaLabel}
               <ArrowIcon />
@@ -192,7 +192,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
             <Link
               href="/sale"
               prefetch={false}
-              className="flex h-12 items-center rounded-full border border-line bg-card/60 px-6 font-semibold backdrop-blur transition-colors duration-200 hover:border-neon/60 hover:text-neon"
+              className="flex h-11 items-center rounded-full border border-line bg-card/60 px-5 text-[15px] font-semibold backdrop-blur sm:h-12 sm:px-6 sm:text-base transition-colors duration-200 hover:border-neon/60 hover:text-neon"
             >
               ყველა აქცია
             </Link>
@@ -210,11 +210,11 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
       </div>
 
       {count > 1 && (
-        <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3">
+        <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3 lg:bottom-12">
           <button type="button" onClick={() => go(-1)} aria-label="წინა აქცია" className={arrow}>
             <ChevronIcon className="size-4 rotate-90" />
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {live.map((slide, dot) => {
               const current = dot === index % count;
               return (
@@ -224,17 +224,19 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
                   onClick={() => setIndex(dot)}
                   aria-label={`აქცია ${dot + 1}`}
                   aria-current={current ? "true" : undefined}
-                  className={`relative h-1.5 overflow-hidden rounded-full bg-white/20 transition-all duration-300 ${current ? "w-10" : "w-4 hover:bg-white/40"}`}
+                  className="group flex h-8 items-center px-0.5"
                 >
-                  {current && (
-                    <span
-                      className="absolute inset-0 origin-left bg-gradient-to-r from-accent to-neon"
-                      style={{
-                        animation: autoplaying ? `progress ${AUTOPLAY_MS}ms linear both` : undefined,
-                        transform: autoplaying ? undefined : "none",
-                      }}
-                    />
-                  )}
+                  <span className={`relative block h-1.5 overflow-hidden rounded-full bg-white/20 transition-all duration-300 ${current ? "w-10" : "w-4 group-hover:bg-white/40"}`}>
+                    {current && (
+                      <span
+                        className="absolute inset-0 origin-left bg-gradient-to-r from-accent to-neon"
+                        style={{
+                          animation: autoplaying ? `progress ${AUTOPLAY_MS}ms linear both` : undefined,
+                          transform: autoplaying ? undefined : "none",
+                        }}
+                      />
+                    )}
+                  </span>
                 </button>
               );
             })}

@@ -43,7 +43,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
 
   return (
     <div className="admin flex flex-1 bg-a-bg bg-[radial-gradient(ellipse_at_top_right,rgba(0,110,255,0.14),transparent_45%)] text-a-text">
-      <aside className="sticky top-0 hidden h-dvh self-start w-64 shrink-0 flex-col gap-6 border-r border-a-line bg-a-panel px-3 py-5 lg:flex">
+      <aside className="sticky top-0 hidden h-dvh w-60 self-start shrink-0 flex-col gap-6 border-r border-a-line bg-a-panel px-3 py-5 lg:flex xl:w-64">
         {brand}
         <div className="flex-1 overflow-y-auto">
           <p className="mb-2 px-3 text-[11px] font-semibold tracking-wider text-a-muted uppercase">მენიუ</p>

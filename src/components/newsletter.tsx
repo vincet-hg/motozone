@@ -9,7 +9,7 @@ export function Newsletter() {
   const [state, action, pending] = useActionState<NewsletterState, FormData>(subscribe, {});
 
   return (
-    <section aria-labelledby="newsletter-title" className="reveal relative isolate mt-14 overflow-hidden rounded-card border border-line bg-gradient-to-r from-section via-card to-section px-5 py-8 sm:px-10 sm:py-10">
+    <section aria-labelledby="newsletter-title" className="reveal relative isolate mt-14 overflow-hidden rounded-card border border-line bg-gradient-to-r from-section via-card to-section px-4 py-7 min-[400px]:px-5 min-[400px]:py-8 sm:px-10 sm:py-10">
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_100%_0%,rgba(0,110,255,0.3),transparent_55%),radial-gradient(ellipse_at_0%_100%,rgba(56,189,248,0.12),transparent_50%)]" />
       <div className="grid items-center gap-6 lg:grid-cols-2">
         <div className="flex items-start gap-4">
@@ -38,7 +38,7 @@ export function Newsletter() {
                 autoComplete="email"
                 placeholder="შენი ელფოსტა"
                 aria-label="ელფოსტა"
-                className="h-12 min-w-0 flex-1 rounded-full border border-line bg-bg/60 px-5 text-base text-fg placeholder:text-muted focus:border-neon/60 focus:outline-none"
+                className="h-12 min-w-0 rounded-full sm:flex-1 border border-line bg-bg/60 px-5 text-base text-fg placeholder:text-muted focus:border-neon/60 focus:outline-none"
               />
               <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <button

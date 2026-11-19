@@ -3,6 +3,7 @@ import { formatPrice } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
 import { tab } from "../../styles";
 import type { Order, OrderStatus } from "@/lib/types";
+import { OrderCards } from "../_ui/order-cards";
 import { StatusBadge } from "../_ui/status-badge";
 import { formatDate, STATUS_LABELS, STATUSES } from "./status";
 
@@ -20,7 +21,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   return (
     <>
       <h1 className="text-2xl font-bold tracking-tight">შეკვეთები</h1>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
         <Link href="/admin/orders" prefetch={false} className={tab(!active)}>
           ყველა
         </Link>
@@ -31,7 +32,11 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
+      <div className="mt-4 sm:hidden">
+        <OrderCards orders={orders} empty="ამ სტატუსით შეკვეთა არ არის." />
+      </div>
+
+      <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
             <tr>

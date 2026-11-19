@@ -34,8 +34,8 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
     <>
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold tracking-tight">პროდუქტები</h1>
-        <form className="flex gap-2">
-          <input name="q" defaultValue={q} placeholder="ძიება სახელით" className="h-9 rounded-lg border border-a-line bg-a-card px-3 text-sm" />
+        <form className="flex w-full gap-2 sm:w-auto">
+          <input name="q" defaultValue={q} placeholder="ძიება სახელით" className="h-9 min-w-0 flex-1 rounded-xl border px-3 text-sm sm:w-56 sm:flex-none" />
           <button className="h-9 rounded-xl border border-a-line bg-a-panel transition-colors hover:border-a-violet/60 px-3 text-sm">ძებნა</button>
         </form>
         <Link
@@ -56,7 +56,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
         <table className="w-full min-w-[960px] text-left text-sm">
           <thead>
             <tr>
-              <th className="px-4 py-3 font-medium">პროდუქტი</th>
+              <th className="z-10 bg-a-panel px-4 py-3 font-medium max-sm:sticky max-sm:left-0">პროდუქტი</th>
               <th className="px-4 py-3 font-medium">კატეგორია</th>
               <th className="px-4 py-3 font-medium">ფასი</th>
               <th className="px-4 py-3 font-medium">ფასდაკლებით</th>
@@ -73,7 +73,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
               const margin = marginPercent(product.final_price, avg);
               return (
                 <tr key={product.id} className="border-b border-a-line/60">
-                  <td className="px-4 py-3">
+                  <td className="z-10 bg-a-card px-4 py-3 max-sm:sticky max-sm:left-0 max-sm:max-w-[200px] max-sm:shadow-[8px_0_12px_-8px_rgba(0,0,0,0.8)]">
                     <div className="flex items-center gap-2">
                       <div className="relative size-12 shrink-0 overflow-hidden rounded-xl border border-a-line bg-white">
                         {product.images[0] && (
@@ -96,7 +96,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                     <input form={formId} name="sale_price" type="number" min="0" step="0.01" defaultValue={product.sale_price ?? ""} aria-label="ფასდაკლებული ფასი" className={number} />
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/products/${product.id}#stock`} className={`font-bold underline ${isLow(product) ? "text-[#ff6b77]" : ""}`}>
+                    <Link href={`/admin/products/${product.id}#stock`} className={`inline-flex min-w-9 items-center justify-center rounded-lg border px-2 py-1 font-bold transition-colors ${isLow(product) ? "border-a-red/40 bg-a-red/10 text-[#ff6b77]" : "border-a-line bg-a-panel hover:border-a-violet/60"}`}>
                       {product.stock}
                     </Link>
                   </td>

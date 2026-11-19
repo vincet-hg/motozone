@@ -3,10 +3,10 @@ import { site } from "@/lib/site";
 import { ArrowIcon, HeadsetIcon, TruckIcon } from "./icons";
 
 const card =
-  "group relative isolate flex min-h-44 items-center gap-5 overflow-hidden rounded-card border border-line bg-card p-6 transition-all duration-300 hover:border-neon/45 sm:p-8";
+  "group relative isolate flex min-h-44 flex-col items-start gap-4 overflow-hidden rounded-card border border-line bg-card p-5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-5 min-[420px]:p-6 transition-all duration-300 hover:border-neon/45 sm:p-8";
 const glow = "absolute -right-16 -bottom-24 -z-10 size-72 rounded-full bg-accent/30 blur-3xl transition-opacity duration-300 group-hover:opacity-100 opacity-70";
 const iconBox =
-  "flex size-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-neon to-accent text-white shadow-[0_12px_30px_-10px_rgba(0,110,255,0.9)] sm:size-20";
+  "flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-neon to-accent text-white shadow-[0_12px_30px_-10px_rgba(0,110,255,0.9)] min-[420px]:size-16 sm:size-20";
 
 // Two service banners. Their text lives in src/lib/site.ts, so every promise stays editable in one place.
 export function PromoBanners() {

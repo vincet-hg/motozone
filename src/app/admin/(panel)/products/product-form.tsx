@@ -128,7 +128,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
           ))}
         </select>
       </label>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <label className="text-sm font-medium text-a-soft">
           ფასი (₾)
           <input name="price" type="number" min="0" step="0.01" required defaultValue={product?.price} className={field} />
@@ -138,7 +138,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
           <input name="sale_price" type="number" min="0" step="0.01" defaultValue={product?.sale_price ?? ""} className={field} />
         </label>
         {product ? (
-          <div className="text-sm">
+          <div className="col-span-2 text-sm font-medium text-a-soft sm:col-span-1">
             მარაგი
             <p className="mt-1 py-2">
               <b>{product.stock}</b>{" "}

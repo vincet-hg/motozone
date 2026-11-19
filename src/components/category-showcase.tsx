@@ -17,7 +17,7 @@ export function CategoryShowcase({ categories, covers }: { categories: Category[
           const cover = covers.get(category.id)?.image;
           const count = covers.get(category.id)?.count ?? 0;
           return (
-            <li key={category.id} className="w-[42%] shrink-0 snap-start sm:w-[30%] lg:w-auto">
+            <li key={category.id} className="w-[46%] shrink-0 snap-start min-[480px]:w-[36%] sm:w-[30%] lg:w-auto">
               <Link
                 href={`/category/${category.slug}`}
                 prefetch={false}
@@ -37,12 +37,12 @@ export function CategoryShowcase({ categories, covers }: { categories: Category[
                     <span className="absolute inset-0 bg-gradient-to-br from-card-hover to-section" />
                   )}
                 </div>
-                <span className="flex flex-1 items-center justify-between gap-2 px-3 py-3">
+                <span className="flex flex-1 items-center justify-between gap-2 px-3 py-3 max-[399px]:px-2.5">
                   <span className="min-w-0">
-                    <span className="block text-sm leading-5 font-semibold">{category.name}</span>
+                    <span className="block text-[13px] leading-5 font-semibold [overflow-wrap:normal] min-[400px]:text-sm">{category.name}</span>
                     {count > 0 && <span className="text-xs text-muted">{count} პროდუქტი</span>}
                   </span>
-                  <ArrowIcon className="size-4 shrink-0 text-muted transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-neon" />
+                  <ArrowIcon className="hidden size-4 shrink-0 text-muted min-[400px]:block transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-neon" />
                 </span>
               </Link>
             </li>

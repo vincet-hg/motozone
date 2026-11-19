@@ -8,7 +8,7 @@ export const secondaryButton =
   "inline-flex items-center justify-center gap-2 rounded-xl border border-a-line bg-a-panel font-medium text-a-text transition-colors duration-200 hover:border-a-violet/60 hover:bg-a-hover/60";
 
 export const tab = (selected: boolean) =>
-  `rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 ${
+  `shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
     selected
       ? "border-a-violet/60 bg-a-purple/25 text-white shadow-[0_0_18px_-6px_rgba(0,110,255,0.9)]"
       : "border-a-line bg-a-panel text-a-soft hover:border-a-violet/40 hover:text-a-text"
