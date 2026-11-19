@@ -34,7 +34,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/60 to-transparent" />
       </div>
 
-      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 pt-10 pb-12 text-center sm:pt-12 lg:pt-14 lg:pb-16">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-4 pt-6 pb-12 text-center sm:pt-8 lg:pt-9 lg:pb-16">
         <Link
           href={promotion ? `/product/${promotion.product.slug}` : "/sale"}
           prefetch={false}
@@ -47,14 +47,14 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
           <ArrowIcon className="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
         </Link>
 
-        <p aria-hidden="true" className="animate-enter-up mt-5 max-w-4xl text-[28px] leading-[1.08] font-extrabold tracking-[-0.01em] italic [animation-delay:80ms] min-[400px]:text-[32px] sm:text-[44px] lg:text-[54px]">
+        <p aria-hidden="true" className="animate-enter-up mt-4 max-w-4xl text-[26px] leading-[1.08] font-extrabold tracking-[-0.01em] italic [animation-delay:80ms] min-[400px]:text-[29px] sm:text-[38px] lg:text-[46px]">
           {mtavruli("მოპედის აქსესუარები")}{" "}
           <span className="block bg-gradient-to-r from-neon via-accent-hover to-neon bg-clip-text pr-2 text-transparent [filter:drop-shadow(0_0_24px_rgba(0,110,255,0.45))]">
             {mtavruli("ერთ სივრცეში")}
           </span>
         </p>
 
-        <p className="animate-enter-up mt-4 max-w-md text-[15px] leading-7 text-muted [animation-delay:160ms] sm:text-base">
+        <p className="animate-enter-up mt-3 max-w-md text-sm leading-6 text-muted [animation-delay:160ms] sm:text-[15px]">
           იპოვე საჭირო ნივთი წამებში. მიწოდება მთელ საქართველოში, გადახდა მიღებისას.
         </p>
 
@@ -62,7 +62,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
           action="/search"
           prefetch={false}
           role="search"
-          className="animate-enter-up group/search mt-7 flex h-12 w-full max-w-[520px] items-center gap-2 rounded-full border border-neon/35 bg-card/90 pr-1 pl-4 shadow-[0_0_0_4px_rgba(0,110,255,0.08),0_14px_36px_-18px_rgba(0,110,255,0.9)] transition-all [animation-delay:240ms] focus-within:border-neon focus-within:shadow-[0_0_0_4px_rgba(56,189,248,0.2),0_14px_36px_-18px_rgba(0,110,255,0.9)] sm:h-[52px]"
+          className="animate-enter-up group/search mt-6 flex h-12 w-full max-w-[520px] items-center gap-2 rounded-full border border-neon/35 bg-card/90 pr-1 pl-4 shadow-[0_0_0_4px_rgba(0,110,255,0.08),0_14px_36px_-18px_rgba(0,110,255,0.9)] transition-all [animation-delay:240ms] focus-within:border-neon focus-within:shadow-[0_0_0_4px_rgba(56,189,248,0.2),0_14px_36px_-18px_rgba(0,110,255,0.9)] sm:h-[52px]"
         >
           <SearchIcon className="size-[18px] shrink-0 text-neon" />
           <input
@@ -97,7 +97,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
         )}
 
         {fan.length > 0 && (
-          <ul className="animate-enter-up mt-9 grid w-full max-w-[300px] grid-cols-3 items-end gap-2 [animation-delay:380ms] min-[400px]:max-w-[340px] sm:max-w-[620px] sm:grid-cols-5 sm:gap-3 lg:mt-10 lg:max-w-[760px] lg:gap-4">
+          <ul className="animate-enter-up mt-9 grid w-full max-w-[320px] grid-cols-3 items-end gap-2 [animation-delay:380ms] min-[400px]:max-w-[360px] sm:max-w-[680px] sm:grid-cols-5 sm:gap-3 lg:mt-10 lg:max-w-[840px] lg:gap-4">
             {fan.map((product, index) =>
               product ? (
                 <li key={product.id} className={`rounded-2xl border border-line bg-card p-1.5 transition-transform duration-300 hover:z-20 hover:-translate-y-1.5 sm:p-2 ${FAN[index]}`}>
@@ -107,7 +107,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
                         src={imageUrl(product.images[0])}
                         alt={product.name}
                         fill
-                        sizes="(min-width: 1024px) 140px, (min-width: 640px) 110px, 100px"
+                        sizes="(min-width: 1024px) 160px, (min-width: 640px) 120px, 110px"
                         quality={75}
                         preload={index === 2}
                         loading={index === 2 ? "eager" : "lazy"}
