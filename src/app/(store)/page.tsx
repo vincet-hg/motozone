@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CategoryShowcase } from "@/components/category-showcase";
-import { HeroSlider, type Slide } from "@/components/hero-slider";
-import { HomeHero } from "@/components/home-hero";
 import { JsonLd } from "@/components/json-ld";
 import { Newsletter } from "@/components/newsletter";
 import type { CardBadge } from "@/components/product-card";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductRow } from "@/components/product-row";
 import { PromoBanners } from "@/components/promo-banners";
+import { SearchHero } from "@/components/search-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { TrustBar } from "@/components/trust-bar";
 import { moreButton } from "@/components/styles";
 import { getCategories, getCategoryCovers, getNewProductIds, getPopularProducts, getProducts, getPromotionSlides } from "@/lib/catalog";
-import { discountPercent, imageUrl } from "@/lib/format";
 import { absolute, organization } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -32,20 +30,8 @@ export default async function HomePage() {
     getProducts({ sale: true }),
   ]);
 
-  const slides: Slide[] = promotions.map((promotion) => ({
-    id: promotion.id,
-    title: promotion.title,
-    description: promotion.description,
-    badge: promotion.badge,
-    ctaLabel: promotion.cta_label,
-    endsAt: promotion.ends_at,
-    href: `/product/${promotion.product.slug}`,
-    image: imageUrl(promotion.product.images[0]),
-    productName: promotion.product.name,
-    price: promotion.product.price,
-    salePrice: promotion.product.sale_price,
-    discount: discountPercent(promotion.product.price, promotion.product.sale_price),
-  }));
+  // The cached page can outlive a promotion's end, so expired ones are skipped here too.
+  const promotion = promotions.find((item) => !item.ends_at || new Date(item.ends_at).getTime() > Date.now());
 
   const badgeFor = (id: string): CardBadge | undefined => (popular.popularIds.has(id) ? "popular" : newIds.has(id) ? "new" : undefined);
   const shown = new Set(popular.products.map((product) => product.id));
@@ -75,10 +61,10 @@ export default async function HomePage() {
         }}
       />
       <h1 className="sr-only">{site.name}: მოტოციკლისა და მოპედის აქსესუარები</h1>
-      <HeroSlider slides={slides} fallback={<HomeHero />} />
+      <SearchHero promotion={promotion} products={popular.products} categories={categories} />
 
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
-        <div className="mt-4 lg:mt-0">
+        <div className="mt-6 lg:mt-8">
           <TrustBar />
         </div>
         <CategoryShowcase categories={categories} covers={covers} />

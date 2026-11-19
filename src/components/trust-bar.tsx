@@ -6,7 +6,7 @@ const ICONS = { truck: TruckIcon, shield: ShieldIcon, badge: BadgeIcon, headset:
 // Four short service promises. Their text lives in src/lib/site.ts.
 export function TrustBar() {
   return (
-    <ul className="relative z-10 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line lg:-mt-8 xl:grid-cols-4">
+    <ul className="relative z-10 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line xl:grid-cols-4">
       {site.trust.map((item) => {
         const Icon = ICONS[item.icon];
         return (
