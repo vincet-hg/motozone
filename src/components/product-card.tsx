@@ -8,14 +8,21 @@ import { WishlistButton } from "./wishlist-button";
 
 const SIZES = "(min-width: 1280px) 240px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw";
 
-export function ProductCard({ product, eager, lcp }: { product: Card; eager: boolean; lcp: boolean }) {
+export type CardBadge = "new" | "popular";
+
+const BADGES: Record<CardBadge, { label: string; className: string }> = {
+  new: { label: "ახალი", className: "bg-fg text-bg" },
+  popular: { label: "პოპულარული", className: "border border-neon/40 bg-bg/80 text-neon backdrop-blur" },
+};
+
+export function ProductCard({ product, eager, lcp, badge }: { product: Card; eager: boolean; lcp: boolean; badge?: CardBadge }) {
   const href = `/product/${product.slug}`;
   const discount = discountPercent(product.price, product.sale_price);
   const available = product.stock > 0;
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_10px_32px_-12px_rgba(229,9,32,0.55)]">
-      <div className="relative bg-photo">
+    <article className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:border-neon/45 hover:bg-card-hover hover:shadow-[0_0_0_1px_rgba(251,113,133,0.2),0_18px_40px_-18px_rgba(225,29,72,0.85)]">
+      <div className="relative m-2 mb-0 overflow-hidden rounded-xl bg-photo">
         <Link href={href} prefetch={false} className="relative block aspect-square">
           {product.images[0] ? (
             <Image
@@ -33,16 +40,21 @@ export function ProductCard({ product, eager, lcp }: { product: Card; eager: boo
           )}
         </Link>
         {discount > 0 && (
-          <span className="absolute top-2.5 left-2.5 rounded-lg bg-accent px-2 py-0.5 text-sm font-bold text-white">-{discount}%</span>
+          <span className="absolute top-2 left-2 rounded-lg bg-accent px-1.5 py-0.5 text-xs font-bold text-white shadow-md min-[400px]:px-2 min-[400px]:text-sm">-{discount}%</span>
+        )}
+        {badge && (
+          <span className={`absolute bottom-2 left-2 max-w-[calc(100%-1rem)] truncate rounded-lg px-1.5 py-0.5 text-[11px] font-semibold min-[400px]:px-2 min-[400px]:text-xs ${BADGES[badge].className}`}>
+            {BADGES[badge].label}
+          </span>
         )}
         <WishlistButton id={product.id} className="absolute top-1.5 right-1.5" />
       </div>
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <h2 className="line-clamp-2 min-h-10 text-sm leading-5 font-semibold sm:text-[15px]">
-          <Link href={href} prefetch={false} className="transition-colors duration-200 hover:text-accent-hover">
+        <h3 className="line-clamp-2 min-h-10 text-sm leading-5 font-semibold sm:text-[15px]">
+          <Link href={href} prefetch={false} className="transition-colors duration-200 hover:text-neon">
             {product.name}
           </Link>
-        </h2>
+        </h3>
         <div className="mt-auto flex min-h-11 items-center justify-between gap-2 pt-2">
           <Price price={product.price} salePrice={product.sale_price} />
           {available ? (

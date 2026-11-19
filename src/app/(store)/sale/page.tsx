@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProductGrid } from "@/components/product-grid";
+import { SaleIcon } from "@/components/category-icons";
 import { SectionHeading } from "@/components/section-heading";
 import { getProducts } from "@/lib/catalog";
 
@@ -11,7 +12,7 @@ export default async function SalePage() {
   return (
     <main className="mx-auto max-w-7xl px-3 py-6 sm:px-4">
       <h1 className="sr-only">აქციები</h1>
-      <SectionHeading title="ფასდაკლებული პროდუქტები" />
+      <SectionHeading icon={<SaleIcon className="size-5" />} title="ფასდაკლებული პროდუქტები" />
       {products.length > 0 ? (
         <ProductGrid products={products} />
       ) : (

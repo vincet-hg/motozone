@@ -11,6 +11,7 @@ const ENTITIES: Record<string, string> = {
   stock_adjustments: "მარაგის კორექცია",
   orders: "შეკვეთა",
   admins: "ადმინისტრატორი",
+  promotions: "სლაიდი",
 };
 
 const ACTIONS: Record<AuditEntry["action"], string> = { insert: "დაემატა", update: "შეიცვალა", delete: "წაიშალა" };
@@ -30,6 +31,10 @@ const FIELDS: Record<string, string> = {
   specs: "მახასიათებლები",
   compatibility: "თავსებადობა",
   position: "რიგი",
+  title: "სათაური",
+  badge: "ნიშანი",
+  ends_at: "მთავრდება",
+  cta_label: "ღილაკი",
 };
 
 function show(value: unknown) {
@@ -51,7 +56,7 @@ function summary(entry: AuditEntry) {
   }
   if (entry.entity === "purchases") return `${show(details.qty)} ცალი, ${show(details.unit_cost)} ₾/ცალი`;
   if (entry.entity === "stock_adjustments") return `${show(details.delta)} ცალი: ${show(details.reason)}`;
-  return show(details.name ?? details.product_name ?? "");
+  return show(details.name ?? details.title ?? details.product_name ?? "");
 }
 
 function link(entry: AuditEntry) {
@@ -59,6 +64,7 @@ function link(entry: AuditEntry) {
   const productId = ["products", "product_costs"].includes(entry.entity) ? entry.entity_id : (details.product_id as string | undefined);
   if (productId && entry.action !== "delete") return `/admin/products/${productId}`;
   if (entry.entity === "orders" && entry.entity_id) return `/admin/orders/${entry.entity_id}`;
+  if (entry.entity === "promotions") return "/admin/promotions";
   return null;
 }
 
@@ -69,26 +75,26 @@ export default async function AuditPage() {
 
   return (
     <>
-      <h1 className="text-xl font-bold">ცვლილებების ისტორია</h1>
-      <p className="mt-1 text-sm text-neutral-700">ბოლო 300 ცვლილება: ვინ, როდის და რა შეცვალა. ჩანაწერის წაშლა ადმინიდან შეუძლებელია.</p>
-      <div className="mt-4 overflow-x-auto rounded border border-neutral-200 bg-white">
+      <h1 className="text-2xl font-bold tracking-tight">ცვლილებების ისტორია</h1>
+      <p className="mt-1 text-sm text-a-soft">ბოლო 300 ცვლილება: ვინ, როდის და რა შეცვალა. ჩანაწერის წაშლა ადმინიდან შეუძლებელია.</p>
+      <div className="mt-4 overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-neutral-200 text-neutral-700">
+          <thead>
             <tr>
-              <th className="p-2 font-medium">დრო</th>
-              <th className="p-2 font-medium">ვინ</th>
-              <th className="p-2 font-medium">რა</th>
-              <th className="p-2 font-medium">დეტალები</th>
+              <th className="px-4 py-3 font-medium">დრო</th>
+              <th className="px-4 py-3 font-medium">ვინ</th>
+              <th className="px-4 py-3 font-medium">რა</th>
+              <th className="px-4 py-3 font-medium">დეტალები</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry) => {
               const href = link(entry);
               return (
-                <tr key={entry.id} className="border-b border-neutral-100 align-top">
-                  <td className="p-2 whitespace-nowrap text-neutral-700">{formatDate(entry.at)}</td>
-                  <td className="p-2">{entry.actor ? "ადმინი" : "სისტემა"}</td>
-                  <td className="p-2 whitespace-nowrap">
+                <tr key={entry.id} className="border-b border-a-line/60 align-top">
+                  <td className="px-4 py-3 whitespace-nowrap text-a-soft">{formatDate(entry.at)}</td>
+                  <td className="px-4 py-3">{entry.actor ? "ადმინი" : "სისტემა"}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     {href ? (
                       <Link href={href} className="underline">
                         {ENTITIES[entry.entity] ?? entry.entity}
@@ -98,13 +104,13 @@ export default async function AuditPage() {
                     )}{" "}
                     {ACTIONS[entry.action]}
                   </td>
-                  <td className="p-2">{summary(entry)}</td>
+                  <td className="px-4 py-3">{summary(entry)}</td>
                 </tr>
               );
             })}
             {entries.length === 0 && (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-neutral-700">ჯერ ცვლილება არ ყოფილა.</td>
+                <td colSpan={4} className="p-8 text-center text-a-soft">ჯერ ცვლილება არ ყოფილა.</td>
               </tr>
             )}
           </tbody>

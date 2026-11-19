@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
+import { tab } from "../../styles";
 import type { Order, OrderStatus } from "@/lib/types";
+import { OrderCards } from "../_ui/order-cards";
+import { StatusBadge } from "../_ui/status-badge";
 import { formatDate, STATUS_LABELS, STATUSES } from "./status";
 
 export default async function AdminOrdersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
@@ -14,13 +17,11 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   const { data } = await query;
   const orders = (data ?? []) as Order[];
 
-  const tab = (selected: boolean) =>
-    `rounded-full border px-3 py-1 text-sm ${selected ? "border-black bg-black text-white" : "border-neutral-300 bg-white"}`;
 
   return (
     <>
-      <h1 className="text-xl font-bold">შეკვეთები</h1>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <h1 className="text-2xl font-bold tracking-tight">შეკვეთები</h1>
+      <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
         <Link href="/admin/orders" prefetch={false} className={tab(!active)}>
           ყველა
         </Link>
@@ -31,36 +32,42 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded border border-neutral-200 bg-white">
+      <div className="mt-4 sm:hidden">
+        <OrderCards orders={orders} empty="ამ სტატუსით შეკვეთა არ არის." />
+      </div>
+
+      <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="border-b border-neutral-200 text-neutral-700">
+          <thead>
             <tr>
-              <th className="p-3 font-medium">ნომერი</th>
-              <th className="p-3 font-medium">თარიღი</th>
-              <th className="p-3 font-medium">მომხმარებელი</th>
-              <th className="p-3 font-medium">ტელეფონი</th>
-              <th className="p-3 font-medium">ჯამი</th>
-              <th className="p-3 font-medium">სტატუსი</th>
+              <th className="px-4 py-3 font-medium">ნომერი</th>
+              <th className="px-4 py-3 font-medium">თარიღი</th>
+              <th className="px-4 py-3 font-medium">მომხმარებელი</th>
+              <th className="px-4 py-3 font-medium">ტელეფონი</th>
+              <th className="px-4 py-3 font-medium">ჯამი</th>
+              <th className="px-4 py-3 font-medium">სტატუსი</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id} className="border-b border-neutral-100">
-                <td className="p-3">
-                  <Link href={`/admin/orders/${order.id}`} className="font-medium underline">
+              <tr key={order.id} className="border-b border-a-line/60 last:border-0">
+                <td className="px-4 py-3">
+                  <Link href={`/admin/orders/${order.id}`} className="font-semibold text-[#fda4af] transition-colors hover:text-white">
                     #{order.id}
                   </Link>
                 </td>
-                <td className="p-3">{formatDate(order.created_at)}</td>
-                <td className="p-3">{order.customer_name}</td>
-                <td className="p-3">{order.phone}</td>
-                <td className="p-3">{formatPrice(order.total)}</td>
-                <td className="p-3">{STATUS_LABELS[order.status]}</td>
+                <td className="px-4 py-3 text-a-soft">{formatDate(order.created_at)}</td>
+                <td className="px-4 py-3">{order.customer_name}</td>
+                <td className="px-4 py-3">{order.phone}</td>
+                <td className="px-4 py-3 font-medium">{formatPrice(order.total)}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={order.status} />
+                </td>
               </tr>
             ))}
             {orders.length === 0 && (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-neutral-700">
+                <td colSpan={6} className="p-8 text-center text-a-soft">
                   ამ სტატუსით შეკვეთა არ არის.
                 </td>
               </tr>

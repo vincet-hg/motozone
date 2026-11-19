@@ -8,18 +8,18 @@ export const metadata: Metadata = { title: "ორფაქტორიანი
 
 // Second sign-in step. Admin access, in the app and in the database, needs this step.
 export default async function MfaPage() {
-  if (isDemo) redirect("/admin/orders");
+  if (isDemo) redirect("/admin");
   const { supabase } = await requirePasswordSession();
 
   const { data: level } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (level?.currentLevel === "aal2") redirect("/admin/orders");
+  if (level?.currentLevel === "aal2") redirect("/admin");
 
   const { data: factors } = await supabase.auth.mfa.listFactors();
   const verified = factors?.totp.find((factor) => factor.status === "verified");
 
   return (
-    <main className="flex flex-1 items-center justify-center bg-neutral-100 px-4 py-10 text-black">
-      <div className="w-full max-w-sm space-y-4 rounded border border-neutral-200 bg-white p-6">
+    <main className="admin flex flex-1 items-center justify-center bg-a-bg bg-[radial-gradient(ellipse_at_50%_20%,rgba(225,29,72,0.25),transparent_55%)] px-4 py-10 text-a-text">
+      <div className="w-full max-w-sm space-y-4 rounded-3xl border border-a-line bg-a-card/90 p-7 backdrop-blur shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <h1 className="text-lg font-bold">ორფაქტორიანი შესვლა</h1>
         {verified ? <MfaChallenge factorId={verified.id} /> : <MfaSetupForm />}
       </div>

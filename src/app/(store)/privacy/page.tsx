@@ -17,6 +17,7 @@ export default function PrivacyPage() {
 
         <h2 className={h2}>რა მონაცემებს ვაგროვებთ</h2>
         <p>შეკვეთის გაფორმებისას: სახელს, ტელეფონის ნომერს, ქალაქს, მისამართს და შენიშვნას, თუ მას დაწერ. ანგარიშის შექმნა საჭირო არ არის.</p>
+        <p>თუ სიახლეებს გამოიწერ, ვინახავთ შენს ელფოსტას, მხოლოდ აქციებისა და ახალი პროდუქტების შესახებ წერილებისთვის. გამოწერის გაუქმება ნებისმიერ დროს შეგიძლია: მოგვწერე და ელფოსტას წავშლით.</p>
         <p>კალათა და სურვილების სია ინახება მხოლოდ შენს ბრაუზერში და ჩვენთან არ იგზავნება შეკვეთის გაფორმებამდე.</p>
         <p>უსაფრთხოებისთვის დროებით ვინახავთ IP მისამართის შიფრირებულ (hash) ფორმას, რომ ავტომატური სპამი შევაჩეროთ. ის 1 დღეში იშლება.</p>
 
@@ -36,8 +37,8 @@ export default function PrivacyPage() {
         <p>
           საქართველოს კანონის „პერსონალურ მონაცემთა დაცვის შესახებ“ თანახმად, შეგიძლია მოითხოვო შენი მონაცემების ნახვა, გასწორება ან
           წაშლა, თუ მათი შენახვა კანონით აღარ არის სავალდებულო. მოგვწერე{" "}
-          <a href={`mailto:${site.email}`} className="text-accent underline hover:text-accent-hover">{site.email}</a> ან დაგვირეკე{" "}
-          <a href={site.phoneHref} className="text-accent underline hover:text-accent-hover">{site.phone}</a>.
+          <a href={`mailto:${site.email}`} className="text-neon underline hover:text-neon">{site.email}</a> ან დაგვირეკე{" "}
+          <a href={site.phoneHref} className="text-neon underline hover:text-neon">{site.phone}</a>.
         </p>
 
         <p className="mt-6 text-sm text-muted">ბოლო განახლება: 2026 წლის ნოემბერი.</p>
