@@ -108,7 +108,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                     activeClassName=""
                     className="flex items-center gap-2 rounded-xl border border-line bg-card/50 px-3 py-2.5 text-sm text-fg/90 transition-colors hover:border-neon/40 hover:text-white aria-[current=page]:border-neon/50 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white"
                   >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line bg-section text-neon">
+                    <span className="optical-center flex size-8 shrink-0 items-center justify-center rounded-lg border border-line bg-section text-neon">
                       <CategoryIcon slug={category.slug} className="size-[18px]" />
                     </span>
                     {category.name}
@@ -119,7 +119,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                 {MOBILE_LINKS.map((link) => (
                   <NavLink key={link.href} href={link.href} className={mobileLink} activeClassName="bg-card text-neon">
                     <span className="flex items-center gap-2">
-                      {link.href === "/sale" && <SaleIcon className="size-5 text-neon" />}
+                      {link.href === "/sale" && <SaleIcon className="optical-center size-5 text-neon" />}
                       {link.label}
                     </span>
                     <ChevronIcon className="size-4 -rotate-90 text-muted" />
@@ -156,7 +156,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                         className={dropdownItem}
                       >
                         <span className="flex items-center gap-3">
-                          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-line bg-section text-muted transition-colors duration-200 group-hover/item:border-neon/40 group-hover/item:text-neon group-aria-[current=page]/item:border-neon/50 group-aria-[current=page]/item:bg-accent/20 group-aria-[current=page]/item:text-neon">
+                          <span className="optical-center flex size-10 shrink-0 items-center justify-center rounded-xl border border-line bg-section text-muted transition-colors duration-200 group-hover/item:border-neon/40 group-hover/item:text-neon group-aria-[current=page]/item:border-neon/50 group-aria-[current=page]/item:bg-accent/20 group-aria-[current=page]/item:text-neon">
                             <CategoryIcon slug={category.slug} className="size-5" />
                           </span>
                           {category.name}
@@ -178,7 +178,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             </div>
             {LINKS.map((link) => (
               <NavLink key={link.href} href={link.href} className={navItem} activeClassName={navActive}>
-                {link.href === "/sale" && <SaleIcon className="size-[18px] text-neon" />}
+                {link.href === "/sale" && <SaleIcon className="optical-center size-[18px] text-neon" />}
                 {link.label}
               </NavLink>
             ))}

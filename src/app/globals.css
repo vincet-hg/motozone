@@ -47,6 +47,12 @@ html {
   outline-offset: 2px;
 }
 
+/* Georgian letters sit low in their line box (most have no ascender), so an icon placed next to
+   Georgian text is nudged down a little to line up with the letters rather than the line box. */
+.optical-center {
+  transform: translateY(0.08em);
+}
+
 /* Search fields show focus with their own glowing pill, not the square outline. */
 input[type="search"]:focus-visible {
   outline: none;

@@ -22,12 +22,12 @@ export function CategoryNav({ categories, active }: { categories: Category[]; ac
     <nav aria-label="კატეგორიები">
       <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-3 sm:px-4">
         <Pill href="/" active={!active}>
-          <AccessoriesIcon className="size-4 shrink-0" />
+          <AccessoriesIcon className="optical-center size-4 shrink-0" />
           ყველა
         </Pill>
         {categories.map((category) => (
           <Pill key={category.id} href={`/category/${category.slug}`} active={active === category.slug}>
-            <CategoryIcon slug={category.slug} className="size-4 shrink-0" />
+            <CategoryIcon slug={category.slug} className="optical-center size-4 shrink-0" />
             {category.name}
           </Pill>
         ))}

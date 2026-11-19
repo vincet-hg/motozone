@@ -78,7 +78,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
                 prefetch={false}
                 className="group/pill flex items-center gap-1.5 rounded-full border border-line bg-card/40 py-1 pr-3 pl-2.5 text-fg/85 transition-colors hover:border-neon/50 hover:text-white"
               >
-                <CategoryIcon slug={category.slug} className="size-4 shrink-0 text-neon/80 transition-colors group-hover/pill:text-neon" />
+                <CategoryIcon slug={category.slug} className="optical-center size-4 shrink-0 text-neon/80 transition-colors group-hover/pill:text-neon" />
                 {category.name}
               </Link>
             ))}
