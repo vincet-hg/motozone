@@ -105,6 +105,40 @@ summary::-webkit-details-marker {
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-spin-slow { animation: spin-slow 60s linear infinite; }
 
+/* Loading screen shown on a full page load (see src/components/splash.tsx). */
+@keyframes splash-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@keyframes splash-bar {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
+@keyframes splash-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 18px rgb(0 110 255 / 0.45)); }
+  50% { transform: scale(1.04); filter: drop-shadow(0 0 34px rgb(56 189 248 / 0.75)); }
+}
+
+@keyframes splash-sweep {
+  0% { stroke-dashoffset: 260; }
+  50% { stroke-dashoffset: 60; }
+  100% { stroke-dashoffset: 260; }
+}
+
+/* Without JavaScript the screen still leaves on its own after 3 seconds. */
+.splash { animation: splash-out 0.5s ease 3s forwards; }
+.splash[data-state="hide"] { animation: splash-out 0.5s ease forwards; }
+/* Page entrance animations wait behind the loading screen and play as it fades. */
+:root:has(.splash[data-ready][data-state="show"]) :is(.animate-enter-left, .animate-enter-right, .animate-enter-up, .animate-pop) {
+  animation-play-state: paused;
+}
+.splash-logo { animation: splash-pulse 1.6s ease-in-out infinite; }
+.splash-bar { animation: splash-bar 1.1s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+.splash-sweep { animation: splash-sweep 1.8s ease-in-out infinite; }
+.splash-spin { animation: spin-slow 2.4s linear infinite; }
+.splash-spin-rev { animation: spin-slow 3.6s linear infinite reverse; }
+
 /* Slowly drifting particles for the hero background. */
 .starfield {
   background-image:
