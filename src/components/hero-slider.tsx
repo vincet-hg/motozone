@@ -143,7 +143,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
         role="group"
         aria-roledescription="slide"
         aria-label={`${(index % count) + 1} / ${count}`}
-        className="mx-auto grid max-w-7xl items-center gap-5 px-4 pt-6 pb-20 sm:px-6 lg:min-h-[520px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-8 lg:pt-14 lg:pb-24"
+        className="mx-auto grid max-w-7xl items-center gap-5 px-4 pt-6 pb-20 sm:px-6 lg:min-h-[520px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:px-8 lg:pt-14 lg:pb-20"
       >
         <div className="order-2 min-w-0 lg:order-1">
           <div className="flex flex-wrap items-center gap-3">
@@ -210,7 +210,7 @@ export function HeroSlider({ slides, fallback }: { slides: Slide[]; fallback: Re
       </div>
 
       {count > 1 && (
-        <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3 lg:bottom-12">
+        <div className="absolute inset-x-0 bottom-5 flex items-center justify-center gap-3 lg:bottom-7">
           <button type="button" onClick={() => go(-1)} aria-label="წინა აქცია" className={arrow}>
             <ChevronIcon className="size-4 rotate-90" />
           </button>

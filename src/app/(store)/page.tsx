@@ -10,7 +10,6 @@ import { ProductGrid } from "@/components/product-grid";
 import { ProductRow } from "@/components/product-row";
 import { PromoBanners } from "@/components/promo-banners";
 import { SectionHeading } from "@/components/section-heading";
-import { TrustBar } from "@/components/trust-bar";
 import { moreButton } from "@/components/styles";
 import { getCategories, getCategoryCovers, getNewProductIds, getPopularProducts, getProducts, getPromotionSlides } from "@/lib/catalog";
 import { discountPercent, imageUrl } from "@/lib/format";
@@ -78,9 +77,6 @@ export default async function HomePage() {
       <HeroSlider slides={slides} fallback={<HomeHero />} />
 
       <main className="mx-auto max-w-7xl px-3 sm:px-4">
-        <div className="mt-4 lg:mt-0">
-          <TrustBar />
-        </div>
         <CategoryShowcase categories={categories} covers={covers} />
 
         <section aria-labelledby="popular-title" className="reveal mt-14">
