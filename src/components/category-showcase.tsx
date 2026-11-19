@@ -4,6 +4,7 @@ import type { CategoryCover } from "@/lib/catalog";
 import { imageUrl } from "@/lib/format";
 import type { Category } from "@/lib/types";
 import { ArrowIcon } from "./icons";
+import { AccessoriesIcon } from "./category-icons";
 import { SectionHeading } from "./section-heading";
 
 // Category cards with the newest product photo of each category. Swipeable on phones.
@@ -11,7 +12,7 @@ export function CategoryShowcase({ categories, covers }: { categories: Category[
   if (categories.length === 0) return null;
   return (
     <section aria-labelledby="categories-title" className="reveal mt-12">
-      <SectionHeading id="categories-title" title="კატეგორიები" link={{ href: "/search", label: "ყველა პროდუქტი" }} />
+      <SectionHeading id="categories-title" icon={<AccessoriesIcon className="size-5" variant="filled" />} title="კატეგორიები" link={{ href: "/search", label: "ყველა პროდუქტი" }} />
       <ul className="no-scrollbar -mx-3 flex snap-x snap-mandatory scroll-px-3 gap-3 overflow-x-auto px-3 pb-2 sm:-mx-4 sm:scroll-px-4 sm:px-4 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 xl:grid-cols-7">
         {categories.map((category) => {
           const cover = covers.get(category.id)?.image;
