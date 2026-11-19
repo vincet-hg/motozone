@@ -76,7 +76,7 @@ export default async function HomePage() {
         {/* Discounts come first. Without any, the section is left out rather than shown empty. */}
         {sale.products.length > 0 && (
           <section aria-labelledby="sale-title" className="reveal mt-10">
-            <SectionHeading id="sale-title" title="ფასდაკლებები" subtitle="აქციაზე მყოფი პროდუქტები" link={{ href: "/sale", label: "ყველა აქცია" }} />
+            <SectionHeading id="sale-title" title="ფასდაკლებები" link={{ href: "/sale", label: "ყველა აქცია" }} />
             <ProductRow products={sale.products} badgeFor={badgeFor} />
           </section>
         )}

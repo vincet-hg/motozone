@@ -10,11 +10,6 @@ export default async function StoreLayout({ children }: { children: React.ReactN
   return (
     <>
       <Splash />
-      {isDemo && (
-        <p className="bg-fg px-3 py-1 text-center text-sm font-medium text-bg">
-          დემო რეჟიმი: სატესტო მონაცემები, ინახება მხოლოდ ამ კომპიუტერში
-        </p>
-      )}
       <SiteHeader categories={categories} />
       <div className="flex-1">{children}</div>
       <SiteFooter categories={categories} />

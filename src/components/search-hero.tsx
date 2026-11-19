@@ -36,19 +36,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
       </div>
 
       <div className="mx-auto flex max-w-7xl flex-col items-center px-4 pt-6 pb-12 text-center sm:pt-8 lg:pt-9 lg:pb-16">
-        <Link
-          href={promotion ? `/product/${promotion.product.slug}` : "/sale"}
-          prefetch={false}
-          className="animate-enter-up group inline-flex max-w-full items-center gap-2 rounded-full border border-neon/35 bg-accent/10 px-3.5 py-1.5 text-xs font-semibold text-neon transition-colors hover:border-neon/70 sm:text-[13px]"
-        >
-          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-neon shadow-[0_0_8px_#38bdf8]" />
-          <span className="truncate">
-            {promotion ? `${promotion.badge || promotion.title}${promoDiscount > 0 ? ` · ფასდაკლება ${promoDiscount}%` : ""}` : "ყველაფერი შენი მოპედისთვის · აქციები"}
-          </span>
-          <ArrowIcon className="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
-        </Link>
-
-        <p aria-hidden="true" className="animate-enter-up mt-4 max-w-4xl text-[26px] leading-[1.08] font-extrabold tracking-[-0.01em] italic [animation-delay:80ms] min-[400px]:text-[29px] sm:text-[38px] lg:text-[46px]">
+        <p aria-hidden="true" className="animate-enter-up max-w-4xl text-[26px] leading-[1.08] font-extrabold tracking-[-0.01em] italic [animation-delay:80ms] min-[400px]:text-[29px] sm:text-[38px] lg:text-[46px]">
           {mtavruli("მოპედის აქსესუარები")}{" "}
           <span className="block bg-gradient-to-r from-neon via-accent-hover to-neon bg-clip-text pr-2 text-transparent [filter:drop-shadow(0_0_24px_rgba(0,110,255,0.45))]">
             {mtavruli("ერთ სივრცეში")}
@@ -56,7 +44,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
         </p>
 
         <p className="animate-enter-up mt-3 max-w-md text-sm leading-6 text-muted [animation-delay:160ms] sm:text-[15px]">
-          იპოვე საჭირო ნივთი წამებში. მიწოდება მთელ საქართველოში, გადახდა მიღებისას.
+          იპოვე საჭირო ნივთი წამებში. მიწოდება თბილისის მასშტაბით, გადახდა მიღებისას.
         </p>
 
         <Form
@@ -84,7 +72,6 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
 
         {categories.length > 0 && (
           <div className="animate-enter-up mt-3.5 flex max-w-full flex-wrap items-center justify-center gap-1.5 text-[13px] text-muted [animation-delay:300ms]">
-            <span className="hidden sm:inline">კატეგორიები:</span>
             {categories.slice(0, 4).map((category) => (
               <Link
                 key={category.id}
