@@ -68,9 +68,10 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
           <input
             name="q"
             type="search"
+            autoComplete="off"
             placeholder="რას ეძებ?"
             aria-label="პროდუქტის ძიება"
-            className="h-full min-w-0 flex-1 bg-transparent text-left text-[15px] text-fg placeholder:text-muted focus:outline-none"
+            className="h-full min-w-0 flex-1 bg-transparent text-left text-[15px] text-fg placeholder:text-muted focus:outline-none focus-visible:outline-none"
           />
           <button
             type="submit"

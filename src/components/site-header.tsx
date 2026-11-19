@@ -2,7 +2,7 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { CartLink, Disclosure, NavLink, WishlistLink } from "./header-parts";
+import { ActiveButton, CartLink, Disclosure, NavLink, WishlistLink } from "./header-parts";
 import { ArrowIcon, CashIcon, ChevronIcon, MenuIcon, PhoneIcon, SearchIcon, TruckIcon } from "./icons";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
@@ -13,6 +13,9 @@ const navItem =
   "relative flex h-full items-center gap-1 px-3 whitespace-nowrap text-[14px] font-semibold text-fg/75 transition-colors duration-200 hover:text-white xl:px-4 " +
   "after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:origin-center after:scale-x-0 after:rounded-t-full after:bg-gradient-to-r after:from-accent after:to-neon after:transition-transform after:duration-300 hover:after:scale-x-100 xl:after:inset-x-4";
 const navActive = "text-white after:scale-x-100 after:shadow-[0_0_14px_2px_rgba(56,189,248,0.7)]";
+// Category in the desktop dropdown: lit on hover, and kept lit (border, tint, dot, arrow) on its own page.
+const dropdownItem =
+  "group/item flex items-center justify-between gap-2 rounded-xl border border-transparent px-3.5 py-3 text-sm text-fg/80 transition-all duration-200 hover:border-line hover:bg-card-hover hover:text-white aria-[current=page]:border-neon/35 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white";
 const mobileLink = "flex items-center justify-between rounded-xl px-3 py-2.5 text-[15px] font-medium text-fg/90 transition-colors duration-200 hover:bg-card hover:text-white";
 
 const LINKS = [
@@ -37,10 +40,11 @@ function SearchForm({ className = "", autoFocus = false }: { className?: string;
       <input
         name="q"
         type="search"
+        autoComplete="off"
         placeholder="რას ეძებ?"
         aria-label="პროდუქტის ძიება"
         autoFocus={autoFocus}
-        className="h-full min-w-0 flex-1 bg-transparent px-3 text-[15px] text-fg placeholder:text-muted focus:outline-none"
+        className="h-full min-w-0 flex-1 bg-transparent px-3 text-[15px] text-fg placeholder:text-muted focus:outline-none focus-visible:outline-none"
       />
       <button
         type="submit"
@@ -97,14 +101,14 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               <p className="px-3 pt-4 pb-1.5 text-xs font-semibold tracking-wide text-muted uppercase">კატეგორიები</p>
               <div className="grid grid-cols-2 gap-1.5">
                 {categories.map((category) => (
-                  <Link
+                  <NavLink
                     key={category.id}
                     href={`/category/${category.slug}`}
-                    prefetch={false}
-                    className="rounded-xl border border-line bg-card/50 px-3 py-2.5 text-sm text-fg/90 transition-colors hover:border-neon/40 hover:text-white"
+                    activeClassName=""
+                    className="rounded-xl border border-line bg-card/50 px-3 py-2.5 text-sm text-fg/90 transition-colors hover:border-neon/40 hover:text-white aria-[current=page]:border-neon/50 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white"
                   >
                     {category.name}
-                  </Link>
+                  </NavLink>
                 ))}
               </div>
               <div className="mt-3 border-t border-line pt-2">
@@ -129,33 +133,36 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
             <NavLink href="/" className={navItem} activeClassName={navActive}>მთავარი</NavLink>
             <div className="group relative flex">
-              <button type="button" aria-haspopup="true" className={`${navItem} cursor-pointer`}>
+              <ActiveButton prefix="/category/" className={`${navItem} cursor-pointer`} activeClassName={navActive}>
                 კატეგორიები
                 <ChevronIcon className="size-4 text-neon transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180" />
-              </button>
-              <div className="invisible absolute top-full left-0 z-40 w-[420px] translate-y-2 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              </ActiveButton>
+              <div className="invisible absolute top-full left-0 z-40 w-[520px] translate-y-2 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                 <div className="overflow-hidden rounded-2xl border border-neon/20 bg-card shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(0,110,255,0.6)]">
                   <div className="h-0.5 bg-gradient-to-r from-accent via-neon to-accent" />
-                  <div className="grid grid-cols-2 gap-1 p-2">
+                  <div className="grid grid-cols-2 gap-1.5 p-3">
                     {categories.map((category) => (
-                      <Link
+                      <NavLink
                         key={category.id}
                         href={`/category/${category.slug}`}
-                        prefetch={false}
-                        className="group/item flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-fg/85 transition-colors duration-200 hover:bg-card-hover hover:text-white"
+                        activeClassName=""
+                        className={dropdownItem}
                       >
-                        {category.name}
-                        <ArrowIcon className="size-3.5 -translate-x-1 text-neon opacity-0 transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100" />
-                      </Link>
+                        <span className="flex items-center gap-2.5">
+                          <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-muted/50 transition-colors duration-200 group-hover/item:bg-neon group-aria-[current=page]/item:bg-neon group-aria-[current=page]/item:shadow-[0_0_8px_#38bdf8]" />
+                          {category.name}
+                        </span>
+                        <ArrowIcon className="size-3.5 shrink-0 -translate-x-1 text-neon opacity-0 transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100 group-aria-[current=page]/item:translate-x-0 group-aria-[current=page]/item:opacity-100" />
+                      </NavLink>
                     ))}
                   </div>
                   <Link
                     href="/search"
                     prefetch={false}
-                    className="flex items-center justify-between border-t border-line bg-section px-5 py-3 text-sm font-semibold text-neon transition-colors hover:text-white"
+                    className="group/all flex items-center justify-between border-t border-line bg-section px-6 py-3.5 text-sm font-semibold text-neon transition-colors hover:bg-card-hover hover:text-white"
                   >
                     ყველა პროდუქტი
-                    <ArrowIcon className="size-4" />
+                    <ArrowIcon className="size-4 transition-transform duration-200 group-hover/all:translate-x-1" />
                   </Link>
                 </div>
               </div>

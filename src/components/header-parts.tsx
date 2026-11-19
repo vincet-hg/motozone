@@ -28,6 +28,21 @@ export function NavLink({ href, className, activeClassName, children }: {
   );
 }
 
+// A button that looks active while the current page starts with prefix (the categories menu on a category page).
+export function ActiveButton({ prefix, className, activeClassName, children }: {
+  prefix: string;
+  className: string;
+  activeClassName: string;
+  children: React.ReactNode;
+}) {
+  const active = usePathname().startsWith(prefix);
+  return (
+    <button type="button" aria-haspopup="true" className={`${className} ${active ? activeClassName : ""}`}>
+      {children}
+    </button>
+  );
+}
+
 // A <details> menu that works without JavaScript and closes itself after navigation.
 export function Disclosure({ className, summary, summaryLabel, summaryClassName, children }: {
   className?: string;
