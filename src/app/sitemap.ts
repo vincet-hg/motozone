@@ -5,7 +5,7 @@ import { absolute, absoluteImage } from "@/lib/seo";
 // Rebuilt with the catalog: saving in the admin refreshes it (see CATALOG_TAG), at least hourly otherwise.
 export const revalidate = 3600;
 
-const PAGES = ["/sale", "/about", "/faq", "/contact", "/delivery", "/returns", "/privacy", "/terms"];
+const PAGES = ["/sale", "/faq", "/contact", "/delivery", "/returns", "/privacy", "/terms"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [categories, products] = await Promise.all([getCategories(), getSitemapProducts()]);

@@ -30,7 +30,6 @@ export function SiteFooter({ categories }: { categories: Category[] }) {
             <Link href="/search" prefetch={false} className={link}>ყველა პროდუქტი</Link>
             <Link href="/sale" prefetch={false} className={link}>აქციები</Link>
             <Link href="/wishlist" prefetch={false} className={link}>ფავორიტები</Link>
-            <Link href="/about" prefetch={false} className={link}>ჩვენ შესახებ</Link>
             <Link href="/contact" prefetch={false} className={link}>კონტაქტი</Link>
           </div>
         </nav>

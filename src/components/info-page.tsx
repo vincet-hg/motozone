@@ -1,6 +1,6 @@
 import { HeadingIcon } from "./heading-icon";
 
-// Shared frame for the text pages (about, delivery, returns, contact, legal): a title with an icon tile,
+// Shared frame for the text pages (delivery, returns, contact, legal): a title with an icon tile,
 // an optional lead paragraph, then the content in readable measure.
 export function InfoPage({ title, icon, lead, children, wide = false }: {
   title: string;

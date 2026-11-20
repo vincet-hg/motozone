@@ -19,7 +19,7 @@ const dropdownItem =
   "group/item flex items-center justify-between gap-2 rounded-xl border border-transparent px-2.5 py-2 text-sm text-fg/80 transition-all duration-200 hover:border-line hover:bg-card-hover hover:text-white aria-[current=page]:border-neon/35 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white";
 const mobileLink = "flex items-center justify-between rounded-xl px-3 py-2.5 text-[15px] font-medium text-fg/90 transition-colors duration-200 hover:bg-card hover:text-white";
 
-// The logo leads home, so the desktop menu has no "Home" link; About lives in the footer.
+// The logo leads home, so the desktop menu has no "Home" link.
 const LINKS = [
   { href: "/search", label: "ყველა პროდუქტი" },
   { href: "/sale", label: "აქციები" },
@@ -31,7 +31,6 @@ const MOBILE_LINKS = [
   ...LINKS,
   { href: "/delivery", label: "მიწოდება" },
   { href: "/faq", label: "ხშირი კითხვები" },
-  { href: "/about", label: "ჩვენ შესახებ" },
 ];
 
 // The three promises of the service bar. On phones they take turns in one line.
