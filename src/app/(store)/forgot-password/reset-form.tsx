@@ -4,6 +4,7 @@ import Link from "next/link";
 import { keepValues } from "@/lib/keep-values";
 import { useActionState, useState } from "react";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
+import { PasswordInput } from "@/components/password-input";
 import { type AuthState, resetPasswordWithCode, sendPasswordReset } from "../login/actions";
 
 // Two steps on one page: the email, then the code from the email with the new password.
@@ -34,12 +35,12 @@ export function ResetForm() {
         </label>
         <label className="block text-sm">
           ახალი პაროლი
-          <input name="password" type="password" required minLength={8} autoComplete="new-password" className={`${authInput} mt-1.5`} />
+          <PasswordInput name="password" required minLength={8} autoComplete="new-password" className={authInput} wrapperClassName="mt-1.5" />
           <span className="mt-1 block text-xs text-muted">მინიმუმ 8 სიმბოლო.</span>
         </label>
         <label className="block text-sm">
           გაიმეორე პაროლი
-          <input name="password2" type="password" required minLength={8} autoComplete="new-password" className={`${authInput} mt-1.5`} />
+          <PasswordInput name="password2" required minLength={8} autoComplete="new-password" className={authInput} wrapperClassName="mt-1.5" />
         </label>
         {reset.error && <p role="alert" className={authError}>{reset.error}</p>}
         <button disabled={resetting} className={authButton}>{resetting ? "ინახება..." : "პაროლის შეცვლა და შესვლა"}</button>
