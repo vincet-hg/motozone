@@ -91,7 +91,7 @@ export default async function EditProductPage({ params, searchParams }: { params
             <input name="note" maxLength={500} className={field} />
           </label>
           <div className="flex items-end">
-            <button className="h-9 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(56,189,248,0.55)] px-3 text-sm font-semibold text-white">დამატება</button>
+            <button className="h-9 w-full rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(227,18,11,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(255,81,72,0.55)] px-3 text-sm font-semibold text-white">დამატება</button>
           </div>
           <p className="col-span-2 text-xs text-a-muted sm:col-span-5">
             თვითღირებულება საშუალო შეწონილით ითვლება: 5 ცალი 10 ₾-ად და 5 ცალი 14 ₾-ად = 10 ცალი 12 ₾-ად. გაყიდვის ფასს შენ ცვლი ზემოთ.

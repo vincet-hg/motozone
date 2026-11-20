@@ -26,7 +26,7 @@ export default async function AdminOrderPage({
 
   return (
     <div className="max-w-2xl">
-      <Link href="/admin/orders" className="text-sm text-a-soft transition-colors hover:text-[#7dd3fc]">
+      <Link href="/admin/orders" className="text-sm text-a-soft transition-colors hover:text-[#ffaaa3]">
         ← ყველა შეკვეთა
       </Link>
       <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -62,7 +62,7 @@ export default async function AdminOrderPage({
         </ul>
         <p className="mt-2 flex justify-between border-t border-a-line pt-3 text-base font-bold">
           <span>ჯამი</span>
-          <span className="text-[#7dd3fc]">{formatPrice(order.total)}</span>
+          <span className="text-[#ffaaa3]">{formatPrice(order.total)}</span>
         </p>
         {(() => {
           const lines = (items ?? []) as OrderItem[];
@@ -91,7 +91,7 @@ export default async function AdminOrderPage({
               </option>
             ))}
           </select>
-          <button className="h-10 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(0,110,255,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(56,189,248,0.55)] px-4 text-sm font-semibold text-white">სტატუსის შენახვა</button>
+          <button className="h-10 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(227,18,11,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(255,81,72,0.55)] px-4 text-sm font-semibold text-white">სტატუსის შენახვა</button>
         </form>
       )}
     </div>

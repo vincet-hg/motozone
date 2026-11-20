@@ -13,7 +13,7 @@ import { iconButton } from "./styles";
 const navItem =
   "relative flex h-full items-center gap-1.5 px-3 whitespace-nowrap text-[14px] font-semibold text-fg/75 transition-colors duration-200 hover:text-white xl:px-4 " +
   "after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:origin-center after:scale-x-0 after:rounded-t-full after:bg-gradient-to-r after:from-accent after:to-neon after:transition-transform after:duration-300 hover:after:scale-x-100 xl:after:inset-x-4";
-const navActive = "text-white after:scale-x-100 after:shadow-[0_0_14px_2px_rgba(56,189,248,0.7)]";
+const navActive = "text-white after:scale-x-100 after:shadow-[0_0_14px_2px_rgba(255,81,72,0.7)]";
 // Category in the desktop dropdown: lit on hover, and kept lit (border, tint, dot, arrow) on its own page.
 const dropdownItem =
   "group/item flex items-center justify-between gap-2 rounded-xl border border-transparent px-2.5 py-2 text-sm text-fg/80 transition-all duration-200 hover:border-line hover:bg-card-hover hover:text-white aria-[current=page]:border-neon/35 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white";
@@ -46,7 +46,7 @@ function SearchForm({ className = "", autoFocus = false }: { className?: string;
       action="/search"
       prefetch={false}
       role="search"
-      className={`group/search flex h-11 items-center rounded-xl border border-line bg-card/50 pr-1 transition-all duration-200 focus-within:border-neon/60 focus-within:bg-card focus-within:shadow-[0_0_0_3px_rgba(0,110,255,0.18)] ${className}`}
+      className={`group/search flex h-11 items-center rounded-xl border border-line bg-card/50 pr-1 transition-all duration-200 focus-within:border-neon/60 focus-within:bg-card focus-within:shadow-[0_0_0_3px_rgba(227,18,11,0.18)] ${className}`}
     >
       <SearchIcon className="ml-3.5 size-[18px] shrink-0 text-muted transition-colors group-focus-within/search:text-neon" />
       <input
@@ -61,7 +61,7 @@ function SearchForm({ className = "", autoFocus = false }: { className?: string;
       <button
         type="submit"
         aria-label="ძებნა"
-        className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_14px_-4px_rgba(0,110,255,0.9)] transition-transform duration-200 hover:scale-105"
+        className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_14px_-4px_rgba(227,18,11,0.9)] transition-transform duration-200 hover:scale-105"
       >
         <ArrowIcon className="size-4" />
       </button>
@@ -77,7 +77,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
   return (
     <>
       {/* Service bar. Keep these promises true for your shop (see src/lib/site.ts). */}
-      <div className="relative border-b border-line bg-[linear-gradient(90deg,#050b18_0%,#0a1d3a_50%,#050b18_100%)] text-[13px] text-fg/80">
+      <div className="relative border-b border-line bg-[linear-gradient(90deg,#0b0d10_0%,#2a0d0b_50%,#0b0d10_100%)] text-[13px] text-fg/80">
         <div className="mx-auto flex h-9 max-w-7xl items-center gap-4 px-4 whitespace-nowrap lg:gap-5">
           {/* Phones: one promise at a time, sliding up every three seconds. */}
           <div className="relative h-5 flex-1 overflow-hidden sm:hidden">
@@ -116,7 +116,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         </div>
       </div>
 
-      <header className="sticky top-0 z-30 bg-bg/80 shadow-[0_18px_40px_-28px_rgba(0,110,255,0.75)] backdrop-blur-xl">
+      <header className="sticky top-0 z-30 bg-bg/80 shadow-[0_18px_40px_-28px_rgba(227,18,11,0.75)] backdrop-blur-xl">
         {/* Neon hairline along the bottom edge. */}
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/45 to-transparent" />
 
@@ -159,7 +159,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </Disclosure>
 
           <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 rounded-xl lg:mx-0 lg:mr-2">
-            <Logo className="h-10 w-auto min-[360px]:h-12 drop-shadow-[0_0_14px_rgba(0,110,255,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
+            <Logo className="h-10 w-auto min-[360px]:h-12 drop-shadow-[0_0_14px_rgba(227,18,11,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
@@ -169,7 +169,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                 <ChevronIcon className="size-4 text-neon transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180" />
               </ActiveButton>
               <div className="invisible absolute top-full left-0 z-40 w-[580px] translate-y-2 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <div className="overflow-hidden rounded-2xl border border-neon/20 bg-card shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(0,110,255,0.6)]">
+                <div className="overflow-hidden rounded-2xl border border-neon/20 bg-card shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(227,18,11,0.6)]">
                   <div className="h-0.5 bg-gradient-to-r from-accent via-neon to-accent" />
                   <div className="grid grid-cols-2 gap-1.5 p-3">
                     {categories.map((category) => (
@@ -222,7 +222,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             <CartLink />
             <a
               href={site.phoneHref}
-              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(0,110,255,0.95)] transition-transform duration-200 hover:-translate-y-px lg:flex"
+              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px lg:flex"
             >
               <PhoneIcon className="size-4" />
               <span className="hidden xl:inline">{site.phone}</span>

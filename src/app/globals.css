@@ -1,33 +1,36 @@
 @import "tailwindcss";
 
-/* Scooter Land design tokens: Space Blue. Deep navy surfaces, electric blue for actions, neon for highlights. */
+/* Scooter Land design tokens: red edition. Graphite surfaces, crimson for actions, light red for highlights. */
 @theme inline {
-  --color-bg: #050b18;
-  --color-header: #050b18;
-  --color-section: #081426;
-  --color-card: #0d1b30;
-  --color-card-hover: #10233d;
-  --color-accent: #006eff;
-  --color-accent-hover: #168bff;
-  --color-neon: #38bdf8;
-  --color-fg: #f0f6ff;
-  --color-muted: #94a9c5;
-  --color-line: rgb(80 150 255 / 0.15);
-  --color-photo: #eef3fb;
-  /* Admin panel: the store's Space Blue. "purple"/"violet" are the admin's main accent pair (blue and neon). */
-  --color-a-bg: #050b18;
-  --color-a-panel: #081426;
-  --color-a-card: #0d1b30;
-  --color-a-hover: #12294a;
-  --color-a-purple: #006eff;
-  --color-a-violet: #38bdf8;
-  --color-a-blue: #168bff;
+  /* Scooter Land, red edition: graphite backgrounds with a premium red accent. "neon" is the light red
+     used for prices, icons and glows. */
+  --color-bg: #0b0d10;
+  --color-header: #0b0d10;
+  --color-section: #111318;
+  --color-card: #171a20;
+  --color-card-hover: #1d2129;
+  --color-accent: #e3120b;
+  --color-accent-hover: #ff2d20;
+  --color-neon: #ff5148;
+  --color-fg: #f5f5f5;
+  --color-muted: #a1a1aa;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-photo: #f4f4f6;
+  /* Admin panel in the same colours. "purple"/"violet" are the admin's main accent pair (red and light red);
+     blue, green and red still mark order statuses. */
+  --color-a-bg: #0b0d10;
+  --color-a-panel: #111318;
+  --color-a-card: #171a20;
+  --color-a-hover: #262a33;
+  --color-a-purple: #e3120b;
+  --color-a-violet: #ff5148;
+  --color-a-blue: #3b82f6;
   --color-a-green: #1ab269;
   --color-a-red: #f04452;
-  --color-a-text: #f0f6ff;
-  --color-a-soft: #94a9c5;
-  --color-a-muted: #6b7f9e;
-  --color-a-line: rgb(80 150 255 / 0.16);
+  --color-a-text: #f5f5f5;
+  --color-a-soft: #a1a1aa;
+  --color-a-muted: #71717a;
+  --color-a-line: rgb(255 255 255 / 0.09);
   --radius-btn: 12px;
   --radius-card: 16px;
   --font-sans: var(--font-inter), var(--font-noto-georgian), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -55,7 +58,7 @@ html {
 
 /* Body text of the info pages (see src/components/info-page.tsx). */
 .info-prose {
-  color: rgb(240 246 255 / 0.85);
+  color: rgb(245 245 245 / 0.85);
   line-height: 1.8;
 }
 
@@ -194,8 +197,8 @@ summary::-webkit-details-marker {
 }
 
 @keyframes splash-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 18px rgb(0 110 255 / 0.45)); }
-  50% { transform: scale(1.04); filter: drop-shadow(0 0 34px rgb(56 189 248 / 0.75)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 18px rgb(227 18 11 / 0.45)); }
+  50% { transform: scale(1.04); filter: drop-shadow(0 0 34px rgb(255 81 72 / 0.75)); }
 }
 
 @keyframes splash-sweep {
@@ -220,11 +223,11 @@ summary::-webkit-details-marker {
 /* Slowly drifting particles for the hero background. */
 .starfield {
   background-image:
-    radial-gradient(1px 1px at 20px 30px, rgb(240 246 255 / 0.7), transparent),
-    radial-gradient(1px 1px at 120px 80px, rgb(56 189 248 / 0.8), transparent),
-    radial-gradient(1.5px 1.5px at 260px 160px, rgb(240 246 255 / 0.5), transparent),
-    radial-gradient(1px 1px at 340px 40px, rgb(56 189 248 / 0.6), transparent),
-    radial-gradient(1px 1px at 60px 250px, rgb(240 246 255 / 0.4), transparent);
+    radial-gradient(1px 1px at 20px 30px, rgb(245 245 245 / 0.7), transparent),
+    radial-gradient(1px 1px at 120px 80px, rgb(255 81 72 / 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 260px 160px, rgb(245 245 245 / 0.5), transparent),
+    radial-gradient(1px 1px at 340px 40px, rgb(255 81 72 / 0.6), transparent),
+    radial-gradient(1px 1px at 60px 250px, rgb(245 245 245 / 0.4), transparent);
   background-size: 400px 400px, 300px 300px;
   animation: stars 120s linear infinite;
 }
@@ -266,7 +269,7 @@ summary::-webkit-details-marker {
 
 .admin :is(input, select, textarea):focus {
   border-color: var(--color-a-violet);
-  box-shadow: 0 0 0 3px rgb(0 110 255 / 0.25);
+  box-shadow: 0 0 0 3px rgb(227 18 11 / 0.25);
   outline: none;
 }
 
@@ -279,7 +282,7 @@ summary::-webkit-details-marker {
 }
 
 .admin table thead {
-  background: rgb(8 20 38 / 0.8);
+  background: rgb(17 19 24 / 0.8);
   color: var(--color-a-muted);
   font-size: 12px;
   letter-spacing: 0.02em;
@@ -290,18 +293,18 @@ summary::-webkit-details-marker {
 }
 
 .admin table tbody tr:hover {
-  background: rgb(18 41 74 / 0.45);
+  background: rgb(38 42 51 / 0.6);
 }
 
 .admin a.underline:not([class*="ff6b77"]),
 .admin button.underline:not([class*="ff6b77"]) {
-  color: #7dd3fc;
-  text-decoration-color: rgb(56 189 248 / 0.4);
+  color: #ffaaa3;
+  text-decoration-color: rgb(255 81 72 / 0.4);
   text-underline-offset: 3px;
   transition: color 0.15s;
 }
 
 .admin a.underline:not([class*="ff6b77"]):hover,
 .admin button.underline:not([class*="ff6b77"]):hover {
-  color: #e0f2fe;
+  color: #ffe4e1;
 }

@@ -21,7 +21,7 @@ export default function ContactPage() {
           <span className="block text-sm text-muted">ტელეფონი, {site.hours.toLowerCase()}</span>
           <span className="mt-1 block text-[22px] font-extrabold whitespace-nowrap text-fg min-[380px]:text-2xl sm:text-3xl">{site.phone}</span>
         </span>
-        <span className="hidden size-12 shrink-0 items-center min-[380px]:flex justify-center rounded-full bg-accent text-white shadow-[0_0_24px_-4px_rgba(0,110,255,0.9)]">
+        <span className="hidden size-12 shrink-0 items-center min-[380px]:flex justify-center rounded-full bg-accent text-white shadow-[0_0_24px_-4px_rgba(227,18,11,0.9)]">
           <PhoneIcon className="size-6" />
         </span>
       </a>

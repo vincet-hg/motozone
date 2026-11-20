@@ -17,7 +17,7 @@ export function OrderCards({ orders, empty }: { orders: Order[]; empty: string }
             className="block rounded-2xl border border-a-line bg-a-card p-4 transition-colors active:bg-a-hover hover:border-a-violet/50"
           >
             <div className="flex items-center justify-between gap-3">
-              <span className="font-semibold text-[#7dd3fc]">#{order.id}</span>
+              <span className="font-semibold text-[#ffaaa3]">#{order.id}</span>
               <StatusBadge status={order.status} />
             </div>
             <div className="mt-2 flex items-end justify-between gap-3">

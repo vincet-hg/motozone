@@ -10,7 +10,7 @@ export function Newsletter() {
 
   return (
     <section aria-labelledby="newsletter-title" className="reveal relative isolate mt-14 overflow-hidden rounded-card border border-line bg-gradient-to-r from-section via-card to-section px-4 py-7 min-[400px]:px-5 min-[400px]:py-8 sm:px-10 sm:py-10">
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_100%_0%,rgba(0,110,255,0.3),transparent_55%),radial-gradient(ellipse_at_0%_100%,rgba(56,189,248,0.12),transparent_50%)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_100%_0%,rgba(227,18,11,0.3),transparent_55%),radial-gradient(ellipse_at_0%_100%,rgba(255,81,72,0.12),transparent_50%)]" />
       <div className="grid items-center gap-6 lg:grid-cols-2">
         <div className="flex items-start gap-4">
           <span aria-hidden="true" className="hidden size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-neon sm:flex">
@@ -44,7 +44,7 @@ export function Newsletter() {
               <button
                 type="submit"
                 disabled={pending}
-                className="h-12 shrink-0 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-10px_rgba(0,110,255,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
+                className="h-12 shrink-0 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-10px_rgba(227,18,11,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
               >
                 {pending ? "იგზავნება..." : "გამოწერა"}
               </button>

@@ -25,7 +25,7 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
       <button
         type="button"
         onClick={add}
-        className="flex h-13 w-full items-center justify-center gap-2 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(0,110,255,0.7)] transition-colors duration-200 hover:bg-accent-hover sm:w-80"
+        className="flex h-13 w-full items-center justify-center gap-2 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(227,18,11,0.7)] transition-colors duration-200 hover:bg-accent-hover sm:w-80"
       >
         <Icon />
         {added ? "დამატებულია" : "კალათაში დამატება"}
