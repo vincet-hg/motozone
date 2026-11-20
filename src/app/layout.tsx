@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { isLiveSite, site } from "@/lib/site";
+import { Toaster } from "@/components/toaster";
 import "./globals.css";
 
 // Both fonts are trimmed to the letters the store uses: Inter for Latin and digits (25 KB),
@@ -43,7 +44,10 @@ export const viewport: Viewport = { themeColor: "#0b0d10" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ka" className={`${inter.variable} ${georgian.variable}`}>
-      <body className="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">{children}</body>
+      <body className="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

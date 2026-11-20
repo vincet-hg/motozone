@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { keepValues } from "@/lib/keep-values";
 import { useActionState, useState } from "react";
+import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput, authSecondary } from "@/components/auth-styles";
 import { GoogleIcon, MailIcon, PhoneIcon } from "@/components/icons";
 import { PasswordInput } from "@/components/password-input";
@@ -59,6 +60,7 @@ export function LoginForms({ next, mode, google, phone }: { next: string; mode: 
 
 function EmailForm({ next, register }: { next: string; register: boolean }) {
   const [state, action, pending] = useActionState<AuthState, FormData>(register ? signUpWithEmail : signInWithEmail, {});
+  useFormToast(state);
   const [restart, setRestart] = useState(0);
   if (state.step === "confirm" && state.email && restart === 0) {
     return <ConfirmEmail key={state.email} email={state.email} next={next} intro={state} onBack={() => setRestart((value) => value + 1)} />;
@@ -102,6 +104,8 @@ function EmailForm({ next, register }: { next: string; register: boolean }) {
 function ConfirmEmail({ email, next, intro, onBack }: { email: string; next: string; intro: AuthState; onBack: () => void }) {
   const [checked, confirmAction, confirming] = useActionState<AuthState, FormData>(confirmEmail, {});
   const [resent, resendAction, resending] = useActionState<AuthState, FormData>(resendConfirmation, {});
+  useFormToast(checked);
+  useFormToast(resent);
   const info = resent.info ?? intro.info;
   const error = checked.error ?? resent.error ?? (resent.info ? undefined : intro.error);
   return (
@@ -145,6 +149,8 @@ function ConfirmEmail({ email, next, intro, onBack }: { email: string; next: str
 function PhoneForm({ next }: { next: string }) {
   const [sent, sendAction, sending] = useActionState<AuthState, FormData>(sendPhoneCode, {});
   const [checked, verifyAction, verifying] = useActionState<AuthState, FormData>(verifyPhoneCode, {});
+  useFormToast(sent);
+  useFormToast(checked);
   const [restart, setRestart] = useState(0);
   const step = (checked.step ?? sent.step) === "code" && restart === 0 ? "code" : "phone";
   const phone = checked.phone ?? sent.phone ?? "";

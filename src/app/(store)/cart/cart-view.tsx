@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useEffect, useMemo, useState } from "react";
+import { useFormToast } from "@/components/toaster";
 import { CheckIcon } from "@/components/icons";
 import { clearCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice, imageUrl } from "@/lib/format";
@@ -17,6 +18,8 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
   const cart = useCart();
   const [products, setProducts] = useState<ProductCard[] | null>(null);
   const [state, action, pending] = useActionState<OrderState, FormData>(placeOrder, {});
+  // One toast per order result (the object is rebuilt only when the action returns).
+  useFormToast(useMemo(() => ({ error: state.error, info: state.orderId ? `შეკვეთა #${state.orderId} მიღებულია.` : undefined }), [state]));
   const [method, setMethod] = useState<"delivery" | "pickup">("delivery");
 
   const idKey = useMemo(() => cart.map((item) => item.id).sort().join(","), [cart]);
