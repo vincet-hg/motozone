@@ -14,3 +14,7 @@ export function toggleWishlist(id: string) {
 export function removeFromWishlist(id: string) {
   wishlist.set(wishlist.get().filter((item) => item.id !== id));
 }
+
+export function replaceWishlist(ids: string[]) {
+  wishlist.set(ids.map((id) => ({ id })));
+}

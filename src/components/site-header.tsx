@@ -2,9 +2,9 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
+import { AccountLink, ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
 import { CategoryIcon, SaleIcon } from "./category-icons";
-import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon } from "./icons";
+import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon, UserIcon } from "./icons";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
 import { iconButton } from "./styles";
@@ -151,6 +151,13 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                   </NavLink>
                 ))}
               </div>
+              <NavLink href="/account" className={`${mobileLink} mt-1 border-t border-line pt-3`} activeClassName="bg-card text-neon">
+                <span className="flex items-center gap-2">
+                  <UserIcon className="optical-center size-5 text-neon" />
+                  ჩემი ანგარიში
+                </span>
+                <ChevronIcon className="size-4 -rotate-90 text-muted" />
+              </NavLink>
               <a href={site.phoneHref} className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover py-3 font-semibold text-white">
                 <PhoneIcon className="size-5" />
                 {site.phone}
@@ -219,14 +226,15 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               </Disclosure>
             </HiddenOnHome>
             <WishlistLink />
+            <AccountLink className="hidden min-[390px]:flex" />
             <CartLink />
             <a
               href={site.phoneHref}
-              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px lg:flex"
+              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px xl:flex"
             >
               <PhoneIcon className="size-4" />
-              <span className="hidden xl:inline">{site.phone}</span>
-              <span className="xl:hidden">დარეკვა</span>
+              <span className="hidden min-[1360px]:inline">{site.phone}</span>
+              <span className="min-[1360px]:hidden">დარეკვა</span>
             </a>
           </div>
         </div>

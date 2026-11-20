@@ -7,12 +7,12 @@ import { clearCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { keepValues } from "@/lib/keep-values";
 import { site } from "@/lib/site";
-import type { ProductCard } from "@/lib/types";
+import type { ProductCard, Profile } from "@/lib/types";
 import { getCartProducts, placeOrder, type OrderState } from "./actions";
 
 const input = "h-11 w-full rounded-btn border border-line bg-bg px-3 text-base text-fg focus:border-accent focus:outline-none";
 
-export function CartView() {
+export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Profile | null }) {
   const cart = useCart();
   const [products, setProducts] = useState<ProductCard[] | null>(null);
   const [state, action, pending] = useActionState<OrderState, FormData>(placeOrder, {});
@@ -50,9 +50,14 @@ export function CartView() {
         <p className="mt-2">შეკვეთის ნომერი: #{state.orderId}</p>
         <p>ჯამი: {formatPrice(state.total ?? 0)}{state.deliveryFee ? ` (მიტანის ჩათვლით)` : ""}</p>
         <p className="mt-2 text-sm text-muted">დასადასტურებლად დაგირეკავთ მითითებულ ნომერზე.</p>
-        <Link href="/" className="mt-4 inline-block text-neon underline">
-          პროდუქტებზე დაბრუნება
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-4">
+          <Link href="/account" className="text-neon underline">
+            ჩემი შეკვეთები
+          </Link>
+          <Link href="/" className="text-neon underline">
+            პროდუქტებზე დაბრუნება
+          </Link>
+        </div>
       </div>
     );
   }
@@ -124,81 +129,102 @@ export function CartView() {
         ))}
       </ul>
 
-      <form action={action} onSubmit={keepValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
-        <dl className="space-y-1.5 text-sm">
-          <div className="flex justify-between text-muted">
-            <dt>პროდუქტები</dt>
-            <dd className="text-fg">{formatPrice(total)}</dd>
-          </div>
-          <div className="flex justify-between text-muted">
-            <dt>{method === "delivery" ? "მიტანა თბილისში" : "გატანა დიღომიდან"}</dt>
-            <dd className="text-fg">{method === "delivery" ? formatPrice(site.deliveryFee) : "უფასო"}</dd>
-          </div>
-          <div className="flex items-baseline justify-between border-t border-line pt-2">
-            <dt className="text-base font-bold text-fg">სულ</dt>
-            <dd className="text-2xl font-bold text-neon">{formatPrice(total + (method === "delivery" ? site.deliveryFee : 0))}</dd>
-          </div>
-        </dl>
-        <input type="hidden" name="items" value={JSON.stringify(cart)} />
-        <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
-        <label className="text-sm">
-          სახელი და გვარი
-          <input name="name" required minLength={2} maxLength={100} autoComplete="name" className={`${input} mt-1`} />
-        </label>
-        <label className="text-sm">
-          ტელეფონი
-          <input name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={`${input} mt-1`} />
-        </label>
-        <fieldset className="text-sm">
-          <legend>მიღების გზა</legend>
-          <div className="mt-1 grid grid-cols-2 gap-2">
-            {(
-              [
-                ["delivery", "მიტანა", `თბილისში, ${site.deliveryFee} ₾`],
-                ["pickup", "გატანა", `დიღომი, უფასოდ`],
-              ] as const
-            ).map(([value, title, hint]) => (
-              <label
-                key={value}
-                className="cursor-pointer rounded-btn border border-line bg-bg px-3 py-2.5 transition-colors has-checked:border-neon/60 has-checked:bg-accent/10"
-              >
-                <input type="radio" name="method" value={value} checked={method === value} onChange={() => setMethod(value)} className="sr-only" />
-                <span className="block font-semibold">{title}</span>
-                <span className="block text-xs text-muted">{hint}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-        {method === "delivery" ? (
+      {signedIn ? (
+        <form action={action} onSubmit={keepValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
+          <dl className="space-y-1.5 text-sm">
+            <div className="flex justify-between text-muted">
+              <dt>პროდუქტები</dt>
+              <dd className="text-fg">{formatPrice(total)}</dd>
+            </div>
+            <div className="flex justify-between text-muted">
+              <dt>{method === "delivery" ? "მიტანა თბილისში" : "გატანა დიღომიდან"}</dt>
+              <dd className="text-fg">{method === "delivery" ? formatPrice(site.deliveryFee) : "უფასო"}</dd>
+            </div>
+            <div className="flex items-baseline justify-between border-t border-line pt-2">
+              <dt className="text-base font-bold text-fg">სულ</dt>
+              <dd className="text-2xl font-bold text-neon">{formatPrice(total + (method === "delivery" ? site.deliveryFee : 0))}</dd>
+            </div>
+          </dl>
+          <input type="hidden" name="items" value={JSON.stringify(cart)} />
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
           <label className="text-sm">
-            მისამართი თბილისში
-            <input name="address" required minLength={3} maxLength={300} autoComplete="street-address" placeholder="ქუჩა, ნომერი, ბინა" className={`${input} mt-1 placeholder:text-muted/70`} />
+            სახელი და გვარი
+            <input name="name" required minLength={2} maxLength={100} autoComplete="name" defaultValue={profile?.name} className={`${input} mt-1`} />
           </label>
-        ) : (
-          <p className="rounded-btn border border-line bg-bg p-3 text-sm leading-6 text-muted">
-            გაიტანე მისამართიდან: <span className="text-fg">{site.pickup.address}</span> ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}. მოსვლამდე დაგირეკავთ, როცა შეკვეთა მზად იქნება.
+          <label className="text-sm">
+            ტელეფონი
+            <input name="phone" type="tel" required autoComplete="tel" inputMode="tel" defaultValue={profile?.phone} className={`${input} mt-1`} />
+          </label>
+          <fieldset className="text-sm">
+            <legend>მიღების გზა</legend>
+            <div className="mt-1 grid grid-cols-2 gap-2">
+              {(
+                [
+                  ["delivery", "მიტანა", `თბილისში, ${site.deliveryFee} ₾`],
+                  ["pickup", "გატანა", `დიღომი, უფასოდ`],
+                ] as const
+              ).map(([value, title, hint]) => (
+                <label
+                  key={value}
+                  className="cursor-pointer rounded-btn border border-line bg-bg px-3 py-2.5 transition-colors has-checked:border-neon/60 has-checked:bg-accent/10"
+                >
+                  <input type="radio" name="method" value={value} checked={method === value} onChange={() => setMethod(value)} className="sr-only" />
+                  <span className="block font-semibold">{title}</span>
+                  <span className="block text-xs text-muted">{hint}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          {method === "delivery" ? (
+            <label className="text-sm">
+              მისამართი თბილისში
+              <input name="address" required minLength={3} maxLength={300} autoComplete="street-address" defaultValue={profile?.address} placeholder="ქუჩა, ნომერი, ბინა" className={`${input} mt-1 placeholder:text-muted/70`} />
+            </label>
+          ) : (
+            <p className="rounded-btn border border-line bg-bg p-3 text-sm leading-6 text-muted">
+              გაიტანე მისამართიდან: <span className="text-fg">{site.pickup.address}</span> ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}. მოსვლამდე დაგირეკავთ, როცა შეკვეთა მზად იქნება.
+            </p>
+          )}
+          <label className="text-sm">
+            შენიშვნა (არასავალდებულო)
+            <input name="note" maxLength={500} className={`${input} mt-1`} />
+          </label>
+          <p className="text-sm text-muted">{method === "delivery" ? "გადახდა მიტანისას, კურიერთან." : "გადახდა გატანისას."}</p>
+          {unavailable && <p className="text-sm font-medium">წაშალე პროდუქტი, რომელიც მარაგში აღარ არის.</p>}
+          {state.error && (
+            <p role="alert" className="rounded-lg border border-accent/50 bg-accent/10 p-2 text-sm font-medium text-fg">
+              {state.error}
+            </p>
+          )}
+          <button type="submit" disabled={pending || unavailable} className="h-13 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(227,18,11,0.7)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-50">
+            {pending ? "იგზავნება..." : "შეკვეთის გაფორმება"}
+          </button>
+          <p className="text-xs leading-5 text-muted">
+            შეკვეთით ეთანხმები{" "}
+            <Link href="/terms" className="underline hover:text-fg">მომსახურების პირობებს</Link> და{" "}
+            <Link href="/privacy" className="underline hover:text-fg">კონფიდენციალურობის პოლიტიკას</Link>.
           </p>
-        )}
-        <label className="text-sm">
-          შენიშვნა (არასავალდებულო)
-          <input name="note" maxLength={500} className={`${input} mt-1`} />
-        </label>
-        <p className="text-sm text-muted">{method === "delivery" ? "გადახდა მიტანისას, კურიერთან." : "გადახდა გატანისას."}</p>
-        {unavailable && <p className="text-sm font-medium">წაშალე პროდუქტი, რომელიც მარაგში აღარ არის.</p>}
-        {state.error && (
-          <p role="alert" className="rounded-lg border border-accent/50 bg-accent/10 p-2 text-sm font-medium text-fg">
-            {state.error}
+        </form>
+      ) : (
+        <div className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-bold">პროდუქტები</h2>
+            <span className="text-2xl font-bold text-neon">{formatPrice(total)}</span>
+          </div>
+          <p className="text-sm leading-6 text-muted">
+            შეკვეთის გასაფორმებლად შედი ანგარიშში. ერთხელ შეიყვან მონაცემებს და შემდეგ შეკვეთებზე თავისით შეივსება. კალათა შენახული დაგხვდება.
           </p>
-        )}
-        <button type="submit" disabled={pending || unavailable} className="h-13 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(227,18,11,0.7)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-50">
-          {pending ? "იგზავნება..." : "შეკვეთის გაფორმება"}
-        </button>
-        <p className="text-xs leading-5 text-muted">
-          შეკვეთით ეთანხმები{" "}
-          <Link href="/terms" className="underline hover:text-fg">მომსახურების პირობებს</Link> და{" "}
-          <Link href="/privacy" className="underline hover:text-fg">კონფიდენციალურობის პოლიტიკას</Link>.
-        </p>
-      </form>
+          <Link href="/login?next=/cart" className="flex h-12 items-center justify-center rounded-btn bg-accent font-bold text-white transition-colors hover:bg-accent-hover">
+            შესვლა და შეკვეთა
+          </Link>
+          <Link href="/login?mode=register&next=/cart" className="flex h-12 items-center justify-center rounded-btn border border-line font-semibold transition-colors hover:border-neon/50">
+            ანგარიშის შექმნა
+          </Link>
+          <p className="text-xs text-muted">
+            ან შეუკვეთე ტელეფონით: <a href={site.phoneHref} className="text-neon underline">{site.phone}</a>
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -40,6 +40,8 @@ export type Order = {
   total: number;
   status: OrderStatus;
   created_at: string;
+  // The customer account that placed the order (orders made before accounts have none).
+  user_id?: string | null;
 };
 
 export type OrderItem = {
@@ -105,3 +107,8 @@ export type Promotion = {
 export type PromotionSlide = Promotion & { product: ProductCard };
 
 export type Subscriber = { id: number; email: string; created_at: string };
+
+export type Profile = { name: string; phone: string; address: string };
+
+// A signed-in customer, from the verified session.
+export type Customer = { id: string; email: string | null; phone: string | null; provider: string };

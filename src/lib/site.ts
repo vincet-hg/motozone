@@ -50,6 +50,13 @@ export const site = {
     title: "გჭირდება რჩევა?",
     text: "გვითხარი შენი მოპედის მოდელი და გეტყვით, რომელი აქსესუარი მოერგება. ვპასუხობთ ყოველდღე, 10:00-დან 22:00-მდე.",
   },
+  // Ways to sign in besides email and password. Each needs setup in Supabase first (see README):
+  // NEXT_PUBLIC_AUTH_GOOGLE=1 after the Google provider is on, NEXT_PUBLIC_AUTH_PHONE=1 after an SMS provider is on.
+  // Local demo mode always offers the phone code (the code is 123456).
+  auth: {
+    google: process.env.NEXT_PUBLIC_AUTH_GOOGLE === "1",
+    phone: process.env.NEXT_PUBLIC_AUTH_PHONE === "1" || (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL),
+  },
   // Leave a link empty ("") to hide its icon.
   facebook: "https://www.facebook.com/scooterland.ge",
   instagram: "https://www.instagram.com/scooterland.ge",

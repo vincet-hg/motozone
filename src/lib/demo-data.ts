@@ -694,6 +694,17 @@ function placeOrder(args: Row) {
   });
 }
 
+// Same as place_order, for a signed-in customer (see place_customer_order in the migrations).
+function placeCustomerOrder(args: Row) {
+  if (typeof args.p_user_id !== "string" || !args.p_user_id) throw new DbError("not_signed_in");
+  const result = placeOrder(args);
+  transaction((db) => {
+    const order = db.orders.find((item) => item.id === result.order_id);
+    if (order) order.user_id = String(args.p_user_id);
+  });
+  return result;
+}
+
 function setOrderStatus(args: Row) {
   return transaction((db) => {
     const status = args.p_status as OrderStatus;
@@ -859,6 +870,7 @@ function popularProductIds(args: Row) {
 
 const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   place_order: placeOrder,
+  place_customer_order: placeCustomerOrder,
   set_order_status: setOrderStatus,
   receive_stock: receiveStock,
   adjust_stock: adjustStock,
