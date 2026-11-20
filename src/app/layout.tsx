@@ -22,14 +22,13 @@ const georgian = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `${site.name} - მოტოციკლისა და მოპედის აქსესუარები`, template: `%s | ${site.name}` },
+  title: { default: `${site.name}: მოპედისა და სკუტერის აქსესუარები თბილისში`, template: `%s | ${site.name}` },
   description: site.description,
   applicationName: site.name,
   openGraph: {
     type: "website",
     siteName: site.name,
     locale: "ka_GE",
-    images: [{ url: "/hero.webp", alt: site.name }],
   },
   twitter: { card: "summary_large_image" },
   formatDetection: { telephone: false },

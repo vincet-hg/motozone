@@ -82,14 +82,15 @@ class DbError extends Error {
 
 // ---------------------------------------------------------------- seed
 
+// Name, slug and the short description shown on the category page (and to Google).
 const CATEGORIES = [
-  ["გათბობადი გრიფსები", "gatbobadi-gripsebi"],
-  ["დამტენები", "damtenebi"],
-  ["ხელთათმანები", "kheltatmanebi"],
-  ["ტელეფონის დამჭერები", "teleponis-damcherebi"],
-  ["ხელის დამცავები", "khelis-damtsavebi"],
-  ["ჩიხოლები", "chikholebi"],
-  ["სხვა აქსესუარები", "skhva-aksesuarebi"],
+  ["გათბობადი გრიფსები", "gatbobadi-gripsebi", "გათბობადი გრიფსები მოპედისა და სკუტერისთვის: თბილი ხელები ზამთრის მგზავრობისას, რამდენიმე სითბოს რეჟიმით."],
+  ["დამტენები", "damtenebi", "USB და USB-C დამტენები მოპედისთვის: დატენე ტელეფონი და ნავიგაცია გზაში."],
+  ["ხელთათმანები", "kheltatmanebi", "მოტო ხელთათმანები ზაფხულისა და ზამთრისთვის: დაცვა, კომფორტი და კარგი ჩაჭიდება საჭეზე."],
+  ["ტელეფონის დამჭერები", "teleponis-damcherebi", "ტელეფონის დამჭერები და წყალგაუმტარი ჩანთები საჭეზე: ნავიგაცია ყოველთვის თვალწინ."],
+  ["ხელის დამცავები", "khelis-damtsavebi", "ხელის დამცავები და ზამთრის ხელის საფარები: დაცვა ქარისგან, წვიმისგან და სიცივისგან."],
+  ["ჩიხოლები", "chikholebi", "წყალგაუმტარი ჩიხოლები მოპედისთვის: დაიცავი სკუტერი წვიმისგან, მზისგან და მტვრისგან."],
+  ["სხვა აქსესუარები", "skhva-aksesuarebi", "სხვა სასარგებლო აქსესუარები მოპედისა და სკუტერისთვის ყოველდღიური მგზავრობისთვის."],
 ];
 
 // Placeholder art in the brand palette: light gray photo background, black or red shape.
@@ -200,7 +201,7 @@ function seed() {
       updated_at: new Date(now - index * 3600000).toISOString(),
     };
   });
-  const categories = CATEGORIES.map(([name, slug], index) => ({ id: seedId(9, index), name, slug, position: index + 1, description: "" }));
+  const categories = CATEGORIES.map(([name, slug, description], index) => ({ id: seedId(9, index), name, slug, position: index + 1, description }));
 
   // Sample purchase costs around 55% of the price, and a few past orders so the reports have numbers.
   const product_costs = products.map((product) => ({
@@ -693,6 +694,17 @@ function placeOrder(args: Row) {
   });
 }
 
+// Same as place_order, for a signed-in customer (see place_customer_order in the migrations).
+function placeCustomerOrder(args: Row) {
+  if (typeof args.p_user_id !== "string" || !args.p_user_id) throw new DbError("not_signed_in");
+  const result = placeOrder(args);
+  transaction((db) => {
+    const order = db.orders.find((item) => item.id === result.order_id);
+    if (order) order.user_id = String(args.p_user_id);
+  });
+  return result;
+}
+
 function setOrderStatus(args: Row) {
   return transaction((db) => {
     const status = args.p_status as OrderStatus;
@@ -858,6 +870,7 @@ function popularProductIds(args: Row) {
 
 const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   place_order: placeOrder,
+  place_customer_order: placeCustomerOrder,
   set_order_status: setOrderStatus,
   receive_stock: receiveStock,
   adjust_stock: adjustStock,

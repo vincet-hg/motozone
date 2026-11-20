@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ShieldIcon } from "@/components/icons";
+import { InfoPage } from "@/components/info-page";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "კონფიდენციალურობის პოლიტიკა", alternates: { canonical: "/privacy" } };
@@ -8,15 +10,13 @@ const h2 = "mt-6 text-lg font-bold";
 // Draft text written for this store's actual data flows. Have a lawyer review it before launch.
 export default function PrivacyPage() {
   return (
-    <main className="mx-auto max-w-2xl px-3 py-8 sm:px-4">
-      <h1 className="text-2xl font-extrabold">კონფიდენციალურობის პოლიტიკა</h1>
-      <div className="mt-4 space-y-3 leading-7 text-fg/85">
+    <InfoPage title="კონფიდენციალურობის პოლიტიკა" icon={<ShieldIcon className="size-5" />}>
         <p>
-          ეს პოლიტიკა აღწერს, რა მონაცემებს აგროვებს {site.name} ({site.legalName}, ს/კ {site.taxId}) და როგორ იყენებს მათ.
+          ეს პოლიტიკა აღწერს, რა მონაცემებს აგროვებს {site.name}{site.legalName ? ` (${site.legalName}${site.taxId ? `, ს/კ ${site.taxId}` : ""})` : ""} და როგორ იყენებს მათ.
         </p>
 
         <h2 className={h2}>რა მონაცემებს ვაგროვებთ</h2>
-        <p>შეკვეთის გაფორმებისას: სახელს, ტელეფონის ნომერს, ქალაქს, მისამართს და შენიშვნას, თუ მას დაწერ. ანგარიშის შექმნა საჭირო არ არის.</p>
+        <p>შეკვეთის გაფორმებისას: სახელს, ტელეფონის ნომერს, მიწოდების მისამართს (თუ მიტანას აირჩევ) და შენიშვნას, თუ მას დაწერ. ანგარიშის შექმნა საჭირო არ არის.</p>
         <p>თუ სიახლეებს გამოიწერ, ვინახავთ შენს ელფოსტას, მხოლოდ აქციებისა და ახალი პროდუქტების შესახებ წერილებისთვის. გამოწერის გაუქმება ნებისმიერ დროს შეგიძლია: მოგვწერე და ელფოსტას წავშლით.</p>
         <p>კალათა და სურვილების სია ინახება მხოლოდ შენს ბრაუზერში და ჩვენთან არ იგზავნება შეკვეთის გაფორმებამდე.</p>
         <p>უსაფრთხოებისთვის დროებით ვინახავთ IP მისამართის შიფრირებულ (hash) ფორმას, რომ ავტომატური სპამი შევაჩეროთ. ის 1 დღეში იშლება.</p>
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
         <h2 className={h2}>ვის გადაეცემა</h2>
         <p>
           მონაცემები ინახება ჩვენი ტექნიკური პარტნიორების სერვერებზე: Supabase (მონაცემთა ბაზა) და Vercel (საიტის ჰოსტინგი). შეკვეთის
-          შეტყობინება იგზავნება მაღაზიის Telegram-ში. მისამართი და ტელეფონი გადაეცემა კურიერს, რომელიც შეკვეთას მოგიტანს.
+          შეტყობინება იგზავნება მაღაზიის Telegram-ში. მიტანისას მისამართი და ტელეფონი გადაეცემა კურიერს, რომელიც შეკვეთას მოგიტანს.
         </p>
 
         <h2 className={h2}>რამდენ ხანს ვინახავთ</h2>
@@ -42,7 +42,6 @@ export default function PrivacyPage() {
         </p>
 
         <p className="mt-6 text-sm text-muted">ბოლო განახლება: 2026 წლის ნოემბერი.</p>
-      </div>
-    </main>
+    </InfoPage>
   );
 }

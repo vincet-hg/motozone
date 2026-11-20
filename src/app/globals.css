@@ -56,6 +56,50 @@ html {
   transform: translateY(0.08em);
 }
 
+/* Body text of the info pages (see src/components/info-page.tsx). */
+.info-prose {
+  color: rgb(245 245 245 / 0.85);
+  line-height: 1.8;
+}
+
+.info-prose > * + * {
+  margin-top: 1rem;
+}
+
+.info-prose > h2 {
+  margin-top: 2rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+.info-prose > ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.info-prose li + li {
+  margin-top: 0.4rem;
+}
+
+.info-prose a:not([class]) {
+  color: var(--color-neon);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Phone service bar: three promises in turn (the list repeats its first item at the end so the loop is seamless). */
+.promise-ticker {
+  animation: promise-ticker 9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes promise-ticker {
+  0%, 27% { transform: translateY(0); }
+  33%, 60% { transform: translateY(-1.25rem); }
+  66%, 93% { transform: translateY(-2.5rem); }
+  100% { transform: translateY(-3.75rem); }
+}
+
 /* Search fields show focus with their own glowing pill, not the square outline. */
 input[type="search"]:focus-visible {
   outline: none;

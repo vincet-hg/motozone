@@ -17,15 +17,29 @@ export function Newsletter() {
             <MailIcon />
           </span>
           <div>
-            <h2 id="newsletter-title" className="text-xl font-extrabold sm:text-2xl">იყავი საქმის კურსში</h2>
-            <p className="mt-1.5 text-sm leading-6 text-muted">ახალი პროდუქტები, ექსკლუზიური ფასდაკლებები და სპეციალური შეთავაზებები პირდაპირ ელფოსტაზე. გაუქმება ნებისმიერ დროს.</p>
+            <h2 id="newsletter-title" className="text-xl font-extrabold sm:text-2xl">ფასდაკლება არ გამოგრჩეს</h2>
+            <p className="mt-1.5 text-sm leading-6 text-muted">დატოვე ელფოსტა და მოკლე წერილს მიიღებ, როცა:</p>
+            <ul className="mt-2 space-y-1 text-sm text-fg/85">
+              <li className="flex items-center gap-2">
+                <CheckIcon className="size-4 shrink-0 text-neon" />
+                პროდუქტზე ფასდაკლება დაიწყება
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckIcon className="size-4 shrink-0 text-neon" />
+                ახალი პროდუქტი შემოვა
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckIcon className="size-4 shrink-0 text-neon" />
+                ამოწურული პროდუქტი მარაგში დაბრუნდება
+              </li>
+            </ul>
           </div>
         </div>
 
         {state.ok ? (
           <p role="status" className="flex items-center gap-2 rounded-btn border border-accent/40 bg-accent/10 px-4 py-3 font-semibold">
             <CheckIcon className="size-5 text-neon" />
-            გმადლობთ! გამოწერა დადასტურდა.
+            გამოწერილია. ახალ აქციებს და პროდუქტებს ელფოსტაზე გამოგიგზავნით.
           </p>
         ) : (
           <form action={action} className="w-full">
@@ -46,7 +60,7 @@ export function Newsletter() {
                 disabled={pending}
                 className="h-12 shrink-0 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-10px_rgba(227,18,11,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
               >
-                {pending ? "იგზავნება..." : "გამოწერა"}
+                {pending ? "იგზავნება..." : "შემატყობინე"}
               </button>
             </div>
             {state.error && (
@@ -55,7 +69,8 @@ export function Newsletter() {
               </p>
             )}
             <p className="mt-2 text-xs text-muted">
-              გამოწერით ეთანხმები <Link href="/privacy" className="underline hover:text-fg">კონფიდენციალურობის პოლიტიკას</Link>.
+              სპამი არ იქნება. გამოწერის გასაუქმებლად უბრალოდ გვიპასუხე წერილზე.{" "}
+              <Link href="/privacy" className="underline hover:text-fg">კონფიდენციალურობა</Link>
             </p>
           </form>
         )}

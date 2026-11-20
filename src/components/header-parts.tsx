@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
-import { CartIcon, HeartIcon } from "./icons";
+import { CartIcon, HeartIcon, UserIcon } from "./icons";
 import { iconButton } from "./styles";
 
 export function isActive(pathname: string, href: string) {
@@ -80,6 +80,14 @@ export function WishlistLink() {
     <Link href="/wishlist" prefetch={false} aria-label={`სურვილები, ${count}`} className={iconButton}>
       <HeartIcon className="size-6" />
       {count > 0 && <span className={badge}>{count}</span>}
+    </Link>
+  );
+}
+
+export function AccountLink({ className = "" }: { className?: string }) {
+  return (
+    <Link href="/account" prefetch={false} aria-label="ჩემი ანგარიში" className={`${iconButton} ${className}`}>
+      <UserIcon className="size-6" />
     </Link>
   );
 }

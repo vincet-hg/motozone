@@ -61,11 +61,42 @@ Do this once per environment.
      insert into public.admins (user_id)
      select id from auth.users where email = 'you@example.com';
      ```
-4. In **Authentication > Sign In / Providers**, turn off **Allow new users to sign up**.
+4. In **Authentication > Sign In / Providers**, keep **Allow new users to sign up** on: customers create
+   their own accounts. A new account is never an admin; admin access needs a row in `public.admins`
+   and the second sign-in step. Then set up customer sign-in as described in *Customer accounts* below.
 5. In **Authentication > Multi-Factor**, make sure **TOTP (App Authenticator)** is enabled.
 6. Sign in at `/admin/login`. The first time, the site asks you to scan a QR code with an authenticator
    app (Google Authenticator, Microsoft Authenticator, 1Password). After that every sign-in needs the
    password and the 6-digit code. The database itself refuses admin access without the second step.
+
+## Customer accounts
+
+Customers sign in at `/login` and see their orders, saved details and wishlist at `/account`. Only
+signed-in customers can place an order; the cart asks visitors to sign in or create an account first.
+In demo mode accounts are kept in `.demo-data/accounts.json` and the SMS code is always `123456`.
+
+Set up each Supabase project (staging and production) like this:
+
+1. **URLs.** In **Authentication > URL Configuration**, set **Site URL** to the store address
+   (`https://scooterland.ge`) and add `https://scooterland.ge/auth/callback` to **Redirect URLs**. For
+   staging add the Vercel preview pattern too, for example `https://*-your-team.vercel.app/auth/callback`.
+2. **Email and password** works out of the box. Supabase's built-in mailer sends only a few emails an
+   hour and only to your own team, so before real customers sign up, add your own SMTP under
+   **Authentication > Emails > SMTP Settings** (for example Resend, free for 3,000 emails a month).
+   Translate the *Confirm signup* and *Reset password* templates into Georgian there as well.
+3. **Google.** In [Google Cloud Console](https://console.cloud.google.com), create an OAuth client
+   (**APIs & Services > Credentials > Create credentials > OAuth client ID**, type *Web application*)
+   with `https://<project-ref>.supabase.co/auth/v1/callback` as the redirect URI. Paste the client ID and
+   secret into **Authentication > Sign In / Providers > Google** in Supabase. Then set
+   `NEXT_PUBLIC_AUTH_GOOGLE=1` in Vercel. Without it the Google button is hidden.
+4. **Phone and SMS.** Supabase sends codes through an SMS provider you pay per message (Twilio,
+   MessageBird, Vonage or Textlocal). Turn on **Phone** under **Sign In / Providers**, enter the
+   provider's keys and set `NEXT_PUBLIC_AUTH_PHONE=1` in Vercel. Without it the phone tab is hidden. The
+   site allows 3 codes an hour per number and 5 per visitor to limit SMS costs.
+
+The migration `20261120000000_customer_accounts.sql` adds the tables and rules: every customer can read
+only their own orders, profile and wishlist, and orders are still placed only through the database
+function.
 
 ## Environment variables
 
@@ -78,6 +109,7 @@ the staging values and **Production** the production values:
 | `SUPABASE_SECRET_KEY` | staging secret key (`sb_secret_...`) | production secret key |
 | `NEXT_PUBLIC_SITE_URL` | not needed: previews use their own address | `https://your-domain.ge` |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | optional, a test chat | your shop chat |
+| `NEXT_PUBLIC_AUTH_GOOGLE`, `NEXT_PUBLIC_AUTH_PHONE` | `1` once the provider is set up | same |
 
 The secret key bypasses all access rules. It is read only on the server; never give it a
 `NEXT_PUBLIC_` prefix, never paste it in chat, and rotate it in Supabase if it leaks. A production build

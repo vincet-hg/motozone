@@ -24,7 +24,8 @@ const csp = [
   `connect-src 'self' ${supabaseOrigin}${isDev ? " ws:" : ""}`,
   "object-src 'none'",
   "base-uri 'self'",
-  "form-action 'self'",
+  // Google sign-in leaves through Supabase to Google's consent page.
+  `form-action 'self' ${supabaseOrigin} https://accounts.google.com`,
   "frame-ancestors 'none'",
   ...(isHttps ? ["upgrade-insecure-requests"] : []),
 ].join("; ");

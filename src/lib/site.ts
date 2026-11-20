@@ -16,28 +16,50 @@ export const site = {
     vercelAddress(process.env.NEXT_PUBLIC_VERCEL_BRANCH_URL || process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL)
   ).replace(/\/+$/, ""),
   email: "info@scooterland.ge",
-  // Shown on the privacy and terms pages. Fill in your registered details.
-  legalName: "ი/მ ...",
-  taxId: "...",
-  address: "თბილისი, საქართველო",
-  description: "მოტოციკლისა და მოპედის აქსესუარები საქართველოში: გრიფსები, დამტენები, ხელთათმანები და სხვა.",
-  phone: "+995 555 123 456",
-  // Short promises in the bar above the menu and in the homepage banners. Keep them true:
-  // write "უფასო მიწოდება" only if delivery really is free, and real working hours below.
-  deliveryShort: "მიწოდება მთელ საქართველოში",
-  paymentShort: "გადახდა პროდუქტის მიღებისას",
+  // Shown on the privacy and terms pages and in the footer. Fill in your registered details;
+  // while legalName is empty the pages name the shop instead.
+  legalName: "",
+  taxId: "",
+  description: "მოპედისა და სკუტერის აქსესუარები თბილისში: გათბობადი გრიფსები, დამტენები, ხელთათმანები, ტელეფონის დამჭერები და სხვა. მიწოდება თბილისში, გადახდა მიღებისას.",
+  phone: "+995 599 03 33 72",
+  phoneHref: "tel:+995599033372",
+  // When orders are taken by phone and couriers run.
+  hours: "ყოველდღე 10:00–22:00",
+  // There is no shop yet; buyers can pick an order up here.
+  pickup: {
+    address: "დავით აღმაშენებლის ხეივანი 190",
+    // Shown under the address so a first-time visitor finds the entrance.
+    landmark: "„არქის“ კორპუსები, პორშე ცენტრის მოპირდაპირედ",
+    hours: "11:00–17:00",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=David+Aghmashenebeli+Alley+190%2C+Tbilisi",
+  },
+  address: "თბილისი, დავით აღმაშენებლის ხეივანი 190",
+  // Courier delivery anywhere in Tbilisi, in lari. Pickup is free.
+  deliveryFee: 7,
+  // Days a buyer has to return an order bought online (the consumer protection law gives 14).
+  returnDays: 14,
+  // Short promises in the bar above the menu and in the homepage banners. Keep them true.
+  deliveryShort: "მიწოდება თბილისში",
+  paymentShort: "გადახდა მიღებისას",
+  pickupShort: "გატანა დიღომიდან",
   deliveryBanner: {
-    title: "მიწოდება მთელ საქართველოში",
-    text: "შეკვეთას დაგირეკავთ დასადასტურებლად და კურიერი პირდაპირ მისამართზე მოგიტანს.",
+    title: "მიწოდება თბილისის მასშტაბით",
+    text: "კურიერი შეკვეთას პირდაპირ მისამართზე მოგიტანს 7 ₾-ად. გადაიხდი მიღებისას, გატანა დიღომიდან უფასოა.",
   },
   supportBanner: {
-    title: "გჭირდება დახმარება?",
-    text: "გვკითხე, რომელი აქსესუარი მოერგება შენს მოპედს. დაგვირეკე ან მოგვწერე სოციალურ ქსელებში.",
+    title: "გჭირდება რჩევა?",
+    text: "გვითხარი შენი მოპედის მოდელი და გეტყვით, რომელი აქსესუარი მოერგება. ვპასუხობთ ყოველდღე, 10:00-დან 22:00-მდე.",
   },
-  phoneHref: "tel:+995555123456",
+  // Ways to sign in besides email and password. Each needs setup in Supabase first (see README):
+  // NEXT_PUBLIC_AUTH_GOOGLE=1 after the Google provider is on, NEXT_PUBLIC_AUTH_PHONE=1 after an SMS provider is on.
+  // Local demo mode always offers the phone code (the code is 123456).
+  auth: {
+    google: process.env.NEXT_PUBLIC_AUTH_GOOGLE === "1",
+    phone: process.env.NEXT_PUBLIC_AUTH_PHONE === "1" || (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL),
+  },
   // Leave a link empty ("") to hide its icon.
-  facebook: "https://www.facebook.com/",
-  instagram: "https://www.instagram.com/",
+  facebook: "https://www.facebook.com/scooterland.ge",
+  instagram: "https://www.instagram.com/scooterland.ge",
   tiktok: "",
   youtube: "",
 };

@@ -92,3 +92,36 @@ select public.newsletter_subscribe('a@b.ge');
 select pg_temp.check(pg_temp.fails($$select public.newsletter_subscribe('not-an-email')$$), 'invalid email refused');
 reset role;
 select pg_temp.check((select count(*) from public.newsletter_subscribers) = 1, 'one subscriber, stored lowercase');
+
+-- ---------------------------------------------------------------- customer accounts
+-- user@test places an order through the store's server and sees only their own orders.
+set role service_role;
+select pg_temp.check(pg_temp.fails($$select public.place_customer_order(null, 'Nika', '555123456', 'Tbilisi', 'Street 1', '', '[]')$$), 'orders need a signed-in customer');
+select (public.place_customer_order('22222222-2222-2222-2222-222222222222', 'Nika', '555123457', 'Tbilisi', 'Street 2', '',
+  jsonb_build_array(jsonb_build_object('id', :'product_id', 'qty', 1))) ->> 'order_id') as own_order \gset
+reset role;
+
+set role authenticated;
+set request.jwt.claim.sub = '22222222-2222-2222-2222-222222222222';
+set request.jwt.claims = '{"aal":"aal1"}';
+select pg_temp.check((select count(*) from public.orders) = 1, 'a customer sees only their own order');
+select pg_temp.check((select id from public.orders) = :'own_order'::bigint, 'it is the order they placed');
+select pg_temp.check((select count(*) from public.order_items) = 1, 'and only its lines');
+select pg_temp.check(pg_temp.fails($$update public.orders set status = 'delivered'$$) or (select status from public.orders) = 'new', 'customers cannot change their order');
+select pg_temp.check(pg_temp.fails($$select public.place_customer_order('22222222-2222-2222-2222-222222222222', 'N', '555123456', 'T', 'S', '', '[]')$$), 'browsers cannot place orders directly');
+
+insert into public.profiles (user_id, name, phone, address) values ('22222222-2222-2222-2222-222222222222', 'Nika', '555123457', 'Street 2');
+update public.profiles set address = 'Street 3';
+select pg_temp.check((select address from public.profiles) = 'Street 3', 'customers update their own details');
+select pg_temp.check(pg_temp.fails($$insert into public.profiles (user_id) values ('11111111-1111-1111-1111-111111111111')$$), 'customers cannot create details for someone else');
+
+insert into public.wishlist_items (user_id, product_id) values ('22222222-2222-2222-2222-222222222222', :'product_id');
+select pg_temp.check((select count(*) from public.wishlist_items) = 1, 'wishlist is saved');
+select pg_temp.check(pg_temp.fails($$insert into public.wishlist_items (user_id, product_id) values ('11111111-1111-1111-1111-111111111111', (select id from public.products limit 1))$$), 'customers cannot fill someone else''s wishlist');
+select pg_temp.check((select count(*) from public.admins) <= 1 and not public.is_admin(), 'a customer is not an admin');
+reset role;
+
+set role anon;
+select pg_temp.check(pg_temp.fails($$select * from public.profiles$$), 'visitors cannot read details');
+select pg_temp.check(pg_temp.fails($$select * from public.wishlist_items$$), 'visitors cannot read wishlists');
+reset role;

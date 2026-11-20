@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
-import { ChevronIcon } from "@/components/icons";
+import { HeadingIcon } from "@/components/heading-icon";
+import { ChevronIcon, HeadsetIcon } from "@/components/icons";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "ხშირად დასმული კითხვები",
-  description: "შეკვეთა, გადახდა, მიწოდება და დაბრუნება Scooter Land-ში.",
+  description: "შეკვეთა, გადახდა მიღებისას, მიწოდება თბილისში, გატანა და დაბრუნება Scooter Land-ში.",
   alternates: { canonical: "/faq" },
 };
 
@@ -16,53 +17,71 @@ const link = "text-neon underline hover:text-neon";
 const QUESTIONS: { question: string; text: string; answer: React.ReactNode }[] = [
   {
     question: "როგორ გავაფორმო შეკვეთა?",
-    text: "დაამატე პროდუქტები კალათაში, შეავსე სახელი, ტელეფონი და მისამართი და დააჭირე „შეკვეთის გაფორმებას“. დასადასტურებლად დაგირეკავთ.",
+    text: "დაამატე პროდუქტები კალათაში, მიუთითე სახელი და ტელეფონი, აირჩიე მიტანა ან გატანა და დააჭირე „შეკვეთის გაფორმებას“. დასადასტურებლად დაგირეკავთ. ანგარიშის შექმნა საჭირო არ არის.",
     answer: (
       <>
-        დაამატე პროდუქტები კალათაში, შეავსე სახელი, ტელეფონი და მისამართი და დააჭირე „შეკვეთის გაფორმებას“. დასადასტურებლად დაგირეკავთ. ანგარიშის შექმნა საჭირო
-        არ არის.
+        დაამატე პროდუქტები კალათაში, მიუთითე სახელი და ტელეფონი, აირჩიე მიტანა ან გატანა და დააჭირე „შეკვეთის გაფორმებას“. დასადასტურებლად
+        დაგირეკავთ. ანგარიშის შექმნა საჭირო არ არის. შეკვეთა ტელეფონითაც შეგიძლია: <a href={site.phoneHref} className={link}>{site.phone}</a>.
       </>
     ),
   },
   {
     question: "როგორ გადავიხადო?",
-    text: "გადახდა ხდება პროდუქტის მიღებისას.",
-    answer: <>გადახდა ხდება პროდუქტის მიღებისას. წინასწარ არაფერს იხდი.</>,
+    text: "გადახდა ხდება ნივთის მიღებისას, კურიერთან ან გატანისას. წინასწარ არაფერს იხდი.",
+    answer: <>გადახდა ხდება ნივთის მიღებისას, კურიერთან ან გატანისას. წინასწარ არაფერს იხდი.</>,
   },
   {
-    question: "რამდენ ხანში მოვა შეკვეთა და რა ღირს მიწოდება?",
-    text: "ვადები და ფასები მიწოდების გვერდზეა.",
+    question: "სად აწვდით და რა ღირს მიწოდება?",
+    text: `მიწოდება გვაქვს თბილისის მასშტაბით, ${site.deliveryFee} ₾. დროს შეკვეთის დადასტურებისას შევთანხმდებით. გატანა დიღომიდან უფასოა.`,
     answer: (
       <>
-        ვადები და ფასები იხილე <Link href="/delivery" className={link}>მიწოდების გვერდზე</Link>. ზუსტ დროს შეკვეთის დადასტურებისას გეტყვით.
+        მიწოდება გვაქვს თბილისის მასშტაბით, {site.deliveryFee} ₾. დროს შეკვეთის დადასტურებისას შევთანხმდებით. გატანა დიღომიდან უფასოა. დეტალები:{" "}
+        <Link href="/delivery" className={link}>მიწოდება და გატანა</Link>.
+      </>
+    ),
+  },
+  {
+    question: "შემიძლია თავად გავიტანო?",
+    text: `კი. გატანა შეიძლება მისამართიდან ${site.pickup.address} (${site.pickup.landmark}), ყოველდღე ${site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე დაგირეკავთ.`,
+    answer: (
+      <>
+        კი. გატანა შეიძლება მისამართიდან {site.pickup.address} ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე
+        დაგირეკავთ. <a href={site.pickup.mapUrl} target="_blank" rel="noopener" className={link}>რუკაზე ნახვა ↗</a>
       </>
     ),
   },
   {
     question: "მოერგება თუ არა აქსესუარი ჩემს მოპედს?",
-    text: "თავსებადობა თითოეული პროდუქტის გვერდზეა მითითებული. თუ ეჭვი გაქვს, დაგვირეკე და მოდელის მიხედვით გეტყვით.",
+    text: "დაგვირეკე, გვითხარი მოპედის მოდელი და გეტყვით, რომელი აქსესუარი მოერგება.",
     answer: (
       <>
-        თავსებადობა თითოეული პროდუქტის გვერდზეა მითითებული. თუ ეჭვი გაქვს, დაგვირეკე{" "}
-        <a href={site.phoneHref} className={link}>{site.phone}</a> და მოდელის მიხედვით გეტყვით.
+        დაგვირეკე <a href={site.phoneHref} className={link}>{site.phone}</a>, გვითხარი მოპედის მოდელი და გეტყვით, რომელი აქსესუარი
+        მოერგება.
       </>
     ),
   },
   {
-    question: "შემიძლია პროდუქტის დაბრუნება?",
-    text: "დაბრუნების პირობები დაბრუნების გვერდზეა.",
+    question: "შემიძლია ნივთის დაბრუნება?",
+    text: `კი, მიღებიდან ${site.returnDays} დღის განმავლობაში, თუ ნივთი გამოუყენებელია. დაზიანებულ ან არასწორ ნივთს უფასოდ გამოგიცვლით.`,
     answer: (
       <>
-        პირობები იხილე <Link href="/returns" className={link}>დაბრუნების გვერდზე</Link>.
+        კი, მიღებიდან {site.returnDays} დღის განმავლობაში, თუ ნივთი გამოუყენებელია. დაზიანებულ ან არასწორ ნივთს უფასოდ გამოგიცვლით.
+        დეტალები: <Link href="/returns" className={link}>დაბრუნება და გაცვლა</Link>.
       </>
     ),
+  },
+  {
+    question: "პროდუქტებს გარანტია აქვს?",
+    text: "ამ ეტაპზე დამატებით გარანტიას არ ვცემთ, მაგრამ თუ ნივთი დაზიანებული მოვიდა ან არ მუშაობს, გამოგიცვლით ან თანხას დაგიბრუნებთ.",
+    answer: <>ამ ეტაპზე დამატებით გარანტიას არ ვცემთ, მაგრამ თუ ნივთი დაზიანებული მოვიდა ან არ მუშაობს, გამოგიცვლით ან თანხას დაგიბრუნებთ.</>,
   },
   {
     question: "როგორ გავიგო ჩემი შეკვეთის სტატუსი?",
-    text: "დაგვირეკე ან მოგვწერე და შეკვეთის ნომრით გეტყვით, სად არის.",
+    text: `დაგვირეკე ${site.hours.toLowerCase()} და შეკვეთის ნომრით გეტყვით, სად არის.`,
     answer: (
       <>
-        დაგვირეკე <a href={site.phoneHref} className={link}>{site.phone}</a> ან მოგვწერე და შეკვეთის ნომრით გეტყვით, სად არის.
+        დაგვირეკე <a href={site.phoneHref} className={link}>{site.phone}</a> ({site.hours.toLowerCase()}) და შეკვეთის ნომრით გეტყვით, სად
+        არის.
       </>
     ),
   },
@@ -70,7 +89,7 @@ const QUESTIONS: { question: string; text: string; answer: React.ReactNode }[] =
 
 export default function FaqPage() {
   return (
-    <main className="mx-auto max-w-3xl px-3 py-10 sm:px-4">
+    <main className="mx-auto max-w-3xl px-4 py-10">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -82,8 +101,15 @@ export default function FaqPage() {
           })),
         }}
       />
-      <h1 className="text-3xl font-black tracking-tight">ხშირად დასმული კითხვები</h1>
-      <p className="mt-2 text-muted">ვერ იპოვე პასუხი? დაგვიკავშირდი, სიამოვნებით დაგეხმარებით.</p>
+      <h1 className="flex items-center gap-3 text-2xl font-extrabold sm:text-[28px]">
+        <HeadingIcon>
+          <HeadsetIcon className="size-5" />
+        </HeadingIcon>
+        ხშირად დასმული კითხვები
+      </h1>
+      <p className="mt-4 text-[17px] leading-8 text-fg/85">
+        ვერ იპოვე პასუხი? დაგვირეკე <a href={site.phoneHref} className={link}>{site.phone}</a>, {site.hours.toLowerCase()}.
+      </p>
       <div className="mt-8 space-y-3">
         {QUESTIONS.map((item) => (
           <details key={item.question} className="group rounded-card border border-line bg-card transition-colors open:border-accent/50">

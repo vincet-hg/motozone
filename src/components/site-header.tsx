@@ -2,9 +2,9 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
+import { AccountLink, ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
 import { CategoryIcon, SaleIcon } from "./category-icons";
-import { ArrowIcon, CashIcon, ChevronIcon, MenuIcon, PhoneIcon, SearchIcon, TruckIcon } from "./icons";
+import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon, UserIcon } from "./icons";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
 import { iconButton } from "./styles";
@@ -19,15 +19,26 @@ const dropdownItem =
   "group/item flex items-center justify-between gap-2 rounded-xl border border-transparent px-2.5 py-2 text-sm text-fg/80 transition-all duration-200 hover:border-line hover:bg-card-hover hover:text-white aria-[current=page]:border-neon/35 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white";
 const mobileLink = "flex items-center justify-between rounded-xl px-3 py-2.5 text-[15px] font-medium text-fg/90 transition-colors duration-200 hover:bg-card hover:text-white";
 
+// The logo leads home, so the desktop menu has no "Home" link.
 const LINKS = [
-  { href: "/search", label: "პროდუქტები" },
+  { href: "/search", label: "ყველა პროდუქტი" },
   { href: "/sale", label: "აქციები" },
-  { href: "/about", label: "შესახებ" },
   { href: "/contact", label: "კონტაქტი" },
 ];
 
-// The phone menu also lists the FAQ, which the desktop menu keeps in the service bar and footer.
-const MOBILE_LINKS = [...LINKS, { href: "/faq", label: "ხშირი კითხვები" }];
+// The phone menu has room for the rest.
+const MOBILE_LINKS = [
+  ...LINKS,
+  { href: "/delivery", label: "მიწოდება" },
+  { href: "/faq", label: "ხშირი კითხვები" },
+];
+
+// The three promises of the service bar. On phones they take turns in one line.
+const PROMISES = [
+  { Icon: TruckIcon, text: site.deliveryShort },
+  { Icon: CashIcon, text: site.paymentShort },
+  { Icon: PinIcon, text: site.pickupShort },
+];
 
 function SearchForm({ className = "", autoFocus = false }: { className?: string; autoFocus?: boolean }) {
   return (
@@ -67,20 +78,34 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
     <>
       {/* Service bar. Keep these promises true for your shop (see src/lib/site.ts). */}
       <div className="relative border-b border-line bg-[linear-gradient(90deg,#0b0d10_0%,#2a0d0b_50%,#0b0d10_100%)] text-[13px] text-fg/80">
-        <div className="mx-auto flex h-9 max-w-7xl items-center justify-center gap-4 px-4 whitespace-nowrap sm:justify-start lg:gap-5">
-          <span className="flex items-center gap-2">
-            <TruckIcon className="size-4 text-neon" />
-            {site.deliveryShort}
-          </span>
-          <span className="hidden items-center gap-4 sm:flex lg:gap-5">
-            <Dot />
-            <span className="flex items-center gap-2">
-              <CashIcon className="size-4 text-neon" />
-              {site.paymentShort}
-            </span>
-          </span>
+        <div className="mx-auto flex h-9 max-w-7xl items-center gap-4 px-4 whitespace-nowrap lg:gap-5">
+          {/* Phones: one promise at a time, sliding up every three seconds. */}
+          <div className="relative h-5 flex-1 overflow-hidden sm:hidden">
+            <ul className="promise-ticker">
+              {[...PROMISES, PROMISES[0]].map(({ Icon, text }, index) => (
+                <li key={index} aria-hidden={index === PROMISES.length || undefined} className="flex h-5 items-center justify-center gap-2">
+                  <Icon className="size-4 text-neon" />
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <ul className="hidden items-center gap-4 sm:flex lg:gap-5">
+            {PROMISES.map(({ Icon, text }, index) => (
+              <li key={text} className={`flex items-center gap-4 lg:gap-5 ${index === 2 ? "hidden lg:flex" : ""}`}>
+                {index > 0 && <Dot />}
+                <span className="flex items-center gap-2">
+                  <Icon className="size-4 text-neon" />
+                  {text}
+                </span>
+              </li>
+            ))}
+          </ul>
           <div className="ml-auto hidden items-center gap-4 md:flex lg:gap-5">
-            <Link href="/faq" prefetch={false} className="hidden transition-colors hover:text-neon xl:block">ხშირი კითხვები</Link>
+            <span className="hidden items-center gap-2 xl:flex">
+              <ClockIcon className="size-4 text-neon" />
+              {site.hours}
+            </span>
             <span className="hidden xl:contents"><Dot /></span>
             <a href={site.phoneHref} className="flex items-center gap-2 font-semibold text-fg transition-colors hover:text-neon">
               <PhoneIcon className="size-4 text-neon" />
@@ -126,6 +151,13 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                   </NavLink>
                 ))}
               </div>
+              <NavLink href="/account" className={`${mobileLink} mt-1 border-t border-line pt-3`} activeClassName="bg-card text-neon">
+                <span className="flex items-center gap-2">
+                  <UserIcon className="optical-center size-5 text-neon" />
+                  ჩემი ანგარიში
+                </span>
+                <ChevronIcon className="size-4 -rotate-90 text-muted" />
+              </NavLink>
               <a href={site.phoneHref} className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover py-3 font-semibold text-white">
                 <PhoneIcon className="size-5" />
                 {site.phone}
@@ -138,7 +170,6 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
-            <NavLink href="/" className={navItem} activeClassName={navActive}>მთავარი</NavLink>
             <div className="group relative flex">
               <ActiveButton prefix="/category/" className={`${navItem} cursor-pointer`} activeClassName={navActive}>
                 კატეგორიები
@@ -195,7 +226,16 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               </Disclosure>
             </HiddenOnHome>
             <WishlistLink />
+            <AccountLink className="hidden min-[390px]:flex" />
             <CartLink />
+            <a
+              href={site.phoneHref}
+              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px xl:flex"
+            >
+              <PhoneIcon className="size-4" />
+              <span className="hidden min-[1360px]:inline">{site.phone}</span>
+              <span className="min-[1360px]:hidden">დარეკვა</span>
+            </a>
           </div>
         </div>
       </header>

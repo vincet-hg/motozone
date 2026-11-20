@@ -2,10 +2,12 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isDemo, isDemoAdmin } from "@/lib/demo";
 
-// Runs on /admin only, so the storefront never pays for it.
+// Runs on /admin and the customer account pages only, so the rest of the storefront never pays for it.
+// It keeps the session cookie fresh (pages cannot write cookies) and guards /admin.
 export async function proxy(request: NextRequest) {
+  const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
   if (isDemo) {
-    return isDemoAdmin(request.cookies) || request.nextUrl.pathname === "/admin/login"
+    return !isAdminPath || isDemoAdmin(request.cookies) || request.nextUrl.pathname === "/admin/login"
       ? NextResponse.next({ request })
       : NextResponse.redirect(new URL("/admin/login", request.url));
   }
@@ -27,10 +29,10 @@ export async function proxy(request: NextRequest) {
   // it expires, so most requests need no round trip to the Auth server.
   const { data } = await supabase.auth.getClaims();
 
-  if (!data?.claims?.sub && request.nextUrl.pathname !== "/admin/login") {
+  if (isAdminPath && !data?.claims?.sub && request.nextUrl.pathname !== "/admin/login") {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
   return response;
 }
 
-export const config = { matcher: ["/admin", "/admin/:path*"] };
+export const config = { matcher: ["/admin", "/admin/:path*", "/account", "/account/:path*", "/login", "/cart"] };
