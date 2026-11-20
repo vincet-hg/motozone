@@ -15,12 +15,12 @@ export function LineChart({ points, format }: { points: { label: string; value: 
     <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="შემოსავალი თვეების მიხედვით">
       <defs>
         <linearGradient id="chart-line" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#e11d48" />
-          <stop offset="1" stopColor="#fb7185" />
+          <stop offset="0" stopColor="#e3120b" />
+          <stop offset="1" stopColor="#ff5148" />
         </linearGradient>
         <linearGradient id="chart-area" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#f43f5e" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#f43f5e" stopOpacity="0" />
+          <stop offset="0" stopColor="#ff2d20" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#ff2d20" stopOpacity="0" />
         </linearGradient>
         <filter id="chart-glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="4" result="blur" />
@@ -42,8 +42,8 @@ export function LineChart({ points, format }: { points: { label: string; value: 
       <path d={line} fill="none" stroke="url(#chart-line)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" filter="url(#chart-glow)" />
       {points.map((p, i) => (
         <g key={p.label}>
-          <circle cx={x(i)} cy={y(p.value)} r="9" fill="#f43f5e" opacity="0.2" />
-          <circle cx={x(i)} cy={y(p.value)} r="4.5" fill="#0b0d10" stroke="#fb7185" strokeWidth="2.5">
+          <circle cx={x(i)} cy={y(p.value)} r="9" fill="#ff2d20" opacity="0.2" />
+          <circle cx={x(i)} cy={y(p.value)} r="4.5" fill="#0b0d10" stroke="#ff5148" strokeWidth="2.5">
             <title>{`${p.label}: ${format(p.value)}`}</title>
           </circle>
           <text x={x(i)} y={H - 8} textAnchor="middle" fontSize="11" fill="#71717a">

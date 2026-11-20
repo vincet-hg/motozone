@@ -43,7 +43,7 @@ export function Splash() {
       data-ready={ready || undefined}
       className="splash fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-bg"
     >
-      <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(225,29,72,0.22),transparent_55%)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(227,18,11,0.22),transparent_55%)]" />
       <div aria-hidden="true" className="starfield absolute inset-0 opacity-60" />
 
       <div className="relative flex flex-col items-center">
@@ -53,8 +53,8 @@ export function Splash() {
           <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-[4%] -rotate-90">
             <defs>
               <linearGradient id="splash-g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stopColor="#e11d48" />
-                <stop offset="1" stopColor="#fb7185" />
+                <stop offset="0" stopColor="#e3120b" />
+                <stop offset="1" stopColor="#ff5148" />
               </linearGradient>
             </defs>
             <circle cx="50" cy="50" r="41" fill="none" stroke="url(#splash-g)" strokeWidth="1.6" strokeLinecap="round" strokeDasharray="258" className="splash-sweep" />
@@ -63,7 +63,7 @@ export function Splash() {
         </div>
 
         <div aria-hidden="true" className="mt-4 h-1 w-44 overflow-hidden rounded-full bg-white/10">
-          <div className="splash-bar h-full w-2/5 rounded-full bg-gradient-to-r from-accent via-neon to-accent shadow-[0_0_12px_#fb7185]" />
+          <div className="splash-bar h-full w-2/5 rounded-full bg-gradient-to-r from-accent via-neon to-accent shadow-[0_0_12px_#ff5148]" />
         </div>
         <p className="mt-4 text-[11px] font-semibold tracking-[0.35em] text-muted uppercase">Everything for your ride</p>
       </div>

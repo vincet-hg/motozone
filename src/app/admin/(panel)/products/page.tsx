@@ -44,7 +44,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
         >
           იწურება ({lowCount})
         </Link>
-        <Link href="/admin/products/new" className="ml-auto flex h-9 items-center rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(225,29,72,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(251,113,133,0.55)] px-4 text-sm font-semibold text-white">
+        <Link href="/admin/products/new" className="ml-auto flex h-9 items-center rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(227,18,11,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(255,81,72,0.55)] px-4 text-sm font-semibold text-white">
           პროდუქტის დამატება
         </Link>
       </div>

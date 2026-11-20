@@ -156,7 +156,7 @@ export function CartView() {
             {state.error}
           </p>
         )}
-        <button type="submit" disabled={pending || unavailable} className="h-13 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(225,29,72,0.7)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-50">
+        <button type="submit" disabled={pending || unavailable} className="h-13 rounded-btn bg-accent font-bold text-white shadow-[0_8px_30px_-8px_rgba(227,18,11,0.7)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-50">
           {pending ? "იგზავნება..." : "შეკვეთის გაფორმება"}
         </button>
         <p className="text-xs leading-5 text-muted">

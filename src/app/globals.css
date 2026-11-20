@@ -9,9 +9,9 @@
   --color-section: #111318;
   --color-card: #171a20;
   --color-card-hover: #1d2129;
-  --color-accent: #e11d48;
-  --color-accent-hover: #f43f5e;
-  --color-neon: #fb7185;
+  --color-accent: #e3120b;
+  --color-accent-hover: #ff2d20;
+  --color-neon: #ff5148;
   --color-fg: #f5f5f5;
   --color-muted: #a1a1aa;
   --color-line: rgb(255 255 255 / 0.08);
@@ -22,8 +22,8 @@
   --color-a-panel: #111318;
   --color-a-card: #171a20;
   --color-a-hover: #262a33;
-  --color-a-purple: #e11d48;
-  --color-a-violet: #fb7185;
+  --color-a-purple: #e3120b;
+  --color-a-violet: #ff5148;
   --color-a-blue: #3b82f6;
   --color-a-green: #1ab269;
   --color-a-red: #f04452;
@@ -153,8 +153,8 @@ summary::-webkit-details-marker {
 }
 
 @keyframes splash-pulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 18px rgb(225 29 72 / 0.45)); }
-  50% { transform: scale(1.04); filter: drop-shadow(0 0 34px rgb(251 113 133 / 0.75)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 18px rgb(227 18 11 / 0.45)); }
+  50% { transform: scale(1.04); filter: drop-shadow(0 0 34px rgb(255 81 72 / 0.75)); }
 }
 
 @keyframes splash-sweep {
@@ -180,9 +180,9 @@ summary::-webkit-details-marker {
 .starfield {
   background-image:
     radial-gradient(1px 1px at 20px 30px, rgb(245 245 245 / 0.7), transparent),
-    radial-gradient(1px 1px at 120px 80px, rgb(251 113 133 / 0.8), transparent),
+    radial-gradient(1px 1px at 120px 80px, rgb(255 81 72 / 0.8), transparent),
     radial-gradient(1.5px 1.5px at 260px 160px, rgb(245 245 245 / 0.5), transparent),
-    radial-gradient(1px 1px at 340px 40px, rgb(251 113 133 / 0.6), transparent),
+    radial-gradient(1px 1px at 340px 40px, rgb(255 81 72 / 0.6), transparent),
     radial-gradient(1px 1px at 60px 250px, rgb(245 245 245 / 0.4), transparent);
   background-size: 400px 400px, 300px 300px;
   animation: stars 120s linear infinite;
@@ -225,7 +225,7 @@ summary::-webkit-details-marker {
 
 .admin :is(input, select, textarea):focus {
   border-color: var(--color-a-violet);
-  box-shadow: 0 0 0 3px rgb(225 29 72 / 0.25);
+  box-shadow: 0 0 0 3px rgb(227 18 11 / 0.25);
   outline: none;
 }
 
@@ -254,13 +254,13 @@ summary::-webkit-details-marker {
 
 .admin a.underline:not([class*="ff6b77"]),
 .admin button.underline:not([class*="ff6b77"]) {
-  color: #fda4af;
-  text-decoration-color: rgb(251 113 133 / 0.4);
+  color: #ffaaa3;
+  text-decoration-color: rgb(255 81 72 / 0.4);
   text-underline-offset: 3px;
   transition: color 0.15s;
 }
 
 .admin a.underline:not([class*="ff6b77"]):hover,
 .admin button.underline:not([class*="ff6b77"]):hover {
-  color: #ffe4e6;
+  color: #ffe4e1;
 }

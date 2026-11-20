@@ -92,7 +92,7 @@ export default async function PromotionsPage({ searchParams }: { searchParams: P
       <form action={savePromotion} className="mt-4 max-w-3xl space-y-3 rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <h2 className="font-semibold text-a-text">ახალი სლაიდი</h2>
         <PromotionFields products={products} />
-        <button className="h-9 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(225,29,72,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(251,113,133,0.55)] px-4 text-sm font-semibold text-white">დამატება</button>
+        <button className="h-9 rounded-xl bg-gradient-to-r from-a-purple to-a-violet shadow-[0_8px_24px_-10px_rgba(227,18,11,0.9)] transition-all duration-200 hover:-translate-y-px hover:shadow-[0_0_24px_-4px_rgba(255,81,72,0.55)] px-4 text-sm font-semibold text-white">დამატება</button>
       </form>
 
       <div className="mt-6 max-w-3xl space-y-3">
