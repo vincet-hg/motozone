@@ -398,3 +398,8 @@ export async function deletePromotion(form: FormData) {
   redirect(promotionsPage({ saved: "სლაიდი წაიშალა." }));
 }
 
+export async function deleteSubscriber(form: FormData) {
+  const supabase = await requireAdmin();
+  await supabase.from("newsletter_subscribers").delete().eq("id", Number(text(form, "id")));
+  redirect("/admin/subscribers");
+}

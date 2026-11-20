@@ -11,6 +11,7 @@ export const LINKS = [
   { href: "/admin/categories", label: "კატეგორიები", icon: Icons.categories },
   { href: "/admin/promotions", label: "სლაიდერი", icon: Icons.slider },
   { href: "/admin/reports", label: "ანგარიშები", icon: Icons.reports },
+  { href: "/admin/subscribers", label: "გამომწერები", icon: Icons.subscribers },
   { href: "/admin/audit", label: "ისტორია", icon: Icons.audit },
 ];
 

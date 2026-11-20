@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CategoryShowcase } from "@/components/category-showcase";
 import { JsonLd } from "@/components/json-ld";
+import { Newsletter } from "@/components/newsletter";
 import type { CardBadge } from "@/components/product-card";
 import { ProductGrid } from "@/components/product-grid";
 import { ProductRow } from "@/components/product-row";
@@ -100,6 +101,8 @@ export default async function HomePage() {
         <Link href="/search" prefetch={false} className={moreButton}>
           ყველა პროდუქტის ნახვა
         </Link>
+
+        <Newsletter />
       </main>
     </>
   );
