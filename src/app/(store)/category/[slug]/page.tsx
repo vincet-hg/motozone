@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = (await getCategories()).find((item) => item.slug === slug);
   if (!category) return {};
-  const description = clip(category.description || `${category.name}: ფასები, მარაგი და მიწოდება მთელ საქართველოში. ${site.name}.`);
+  const description = clip(category.description || `${category.name}: ფასები, მარაგი და მიწოდება თბილისში, გადახდა მიღებისას. ${site.name}.`);
   return {
     title: category.name,
     description,

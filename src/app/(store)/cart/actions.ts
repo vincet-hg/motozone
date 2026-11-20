@@ -5,6 +5,7 @@ import { after } from "next/server";
 import { CATALOG_TAG, getProductsByIds } from "@/lib/catalog";
 import { orderMessage, sendTelegram, type PlacedOrder } from "@/lib/notify";
 import { allow, clientIp } from "@/lib/request-guard";
+import { site } from "@/lib/site";
 import { service } from "@/lib/supabase-service";
 import type { ProductCard } from "@/lib/types";
 
@@ -33,11 +34,14 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
     return { error: "ძალიან ბევრი მცდელობაა. სცადე მოგვიანებით ან დაგვირეკე." };
   }
 
+  // Delivery runs in Tbilisi only. A pickup order carries the pickup point as its address,
+  // so the admin and the Telegram message show it plainly.
+  const pickup = form.get("method") === "pickup";
   const customer = {
     name: String(form.get("name") ?? "").slice(0, 200),
     phone: String(form.get("phone") ?? "").slice(0, 40),
-    city: String(form.get("city") ?? "").slice(0, 120),
-    address: String(form.get("address") ?? "").slice(0, 600),
+    city: "თბილისი",
+    address: pickup ? `გატანა: ${site.pickup.address}` : String(form.get("address") ?? "").slice(0, 600),
     note: String(form.get("note") ?? "").slice(0, 1000),
   };
 
@@ -56,7 +60,7 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
       case "invalid_phone":
         return { error: "შეიყვანე სწორი ტელეფონის ნომერი, მაგალითად 555123456." };
       case "invalid_customer":
-        return { error: "შეავსე სახელი, ქალაქი და მისამართი." };
+        return { error: "შეავსე სახელი და მისამართი." };
       case "out_of_stock":
         return { error: `მარაგში საკმარისი რაოდენობა აღარ არის: ${error.details}. შეცვალე რაოდენობა.` };
       case "product_unavailable":

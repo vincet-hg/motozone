@@ -18,7 +18,7 @@ export function Newsletter() {
           </span>
           <div>
             <h2 id="newsletter-title" className="text-xl font-extrabold sm:text-2xl">იყავი საქმის კურსში</h2>
-            <p className="mt-1.5 text-sm leading-6 text-muted">ახალი პროდუქტები, ექსკლუზიური ფასდაკლებები და სპეციალური შეთავაზებები პირდაპირ ელფოსტაზე. გაუქმება ნებისმიერ დროს.</p>
+            <p className="mt-1.5 text-sm leading-6 text-muted">ახალი პროდუქტები და აქციები პირველმა გაიგე. ვწერთ იშვიათად და მხოლოდ საქმეზე, გაუქმება ნებისმიერ დროს.</p>
           </div>
         </div>
 

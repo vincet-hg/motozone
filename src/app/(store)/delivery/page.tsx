@@ -1,17 +1,55 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { CashIcon, PinIcon, TruckIcon } from "@/components/icons";
+import { InfoCard, InfoPage } from "@/components/info-page";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "მიწოდება", alternates: { canonical: "/delivery" } };
+export const metadata: Metadata = {
+  title: "მიწოდება და გატანა",
+  description: `მიწოდება თბილისის მასშტაბით ან გატანა დიღომიდან (${site.pickup.address}). გადახდა მიღებისას.`,
+  alternates: { canonical: "/delivery" },
+};
 
-// Draft text: replace it with your real delivery terms, prices and timing.
+// Delivery price and time are told on the confirmation call; add them here once they are fixed.
 export default function DeliveryPage() {
   return (
-    <main className="mx-auto max-w-2xl px-3 py-8 sm:px-4">
-      <h1 className="text-2xl font-extrabold">მიწოდება</h1>
-      <div className="mt-4 space-y-3 leading-7 text-fg/85">
-        <p>შეკვეთის გაფორმების შემდეგ დაგირეკავთ მითითებულ ნომერზე და დავადასტურებთ დეტალებს.</p>
-        <p>მიწოდების ვადასა და ღირებულებას შეკვეთის დადასტურებისას გეტყვით.</p>
-        <p>გადახდა ხდება პროდუქტის მიტანისას.</p>
+    <InfoPage
+      title="მიწოდება და გატანა"
+      icon={<TruckIcon className="size-5" />}
+      lead="შეკვეთას მოგიტანთ თბილისის ნებისმიერ მისამართზე, ან თავად გაიტან დიღომიდან. ორივე შემთხვევაში იხდი მხოლოდ მიღებისას."
+    >
+      <div className="grid gap-3 sm:grid-cols-3">
+        <InfoCard icon={<TruckIcon className="size-5" />} title="მიტანა">
+          თბილისის მასშტაბით, კურიერით, პირდაპირ მისამართზე.
+        </InfoCard>
+        <InfoCard icon={<PinIcon className="size-5" />} title="გატანა">
+          {site.pickup.address}, ყოველდღე {site.pickup.hours}.
+        </InfoCard>
+        <InfoCard icon={<CashIcon className="size-5" />} title="გადახდა">
+          მიღებისას. წინასწარ არაფერს იხდი.
+        </InfoCard>
       </div>
-    </main>
+
+      <h2>როგორ მუშაობს</h2>
+      <ul>
+        <li>
+          აირჩიე პროდუქტები, კალათაში მიუთითე სახელი და ტელეფონი და აირჩიე: <b className="text-fg">მიტანა</b> ან{" "}
+          <b className="text-fg">გატანა</b>.
+        </li>
+        <li>დაგირეკავთ შეკვეთის დასადასტურებლად ({site.hours.toLowerCase()}). ამ ზარში გეტყვით მიწოდების ფასს და დროს.</li>
+        <li>კურიერი შეკვეთას მისამართზე მოგიტანს, ან გატანისას შეკვეთა მზად დაგხვდება.</li>
+        <li>ნივთს ნახავ, შეამოწმებ და მერე გადაიხდი.</li>
+      </ul>
+
+      <h2>მიწოდება თბილისის გარეთ</h2>
+      <p>
+        ამ ეტაპზე მიწოდება მხოლოდ თბილისში გვაქვს. თუ სხვა ქალაქში ხარ, დაგვირეკე <a href={site.phoneHref}>{site.phone}</a> და
+        ვეცდებით, გამოსავალი ვიპოვოთ.
+      </p>
+
+      <p>
+        კითხვები? ნახე <Link href="/faq">ხშირი კითხვები</Link> ან <Link href="/contact">დაგვიკავშირდი</Link>.
+      </p>
+    </InfoPage>
   );
 }

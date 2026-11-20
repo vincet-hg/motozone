@@ -6,6 +6,7 @@ import { useActionState, useEffect, useMemo, useState } from "react";
 import { clearCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { keepValues } from "@/lib/keep-values";
+import { site } from "@/lib/site";
 import type { ProductCard } from "@/lib/types";
 import { getCartProducts, placeOrder, type OrderState } from "./actions";
 
@@ -15,6 +16,7 @@ export function CartView() {
   const cart = useCart();
   const [products, setProducts] = useState<ProductCard[] | null>(null);
   const [state, action, pending] = useActionState<OrderState, FormData>(placeOrder, {});
+  const [method, setMethod] = useState<"delivery" | "pickup">("delivery");
 
   const idKey = useMemo(() => cart.map((item) => item.id).sort().join(","), [cart]);
 
@@ -137,19 +139,41 @@ export function CartView() {
           ტელეფონი
           <input name="phone" type="tel" required autoComplete="tel" inputMode="tel" className={`${input} mt-1`} />
         </label>
-        <label className="text-sm">
-          ქალაქი
-          <input name="city" required minLength={2} maxLength={60} autoComplete="address-level2" className={`${input} mt-1`} />
-        </label>
-        <label className="text-sm">
-          მისამართი
-          <input name="address" required minLength={3} maxLength={300} autoComplete="street-address" className={`${input} mt-1`} />
-        </label>
+        <fieldset className="text-sm">
+          <legend>მიღების გზა</legend>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            {(
+              [
+                ["delivery", "მიტანა", "თბილისის მასშტაბით"],
+                ["pickup", "გატანა", `დიღომი, ${site.pickup.hours}`],
+              ] as const
+            ).map(([value, title, hint]) => (
+              <label
+                key={value}
+                className="cursor-pointer rounded-btn border border-line bg-bg px-3 py-2.5 transition-colors has-checked:border-neon/60 has-checked:bg-accent/10"
+              >
+                <input type="radio" name="method" value={value} checked={method === value} onChange={() => setMethod(value)} className="sr-only" />
+                <span className="block font-semibold">{title}</span>
+                <span className="block text-xs text-muted">{hint}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        {method === "delivery" ? (
+          <label className="text-sm">
+            მისამართი თბილისში
+            <input name="address" required minLength={3} maxLength={300} autoComplete="street-address" placeholder="ქუჩა, ნომერი, ბინა" className={`${input} mt-1 placeholder:text-muted/70`} />
+          </label>
+        ) : (
+          <p className="rounded-btn border border-line bg-bg p-3 text-sm leading-6 text-muted">
+            გაიტანე მისამართიდან: <span className="text-fg">{site.pickup.address}</span>, ყოველდღე {site.pickup.hours}. მოსვლამდე დაგირეკავთ, როცა შეკვეთა მზად იქნება.
+          </p>
+        )}
         <label className="text-sm">
           შენიშვნა (არასავალდებულო)
           <input name="note" maxLength={500} className={`${input} mt-1`} />
         </label>
-        <p className="text-sm text-muted">გადახდა მიტანისას.</p>
+        <p className="text-sm text-muted">{method === "delivery" ? "გადახდა მიტანისას. მიწოდების ფასს შეკვეთის დადასტურებისას გეტყვით." : "გადახდა გატანისას."}</p>
         {unavailable && <p className="text-sm font-medium">წაშალე პროდუქტი, რომელიც მარაგში აღარ არის.</p>}
         {state.error && (
           <p role="alert" className="rounded-lg border border-accent/50 bg-accent/10 p-2 text-sm font-medium text-fg">

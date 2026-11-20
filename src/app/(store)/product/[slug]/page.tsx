@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   const price = formatPrice(product.final_price);
-  const description = clip(product.description ? `${price}. ${product.description}` : `${product.name}, ${price}. მიწოდება მთელ საქართველოში.`);
+  const description = clip(product.description ? `${price}. ${product.description}` : `${product.name}, ${price}. მიწოდება თბილისში, გადახდა მიღებისას.`);
   return {
     title: product.name,
     description,

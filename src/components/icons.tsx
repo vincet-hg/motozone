@@ -161,6 +161,15 @@ export function PinIcon({ className = "size-6" }: Props) {
   );
 }
 
+export function ClockIcon({ className = "size-6" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
+  );
+}
+
 // Brand marks, simplified.
 export function FacebookIcon({ className = "size-5" }: Props) {
   return (

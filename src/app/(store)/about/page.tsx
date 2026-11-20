@@ -1,24 +1,47 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BadgeIcon, CashIcon, HeadsetIcon, TruckIcon } from "@/components/icons";
+import { InfoCard, InfoPage } from "@/components/info-page";
+import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "შესახებ", alternates: { canonical: "/about" } };
+export const metadata: Metadata = {
+  title: "ჩვენ შესახებ",
+  description: "Scooter Land: მოპედისა და სკუტერის აქსესუარების ონლაინ მაღაზია თბილისში. მიწოდება თბილისში, გადახდა მიღებისას.",
+  alternates: { canonical: "/about" },
+};
 
-// Draft text: tell your own story here.
 export default function AboutPage() {
   return (
-    <main className="mx-auto max-w-2xl px-3 py-10 sm:px-4">
-      <h1 className="border-l-4 border-accent pl-3 text-2xl font-extrabold">ჩვენ შესახებ</h1>
-      <div className="mt-5 space-y-4 leading-7 text-fg/85">
-        <p>Scooter Land არის მოტოციკლისა და მოპედის აქსესუარების მაღაზია საქართველოში.</p>
-        <p>ვყიდით იმას, რაც ყოველდღიურ სიარულს უფრო კომფორტულს და უსაფრთხოს ხდის: გათბობად გრიფსებს, დამტენებს, ხელთათმანებს, ტელეფონის დამჭერებს და სხვა აქსესუარებს.</p>
-        <p>
-          კითხვა თუ გაქვს,{" "}
-          <Link href="/contact" className="text-neon underline hover:text-neon">
-            დაგვიკავშირდი
-          </Link>
-          .
-        </p>
+    <InfoPage
+      title="ჩვენ შესახებ"
+      icon={<BadgeIcon className="size-5" />}
+      lead="Scooter Land მოპედისა და სკუტერის აქსესუარების ონლაინ მაღაზიაა თბილისში. ვარჩევთ იმას, რაც ყოველდღიურ მგზავრობას უფრო თბილს, კომფორტულს და უსაფრთხოს ხდის."
+    >
+      <p>
+        ზამთარში გათბობადი გრიფსები და ხელის საფარები, წვიმაში წყალგაუმტარი ჩიხოლი და ტელეფონის ჩანთა, ყოველდღე კი საიმედო დამჭერი
+        ნავიგაციისთვის და დამტენი, რომ ტელეფონი გზაში არ დაგიჯდეს. ყველაფერი ერთ ადგილას, კურიერებისა და ყოველდღიური მძღოლებისთვის.
+      </p>
+      <p>
+        ჯერ მაღაზია არ გვაქვს, ამიტომ შეკვეთას კურიერით მოგიტანთ ან თავად გაიტან დიღომიდან. ფულს იხდი მხოლოდ მაშინ, როცა ნივთს ხელში
+        აიღებ.
+      </p>
+
+      <div className="grid gap-3 pt-2 sm:grid-cols-3">
+        <InfoCard icon={<TruckIcon className="size-5" />} title="მიწოდება თბილისში">
+          კურიერი მისამართზე მოგიტანს. <Link href="/delivery" className="text-neon underline">დეტალები</Link>
+        </InfoCard>
+        <InfoCard icon={<CashIcon className="size-5" />} title="გადახდა მიღებისას">
+          წინასწარ არაფერს იხდი.
+        </InfoCard>
+        <InfoCard icon={<HeadsetIcon className="size-5" />} title="რჩევა არჩევაში">
+          დაგვირეკე, {site.hours.toLowerCase()}.
+        </InfoCard>
       </div>
-    </main>
+
+      <p>
+        არ იცი, რომელი აქსესუარი მოერგება შენს მოპედს? დაგვირეკე <a href={site.phoneHref}>{site.phone}</a>, გვითხარი მოდელი და
+        გეტყვით.
+      </p>
+    </InfoPage>
   );
 }
