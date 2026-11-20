@@ -5,6 +5,7 @@ import { keepValues } from "@/lib/keep-values";
 import { useActionState, useState } from "react";
 import { authButton, authError, authInfo, authInput, authSecondary } from "@/components/auth-styles";
 import { GoogleIcon, MailIcon, PhoneIcon } from "@/components/icons";
+import { PasswordInput } from "@/components/password-input";
 import { type AuthState, confirmEmail, resendConfirmation, sendPhoneCode, signInWithEmail, signInWithGoogle, signUpWithEmail, verifyPhoneCode } from "./actions";
 
 type Method = "email" | "phone";
@@ -79,13 +80,13 @@ function EmailForm({ next, register }: { next: string; register: boolean }) {
             </Link>
           )}
         </span>
-        <input
+        <PasswordInput
           name="password"
-          type="password"
           required
           minLength={register ? 8 : 1}
           autoComplete={register ? "new-password" : "current-password"}
-          className={`${authInput} mt-1.5`}
+          className={authInput}
+          wrapperClassName="mt-1.5"
         />
         {register && <span className="mt-1 block text-xs text-muted">მინიმუმ 8 სიმბოლო.</span>}
       </label>

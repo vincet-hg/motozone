@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { crc32, deflateSync } from "node:zlib";
+import { demoAdminUsers, demoSetAdmin } from "./demo-accounts";
 import type { AuditEntry, Category, Order, OrderItem, OrderStatus, Product, ProductCost, Promotion, Purchase, StockAdjustment, Subscriber } from "./types";
 
 // Stands in for the part of the Supabase client this app uses, backed by JSON files in .demo-data/.
@@ -694,6 +695,17 @@ function placeOrder(args: Row) {
   });
 }
 
+function adminUsers(args: Row) {
+  const db = load();
+  const search = String(args.p_search ?? "").toLowerCase();
+  const limit = Math.min(Math.max(Number(args.p_limit) || 50, 1), 200);
+  const offset = Math.max(Number(args.p_offset) || 0, 0);
+  const all = demoAdminUsers(DEMO_EMAIL, (id) => db.orders.filter((order) => order.user_id === id).length).filter(
+    (user) => !search || [user.email, user.phone, user.name].some((value) => (value ?? "").toLowerCase().includes(search)),
+  );
+  return all.slice(offset, offset + limit).map((user) => ({ ...user, total: all.length }));
+}
+
 // Same as place_order, for a signed-in customer (see place_customer_order in the migrations).
 function placeCustomerOrder(args: Row) {
   if (typeof args.p_user_id !== "string" || !args.p_user_id) throw new DbError("not_signed_in");
@@ -881,6 +893,18 @@ const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   rate_limit_hit: () => true,
   newsletter_subscribe: newsletterSubscribe,
   popular_product_ids: popularProductIds,
+  // Demo mode is a test environment: whoever reaches the demo admin manages it.
+  admin_access: () => "super",
+  is_super_admin: () => true,
+  every_account_is_admin: () => true,
+  admin_users: adminUsers,
+  set_admin: (args: Row) => {
+    try {
+      demoSetAdmin(String(args.p_user_id), Boolean(args.p_admin));
+    } catch (error) {
+      throw new DbError((error as Error).message);
+    }
+  },
 };
 
 export const demoClient = {

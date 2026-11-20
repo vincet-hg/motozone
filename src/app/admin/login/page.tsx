@@ -2,10 +2,12 @@
 
 import { useActionState } from "react";
 import { Logo } from "@/components/logo";
+import { PasswordInput } from "@/components/password-input";
 import { keepValues } from "@/lib/keep-values";
 import { login, type FormState } from "../actions";
 
-const input = "mt-1.5 h-11 w-full rounded-xl border px-3.5 font-normal";
+const field = "h-11 w-full rounded-xl border px-3.5 font-normal";
+const input = `mt-1.5 ${field}`;
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState<FormState, FormData>(login, {});
@@ -24,7 +26,7 @@ export default function LoginPage() {
         </label>
         <label className="block text-sm font-medium text-a-soft">
           პაროლი
-          <input name="password" type="password" required autoComplete="current-password" className={input} />
+          <PasswordInput name="password" required autoComplete="current-password" className={field} wrapperClassName="mt-1.5" />
         </label>
         {state.error && (
           <p role="alert" className="text-sm text-[#ff6b77]">

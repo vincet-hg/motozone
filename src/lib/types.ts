@@ -112,3 +112,20 @@ export type Profile = { name: string; phone: string; address: string };
 
 // A signed-in customer, from the verified session.
 export type Customer = { id: string; email: string | null; phone: string | null; provider: string };
+
+// One account on the admin's users page (see admin_users in the migrations).
+export type AdminRole = "super" | "admin";
+export type AdminUser = {
+  id: string;
+  email: string | null;
+  phone: string | null;
+  name: string;
+  providers: string[];
+  has_password: boolean;
+  confirmed: boolean;
+  created_at: string;
+  last_sign_in_at: string | null;
+  orders: number;
+  role: AdminRole | null;
+  total: number;
+};
