@@ -189,6 +189,40 @@ export function LogoutIcon({ className = "size-5" }: Props) {
   );
 }
 
+export function LoginIcon({ className = "size-5" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4" />
+      <path d="M14 7l5 5-5 5" />
+      <path d="M19 12H8" />
+    </svg>
+  );
+}
+
+// Tabler "package" (MIT).
+export function PackageIcon({ className = "size-5" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3" />
+      <path d="M12 12l8-4.5" />
+      <path d="M12 12v9" />
+      <path d="M12 12L4 7.5" />
+      <path d="M16 5.25l-8 4.5" />
+    </svg>
+  );
+}
+
+export function KeyIcon({ className = "size-5" }: Props) {
+  return (
+    <svg {...base} className={className}>
+      <circle cx="8" cy="15" r="4" />
+      <path d="M10.85 12.15L19 4" />
+      <path d="M18 5l2 2" />
+      <path d="M15 8l2 2" />
+    </svg>
+  );
+}
+
 export function GoogleIcon({ className = "size-5" }: Props) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">

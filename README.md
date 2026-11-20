@@ -80,10 +80,21 @@ Set up each Supabase project (staging and production) like this:
 1. **URLs.** In **Authentication > URL Configuration**, set **Site URL** to the store address
    (`https://scooterland.ge`) and add `https://scooterland.ge/auth/callback` to **Redirect URLs**. For
    staging add the Vercel preview pattern too, for example `https://*-your-team.vercel.app/auth/callback`.
-2. **Email and password** works out of the box. Supabase's built-in mailer sends only a few emails an
-   hour and only to your own team, so before real customers sign up, add your own SMTP under
-   **Authentication > Emails > SMTP Settings** (for example Resend, free for 3,000 emails a month).
-   Translate the *Confirm signup* and *Reset password* templates into Georgian there as well.
+2. **Email and password.** Customers confirm their email and reset a forgotten password with a 6-digit
+   code from the email, typed on the site, so it works even when the email is opened on another device.
+   - Supabase's built-in mailer sends only a few emails an hour and only to your own team's addresses.
+     Before real customers sign up, add your own SMTP under **Authentication > Emails > SMTP Settings**
+     (for example Resend, free for 3,000 emails a month).
+   - Under **Authentication > Emails > Templates**, put the code in the *Confirm signup* and *Reset
+     password* templates. For example, *Confirm signup*: subject `Scooter Land: დადასტურების კოდი`, body
+     ```html
+     <h2>გამარჯობა!</h2>
+     <p>შენი დადასტურების კოდია: <strong style="font-size:24px">{{ .Token }}</strong></p>
+     <p>ჩაწერე ის საიტზე. კოდი 1 საათი მოქმედებს.</p>
+     ```
+     *Reset password*: subject `Scooter Land: პაროლის აღდგენა`, the same body with
+     `პაროლის აღდგენის კოდია`. Without `{{ .Token }}` the email holds only a link, which also works,
+     but only in the browser where the code was requested.
 3. **Google.** In [Google Cloud Console](https://console.cloud.google.com), create an OAuth client
    (**APIs & Services > Credentials > Create credentials > OAuth client ID**, type *Web application*)
    with `https://<project-ref>.supabase.co/auth/v1/callback` as the redirect URI. Paste the client ID and

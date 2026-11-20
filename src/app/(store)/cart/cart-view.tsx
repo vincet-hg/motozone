@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState, useEffect, useMemo, useState } from "react";
+import { CheckIcon } from "@/components/icons";
 import { clearCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { keepValues } from "@/lib/keep-values";
@@ -45,17 +46,27 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
 
   if (state.orderId) {
     return (
-      <div className="mt-6 max-w-md rounded-card border border-line bg-card p-6">
-        <h2 className="text-xl font-extrabold text-neon">შეკვეთა მიღებულია</h2>
-        <p className="mt-2">შეკვეთის ნომერი: #{state.orderId}</p>
-        <p>ჯამი: {formatPrice(state.total ?? 0)}{state.deliveryFee ? ` (მიტანის ჩათვლით)` : ""}</p>
-        <p className="mt-2 text-sm text-muted">დასადასტურებლად დაგირეკავთ მითითებულ ნომერზე.</p>
-        <div className="mt-4 flex flex-wrap gap-4">
-          <Link href="/account" className="text-neon underline">
-            ჩემი შეკვეთები
+      <div className="mx-auto mt-6 max-w-lg rounded-card border border-neon/30 bg-card p-6 text-center shadow-[0_0_60px_-30px_rgba(227,18,11,0.9)] sm:p-8">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_30px_-6px_rgba(227,18,11,0.9)]">
+          <CheckIcon className="size-7" />
+        </span>
+        <h2 className="mt-4 text-2xl font-extrabold">შეკვეთა მიღებულია!</h2>
+        <p className="mt-1 text-muted">
+          შეკვეთა <span className="font-bold text-fg">#{state.orderId}</span> · სულ{" "}
+          <span className="font-bold text-neon">{formatPrice(state.total ?? 0)}</span>
+        </p>
+        <p className="mt-4 rounded-btn border border-line bg-bg px-4 py-3 text-sm leading-6 text-fg/90">
+          დასადასტურებლად დაგირეკავთ. შეკვეთის ეტაპს ნებისმიერ დროს ნახავ ანგარიშში, „ჩემი შეკვეთები“-ში.
+        </p>
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <Link
+            href={`/account/orders/${state.orderId}`}
+            className="flex h-12 items-center justify-center gap-2 rounded-btn bg-gradient-to-r from-accent to-accent-hover font-bold text-white"
+          >
+            შეკვეთის ნახვა
           </Link>
-          <Link href="/" className="text-neon underline">
-            პროდუქტებზე დაბრუნება
+          <Link href="/" className="flex h-12 items-center justify-center rounded-btn border border-line font-semibold text-fg hover:border-neon/50">
+            მთავარზე დაბრუნება
           </Link>
         </div>
       </div>

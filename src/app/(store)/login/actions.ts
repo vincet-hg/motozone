@@ -4,12 +4,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { toE164 } from "@/lib/account";
 import { isDemo } from "@/lib/demo";
-import { DEMO_CUSTOMER_COOKIE, DEMO_PHONE_CODE, demoPhoneSignIn, demoSetPassword, demoSignIn, demoSignUp } from "@/lib/demo-accounts";
+import { DEMO_CUSTOMER_COOKIE, DEMO_PHONE_CODE, demoConfirm, demoPhoneSignIn, demoSetPassword, demoSignIn, demoSignUp, demoUserByEmail } from "@/lib/demo-accounts";
 import { allow, clientIp } from "@/lib/request-guard";
 import { site } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase-server";
 
-export type AuthState = { error?: string; info?: string; phone?: string; step?: "code" };
+// step "code": waiting for the SMS or email code; "confirm": a new account waiting for the email code.
+export type AuthState = { error?: string; info?: string; phone?: string; email?: string; step?: "code" | "confirm" };
 
 const text = (form: FormData, key: string) => String(form.get(key) ?? "").trim();
 
@@ -28,6 +29,12 @@ async function tooFast(scope: string) {
 }
 
 const SLOW = "ძალიან ბევრი მცდელობაა. სცადე რამდენიმე წუთში.";
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+// Supabase email codes are 6 digits by default (up to 10 if changed in the dashboard).
+const emailCode = (form: FormData) => text(form, "code").replace(/\s/g, "");
+const isCode = (code: string) => /^[0-9]{6,10}$/.test(code);
+const demoNote = isDemo ? ` დემო რეჟიმი: კოდია ${DEMO_PHONE_CODE}.` : "";
+const confirmInfo = (email: string) => `6-ნიშნა კოდი გამოგიგზავნეთ ${email}-ზე. ჩაწერე ქვემოთ. თუ ვერ ხედავ, შეამოწმე Spam.${demoNote}`;
 
 export async function signInWithEmail(_: AuthState, form: FormData): Promise<AuthState> {
   const email = text(form, "email").toLowerCase();
@@ -38,12 +45,16 @@ export async function signInWithEmail(_: AuthState, form: FormData): Promise<Aut
   if (isDemo) {
     const user = demoSignIn(email, password);
     if (!user) return { error: "ელფოსტა ან პაროლი არასწორია." };
+    if (user.confirmed === false) return { step: "confirm", email, info: confirmInfo(email), error: "ჯერ დაადასტურე ელფოსტა." };
     await demoSession(user.id);
   } else {
     const supabase = await createAdminClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      if (error.code === "email_not_confirmed") return { error: "ჯერ დაადასტურე ელფოსტა: გახსენი წერილი, რომელიც რეგისტრაციისას გამოგიგზავნეთ." };
+      if (error.code === "email_not_confirmed") {
+        await supabase.auth.resend({ type: "signup", email });
+        return { step: "confirm", email, info: confirmInfo(email), error: "ჯერ დაადასტურე ელფოსტა." };
+      }
       return { error: "ელფოსტა ან პაროლი არასწორია." };
     }
   }
@@ -53,7 +64,7 @@ export async function signInWithEmail(_: AuthState, form: FormData): Promise<Aut
 export async function signUpWithEmail(_: AuthState, form: FormData): Promise<AuthState> {
   const email = text(form, "email").toLowerCase();
   const password = String(form.get("password") ?? "");
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
+  if (!EMAIL.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
   if (password.length < 8) return { error: "პაროლი უნდა იყოს მინიმუმ 8 სიმბოლო." };
   if (await tooFast("signup")) return { error: SLOW };
   const next = safeNext(form.get("next"));
@@ -61,8 +72,7 @@ export async function signUpWithEmail(_: AuthState, form: FormData): Promise<Aut
   if (isDemo) {
     const result = demoSignUp(email, password);
     if ("error" in result) return { error: "ამ ელფოსტით ანგარიში უკვე არსებობს. შედი ან აღადგინე პაროლი." };
-    await demoSession(result.user.id);
-    redirect(next);
+    return { step: "confirm", email, info: confirmInfo(email) };
   }
 
   const supabase = await createAdminClient();
@@ -77,9 +87,41 @@ export async function signUpWithEmail(_: AuthState, form: FormData): Promise<Aut
     console.error("signUp failed", error.code, error.message);
     return { error: "რეგისტრაცია ვერ მოხერხდა. სცადე თავიდან." };
   }
-  // With email confirmation on, Supabase returns no session until the link in the email is opened.
-  if (!data.session) return { info: `დადასტურების წერილი გამოგიგზავნეთ მისამართზე ${email}. გახსენი ბმული და ანგარიში მზად იქნება.` };
+  // With email confirmation on, Supabase returns no session until the code (or the link) from the email is used.
+  if (!data.session) return { step: "confirm", email, info: confirmInfo(email) };
   redirect(next);
+}
+
+// The code from the "confirm your email" message. Signs the new customer in.
+export async function confirmEmail(_: AuthState, form: FormData): Promise<AuthState> {
+  const email = text(form, "email").toLowerCase();
+  const code = emailCode(form);
+  if (!EMAIL.test(email)) return { error: "დაიწყე თავიდან." };
+  if (!isCode(code)) return { step: "confirm", email, error: "ჩაწერე კოდი წერილიდან." };
+  if (await tooFast("confirm")) return { step: "confirm", email, error: SLOW };
+
+  if (isDemo) {
+    if (code !== DEMO_PHONE_CODE) return { step: "confirm", email, error: "კოდი არასწორია." };
+    const user = demoConfirm(email);
+    if (!user) return { error: "ანგარიში ვერ მოიძებნა. დარეგისტრირდი თავიდან." };
+    await demoSession(user.id);
+  } else {
+    const supabase = await createAdminClient();
+    const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
+    if (error) return { step: "confirm", email, error: "კოდი არასწორია ან ვადა გაუვიდა. მოითხოვე ახალი." };
+  }
+  redirect(safeNext(form.get("next")));
+}
+
+export async function resendConfirmation(_: AuthState, form: FormData): Promise<AuthState> {
+  const email = text(form, "email").toLowerCase();
+  if (!EMAIL.test(email)) return { error: "დაიწყე თავიდან." };
+  if (!(await allow("resend", email, 3, 3600))) return { step: "confirm", email, error: SLOW };
+  if (!isDemo) {
+    const supabase = await createAdminClient();
+    await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${site.url}/auth/callback?next=/account` } });
+  }
+  return { step: "confirm", email, info: `ახალი კოდი გამოგიგზავნეთ ${email}-ზე.${demoNote}` };
 }
 
 export async function sendPhoneCode(_: AuthState, form: FormData): Promise<AuthState> {
@@ -133,16 +175,50 @@ export async function signInWithGoogle(form: FormData) {
   redirect(data.url);
 }
 
+// Step 1 of a forgotten password: a code (and a link, for those who prefer it) goes to the email.
 export async function sendPasswordReset(_: AuthState, form: FormData): Promise<AuthState> {
   const email = text(form, "email").toLowerCase();
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
-  if (await tooFast("reset")) return { error: SLOW };
+  if (!EMAIL.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
+  if (await tooFast("reset") || !(await allow("reset-email", email, 3, 3600))) return { error: SLOW };
   if (!isDemo) {
     const supabase = await createAdminClient();
-    await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${site.url}/auth/callback?next=/account/password` });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${site.url}/auth/callback?next=/account/password` });
+    if (error && error.status !== 400) console.error("password reset failed", error.code, error.message);
   }
   // The same answer whether or not the account exists, so the form cannot be used to look up emails.
-  return { info: "თუ ამ ელფოსტით ანგარიში არსებობს, პაროლის აღდგენის ბმულს მიიღებ რამდენიმე წუთში." };
+  return { step: "code", email, info: `თუ ${email} დარეგისტრირებულია, მასზე 6-ნიშნა კოდი გამოგიგზავნეთ. თუ ვერ ხედავ, შეამოწმე Spam.${demoNote}` };
+}
+
+// Step 2: the code from the email and the new password. Signs the customer in.
+export async function resetPasswordWithCode(_: AuthState, form: FormData): Promise<AuthState> {
+  const email = text(form, "email").toLowerCase();
+  const code = emailCode(form);
+  const password = String(form.get("password") ?? "");
+  const back = { step: "code" as const, email };
+  if (!EMAIL.test(email)) return { error: "დაიწყე თავიდან." };
+  if (!isCode(code)) return { ...back, error: "ჩაწერე კოდი წერილიდან." };
+  if (password.length < 8) return { ...back, error: "ახალი პაროლი უნდა იყოს მინიმუმ 8 სიმბოლო." };
+  if (password !== String(form.get("password2") ?? "")) return { ...back, error: "პაროლები ერთმანეთს არ ემთხვევა." };
+  if (await tooFast("reset-verify")) return { ...back, error: SLOW };
+
+  if (isDemo) {
+    const user = demoUserByEmail(email);
+    if (!user || code !== DEMO_PHONE_CODE) return { ...back, error: "კოდი არასწორია ან ვადა გაუვიდა." };
+    demoSetPassword(user.id, password);
+    demoConfirm(email);
+    await demoSession(user.id);
+  } else {
+    const supabase = await createAdminClient();
+    const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "recovery" });
+    if (error) return { ...back, error: "კოდი არასწორია ან ვადა გაუვიდა. მოითხოვე ახალი." };
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    if (updateError) {
+      if (updateError.code === "same_password") return { ...back, error: "ახალი პაროლი ძველს არ უნდა ემთხვეოდეს." };
+      if (updateError.code === "weak_password") return { ...back, error: "პაროლი ძალიან მარტივია." };
+      return { ...back, error: "პაროლი ვერ შეიცვალა. სცადე თავიდან." };
+    }
+  }
+  redirect("/account?password=changed");
 }
 
 export async function updatePassword(_: AuthState, form: FormData): Promise<AuthState> {

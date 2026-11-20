@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { keepValues } from "@/lib/keep-values";
 import { useActionState, useState } from "react";
 import { authButton, authError, authInfo, authInput, authSecondary } from "@/components/auth-styles";
 import { GoogleIcon, MailIcon, PhoneIcon } from "@/components/icons";
-import { type AuthState, sendPhoneCode, signInWithEmail, signInWithGoogle, signUpWithEmail, verifyPhoneCode } from "./actions";
+import { type AuthState, confirmEmail, resendConfirmation, sendPhoneCode, signInWithEmail, signInWithGoogle, signUpWithEmail, verifyPhoneCode } from "./actions";
 
 type Method = "email" | "phone";
 
@@ -57,21 +58,24 @@ export function LoginForms({ next, mode, google, phone }: { next: string; mode: 
 
 function EmailForm({ next, register }: { next: string; register: boolean }) {
   const [state, action, pending] = useActionState<AuthState, FormData>(register ? signUpWithEmail : signInWithEmail, {});
-  if (state.info) return <p role="status" className={authInfo}>{state.info}</p>;
+  const [restart, setRestart] = useState(0);
+  if (state.step === "confirm" && state.email && restart === 0) {
+    return <ConfirmEmail key={state.email} email={state.email} next={next} intro={state} onBack={() => setRestart((value) => value + 1)} />;
+  }
 
   return (
-    <form action={action} className="space-y-3">
+    <form action={action} onSubmit={keepValues((form) => { setRestart(0); action(form); })} className="space-y-3">
       <input type="hidden" name="next" value={next} />
       <label className="block text-sm">
         ელფოსტა
-        <input name="email" type="email" required autoComplete="email" maxLength={254} className={`${authInput} mt-1.5`} />
+        <input name="email" type="email" required autoComplete="email" maxLength={254} defaultValue={state.email} className={`${authInput} mt-1.5`} />
       </label>
       <label className="block text-sm">
         <span className="flex items-center justify-between">
           პაროლი
           {!register && (
-            <Link href="/forgot-password" className="text-xs text-muted underline hover:text-fg">
-              დაგავიწყდა?
+            <Link href="/forgot-password" className="text-xs font-semibold text-neon underline">
+              დაგავიწყდა პაროლი?
             </Link>
           )}
         </span>
@@ -93,6 +97,50 @@ function EmailForm({ next, register }: { next: string; register: boolean }) {
   );
 }
 
+// A new account's email code, with a way to get a new one.
+function ConfirmEmail({ email, next, intro, onBack }: { email: string; next: string; intro: AuthState; onBack: () => void }) {
+  const [checked, confirmAction, confirming] = useActionState<AuthState, FormData>(confirmEmail, {});
+  const [resent, resendAction, resending] = useActionState<AuthState, FormData>(resendConfirmation, {});
+  const info = resent.info ?? intro.info;
+  const error = checked.error ?? resent.error ?? (resent.info ? undefined : intro.error);
+  return (
+    <div className="space-y-3">
+      <form action={confirmAction} onSubmit={keepValues(confirmAction)} className="space-y-3">
+        <input type="hidden" name="next" value={next} />
+        <input type="hidden" name="email" value={email} />
+        <p className="text-sm font-bold">დაადასტურე ელფოსტა</p>
+        {info && <p role="status" className={authInfo}>{info}</p>}
+        <label className="block text-sm">
+          კოდი წერილიდან
+          <input
+            name="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            pattern="[0-9 ]{6,11}"
+            maxLength={11}
+            required
+            autoFocus
+            className={`${authInput} mt-1.5 text-center text-xl tracking-[0.4em]`}
+          />
+        </label>
+        {error && <p role="alert" className={authError}>{error}</p>}
+        <button disabled={confirming} className={authButton}>{confirming ? "მოწმდება..." : "დადასტურება"}</button>
+      </form>
+      <div className="flex items-center justify-between gap-3 text-sm">
+        <button type="button" onClick={onBack} className="cursor-pointer text-muted underline hover:text-fg">
+          სხვა ელფოსტა
+        </button>
+        <form action={resendAction}>
+          <input type="hidden" name="email" value={email} />
+          <button disabled={resending} className="cursor-pointer text-neon underline disabled:opacity-60">
+            {resending ? "იგზავნება..." : "კოდის ხელახლა გაგზავნა"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function PhoneForm({ next }: { next: string }) {
   const [sent, sendAction, sending] = useActionState<AuthState, FormData>(sendPhoneCode, {});
   const [checked, verifyAction, verifying] = useActionState<AuthState, FormData>(verifyPhoneCode, {});
@@ -102,7 +150,7 @@ function PhoneForm({ next }: { next: string }) {
 
   if (step === "code") {
     return (
-      <form action={verifyAction} className="space-y-3">
+      <form action={verifyAction} onSubmit={keepValues(verifyAction)} className="space-y-3">
         <input type="hidden" name="next" value={next} />
         <input type="hidden" name="phone" value={phone} />
         {sent.info && !checked.error && <p role="status" className={authInfo}>{sent.info}</p>}
@@ -131,7 +179,7 @@ function PhoneForm({ next }: { next: string }) {
   }
 
   return (
-    <form action={(form) => { setRestart(0); sendAction(form); }} className="space-y-3">
+    <form action={sendAction} onSubmit={keepValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
       <label className="block text-sm">
         მობილურის ნომერი
         <span className="mt-1.5 flex">

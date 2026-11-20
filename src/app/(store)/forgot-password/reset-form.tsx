@@ -1,28 +1,64 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { keepValues } from "@/lib/keep-values";
+import { useActionState, useState } from "react";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
-import { type AuthState, sendPasswordReset } from "../login/actions";
+import { type AuthState, resetPasswordWithCode, sendPasswordReset } from "../login/actions";
 
+// Two steps on one page: the email, then the code from the email with the new password.
 export function ResetForm() {
-  const [state, action, pending] = useActionState<AuthState, FormData>(sendPasswordReset, {});
-  if (state.info) {
+  const [sent, sendAction, sending] = useActionState<AuthState, FormData>(sendPasswordReset, {});
+  const [reset, resetAction, resetting] = useActionState<AuthState, FormData>(resetPasswordWithCode, {});
+  const [restart, setRestart] = useState(0);
+  const email = reset.email ?? sent.email ?? "";
+  const step = (reset.step ?? sent.step) === "code" && restart === 0 ? "code" : "email";
+
+  if (step === "code") {
     return (
-      <div className="space-y-4">
-        <p role="status" className={authInfo}>{state.info}</p>
-        <Link href="/login" className="block text-center text-sm text-neon underline">შესვლაზე დაბრუნება</Link>
-      </div>
+      <form action={resetAction} onSubmit={keepValues(resetAction)} className="space-y-3">
+        <input type="hidden" name="email" value={email} />
+        {sent.info && !reset.error && <p role="status" className={authInfo}>{sent.info}</p>}
+        <label className="block text-sm">
+          კოდი წერილიდან
+          <input
+            name="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            pattern="[0-9 ]{6,11}"
+            maxLength={11}
+            required
+            autoFocus
+            className={`${authInput} mt-1.5 text-center text-xl tracking-[0.4em]`}
+          />
+        </label>
+        <label className="block text-sm">
+          ახალი პაროლი
+          <input name="password" type="password" required minLength={8} autoComplete="new-password" className={`${authInput} mt-1.5`} />
+          <span className="mt-1 block text-xs text-muted">მინიმუმ 8 სიმბოლო.</span>
+        </label>
+        <label className="block text-sm">
+          გაიმეორე პაროლი
+          <input name="password2" type="password" required minLength={8} autoComplete="new-password" className={`${authInput} mt-1.5`} />
+        </label>
+        {reset.error && <p role="alert" className={authError}>{reset.error}</p>}
+        <button disabled={resetting} className={authButton}>{resetting ? "ინახება..." : "პაროლის შეცვლა და შესვლა"}</button>
+        <button type="button" onClick={() => setRestart((value) => value + 1)} className="w-full text-sm text-muted underline hover:text-fg">
+          სხვა ელფოსტა ან ხელახლა გაგზავნა
+        </button>
+      </form>
     );
   }
+
   return (
-    <form action={action} className="space-y-3">
+    <form action={sendAction} onSubmit={keepValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
       <label className="block text-sm">
         ელფოსტა
-        <input name="email" type="email" required autoComplete="email" className={`${authInput} mt-1.5`} />
+        <input name="email" type="email" required autoComplete="email" defaultValue={email} className={`${authInput} mt-1.5`} />
       </label>
-      {state.error && <p role="alert" className={authError}>{state.error}</p>}
-      <button disabled={pending} className={authButton}>{pending ? "იგზავნება..." : "ბმულის გაგზავნა"}</button>
+      {sent.error && <p role="alert" className={authError}>{sent.error}</p>}
+      <button disabled={sending} className={authButton}>{sending ? "იგზავნება..." : "კოდის მიღება"}</button>
+      <Link href="/login" className="block text-center text-sm text-muted underline hover:text-fg">შესვლაზე დაბრუნება</Link>
     </form>
   );
 }
