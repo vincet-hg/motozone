@@ -96,11 +96,11 @@ export default async function HomePage() {
           <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
         </section>
 
-        <PromoBanners />
-
         <Link href="/search" prefetch={false} className={moreButton}>
           ყველა პროდუქტის ნახვა
         </Link>
+
+        <PromoBanners />
 
         <Newsletter />
       </main>
