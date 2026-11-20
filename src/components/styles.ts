@@ -10,4 +10,4 @@ export const field =
 
 // Square header buttons: menu, search, wishlist, cart.
 export const iconButton =
-  "relative flex size-9 cursor-pointer items-center justify-center rounded-xl border border-line bg-card/50 text-fg/90 transition-all duration-200 hover:border-neon/50 hover:bg-card-hover hover:text-neon hover:shadow-[0_0_18px_-6px_rgba(251,113,133,0.9)] min-[360px]:size-10 lg:size-11";
+  "relative flex size-9 cursor-pointer items-center justify-center rounded-xl border border-line bg-card/50 text-fg/90 transition-all duration-200 hover:border-neon/50 hover:bg-card-hover hover:text-neon hover:shadow-[0_0_18px_-6px_rgba(255,81,72,0.9)] min-[360px]:size-10 lg:size-11";

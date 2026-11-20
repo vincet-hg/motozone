@@ -21,7 +21,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
 
   const brand = (
     <Link href="/admin" prefetch={false} aria-label="მიმოხილვა" className="flex items-center gap-2 px-1">
-      <Logo className="h-10 w-auto drop-shadow-[0_0_14px_rgba(225,29,72,0.35)] lg:h-14" sizes="143px" />
+      <Logo className="h-10 w-auto drop-shadow-[0_0_14px_rgba(227,18,11,0.35)] lg:h-14" sizes="143px" />
       <span className="hidden rounded-md border border-a-line bg-a-card px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-a-soft uppercase sm:inline">Admin</span>
     </Link>
   );
@@ -42,7 +42,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   );
 
   return (
-    <div className="admin flex flex-1 bg-a-bg bg-[radial-gradient(ellipse_at_top_right,rgba(225,29,72,0.14),transparent_45%)] text-a-text">
+    <div className="admin flex flex-1 bg-a-bg bg-[radial-gradient(ellipse_at_top_right,rgba(227,18,11,0.14),transparent_45%)] text-a-text">
       <aside className="sticky top-0 hidden h-dvh w-60 self-start shrink-0 flex-col gap-6 border-r border-a-line bg-a-panel px-3 py-5 lg:flex xl:w-64">
         {brand}
         <div className="flex-1 overflow-y-auto">

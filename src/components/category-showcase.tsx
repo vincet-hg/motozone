@@ -22,7 +22,7 @@ export function CategoryShowcase({ categories, covers }: { categories: Category[
               <Link
                 href={`/category/${category.slug}`}
                 prefetch={false}
-                className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-gradient-to-b from-card-hover to-card transition-all duration-300 hover:-translate-y-1 hover:border-neon/50 hover:shadow-[0_0_0_1px_rgba(251,113,133,0.25),0_18px_40px_-18px_rgba(225,29,72,0.9)]"
+                className="group flex h-full flex-col overflow-hidden rounded-card border border-line bg-gradient-to-b from-card-hover to-card transition-all duration-300 hover:-translate-y-1 hover:border-neon/50 hover:shadow-[0_0_0_1px_rgba(255,81,72,0.25),0_18px_40px_-18px_rgba(227,18,11,0.9)]"
               >
                 <div className="relative m-2 mb-0 aspect-square overflow-hidden rounded-xl bg-photo">
                   {cover ? (

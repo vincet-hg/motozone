@@ -13,7 +13,7 @@ const mtavruli = (text: string) => text.replace(/[ა-ჺჽ-ჿ]/g, (c) => Stri
 const FAN = [
   "hidden sm:block lg:translate-y-6 lg:-rotate-[5deg]",
   "lg:translate-y-2 lg:-rotate-2",
-  "z-10 scale-105 border-neon/50 shadow-[0_20px_50px_-20px_rgba(225,29,72,0.95)] lg:scale-110",
+  "z-10 scale-105 border-neon/50 shadow-[0_20px_50px_-20px_rgba(227,18,11,0.95)] lg:scale-110",
   "lg:translate-y-2 lg:rotate-2",
   "hidden sm:block lg:translate-y-6 lg:rotate-[5deg]",
 ];
@@ -28,7 +28,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
   return (
     <section aria-label="ძიება და შეთავაზებები" className="relative isolate overflow-hidden border-b border-line">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_112%,rgba(225,29,72,0.5),transparent_55%),radial-gradient(ellipse_at_50%_0%,rgba(251,113,133,0.12),transparent_45%),#0b0d10]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_112%,rgba(227,18,11,0.5),transparent_55%),radial-gradient(ellipse_at_50%_0%,rgba(255,81,72,0.12),transparent_45%),#0b0d10]" />
         <div className="starfield absolute inset-0 opacity-60" />
         <div className="absolute -bottom-[460px] left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-[50%] border border-dashed border-neon/25" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/60 to-transparent" />
@@ -37,7 +37,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
       <div className="mx-auto flex max-w-7xl flex-col items-center px-4 pt-6 pb-12 text-center sm:pt-8 lg:pt-9 lg:pb-16">
         <p aria-hidden="true" className="animate-enter-up max-w-4xl text-[26px] leading-[1.08] font-extrabold tracking-[-0.01em] italic [animation-delay:80ms] min-[400px]:text-[29px] sm:text-[38px] lg:text-[46px]">
           {mtavruli("მოპედის აქსესუარები")}{" "}
-          <span className="block bg-gradient-to-r from-neon via-accent-hover to-neon bg-clip-text pr-2 text-transparent [filter:drop-shadow(0_0_24px_rgba(225,29,72,0.45))]">
+          <span className="block bg-gradient-to-r from-neon via-accent-hover to-neon bg-clip-text pr-2 text-transparent [filter:drop-shadow(0_0_24px_rgba(227,18,11,0.45))]">
             {mtavruli("ერთ სივრცეში")}
           </span>
         </p>
@@ -50,7 +50,7 @@ export function SearchHero({ promotion, products, categories }: { promotion?: Pr
           action="/search"
           prefetch={false}
           role="search"
-          className="animate-enter-up group/search mt-6 flex h-12 w-full max-w-[520px] items-center gap-2 rounded-full border border-neon/35 bg-card/90 pr-1 pl-4 shadow-[0_0_0_4px_rgba(225,29,72,0.08),0_14px_36px_-18px_rgba(225,29,72,0.9)] transition-all [animation-delay:240ms] focus-within:border-neon focus-within:shadow-[0_0_0_4px_rgba(251,113,133,0.2),0_14px_36px_-18px_rgba(225,29,72,0.9)] sm:h-[52px]"
+          className="animate-enter-up group/search mt-6 flex h-12 w-full max-w-[520px] items-center gap-2 rounded-full border border-neon/35 bg-card/90 pr-1 pl-4 shadow-[0_0_0_4px_rgba(227,18,11,0.08),0_14px_36px_-18px_rgba(227,18,11,0.9)] transition-all [animation-delay:240ms] focus-within:border-neon focus-within:shadow-[0_0_0_4px_rgba(255,81,72,0.2),0_14px_36px_-18px_rgba(227,18,11,0.9)] sm:h-[52px]"
         >
           <SearchIcon className="size-[18px] shrink-0 text-neon" />
           <input

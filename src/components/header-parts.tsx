@@ -72,7 +72,7 @@ export function Disclosure({ className, summary, summaryLabel, summaryClassName,
   );
 }
 
-const badge = "absolute -top-1.5 -right-1.5 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white shadow-[0_0_12px_rgba(225,29,72,0.8)]";
+const badge = "absolute -top-1.5 -right-1.5 min-w-5 rounded-full bg-accent px-1 text-center text-xs leading-5 font-bold text-white shadow-[0_0_12px_rgba(227,18,11,0.8)]";
 
 export function WishlistLink() {
   const count = useWishlist().length;
