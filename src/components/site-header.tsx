@@ -220,14 +220,6 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             </HiddenOnHome>
             <WishlistLink />
             <CartLink />
-            <a
-              href={site.phoneHref}
-              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px lg:flex"
-            >
-              <PhoneIcon className="size-4" />
-              <span className="hidden xl:inline">{site.phone}</span>
-              <span className="xl:hidden">დარეკვა</span>
-            </a>
           </div>
         </div>
       </header>
