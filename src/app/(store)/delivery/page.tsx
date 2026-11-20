@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "მიწოდება და გატანა",
-  description: `მიწოდება თბილისის მასშტაბით ან გატანა დიღომიდან (${site.pickup.address}). გადახდა მიღებისას.`,
+  description: `მიწოდება თბილისის მასშტაბით ${site.deliveryFee} ₾-ად ან უფასო გატანა დიღომიდან (${site.pickup.address}). გადახდა მიღებისას.`,
   alternates: { canonical: "/delivery" },
 };
 
@@ -16,14 +16,14 @@ export default function DeliveryPage() {
     <InfoPage
       title="მიწოდება და გატანა"
       icon={<TruckIcon className="size-5" />}
-      lead="შეკვეთას მოგიტანთ თბილისის ნებისმიერ მისამართზე, ან თავად გაიტან დიღომიდან. ორივე შემთხვევაში იხდი მხოლოდ მიღებისას."
+      lead={`შეკვეთას მოგიტანთ თბილისის ნებისმიერ მისამართზე ${site.deliveryFee} ₾-ად, ან უფასოდ გაიტან დიღომიდან. ორივე შემთხვევაში იხდი მხოლოდ მიღებისას.`}
     >
       <div className="grid gap-3 sm:grid-cols-3">
         <InfoCard icon={<TruckIcon className="size-5" />} title="მიტანა">
-          თბილისის მასშტაბით, კურიერით, პირდაპირ მისამართზე.
+          {site.deliveryFee} ₾, თბილისის ნებისმიერ მისამართზე, კურიერით.
         </InfoCard>
         <InfoCard icon={<PinIcon className="size-5" />} title="გატანა">
-          {site.pickup.address}, ყოველდღე {site.pickup.hours}.
+          უფასოდ, {site.pickup.address}, ყოველდღე {site.pickup.hours}.
         </InfoCard>
         <InfoCard icon={<CashIcon className="size-5" />} title="გადახდა">
           მიღებისას. წინასწარ არაფერს იხდი.
@@ -36,7 +36,7 @@ export default function DeliveryPage() {
           აირჩიე პროდუქტები, კალათაში მიუთითე სახელი და ტელეფონი და აირჩიე: <b className="text-fg">მიტანა</b> ან{" "}
           <b className="text-fg">გატანა</b>.
         </li>
-        <li>დაგირეკავთ შეკვეთის დასადასტურებლად ({site.hours.toLowerCase()}). ამ ზარში გეტყვით მიწოდების ფასს და დროს.</li>
+        <li>დაგირეკავთ შეკვეთის დასადასტურებლად ({site.hours.toLowerCase()}). ამ ზარში შევთანხმდებით მიტანის დროზე.</li>
         <li>კურიერი შეკვეთას მისამართზე მოგიტანს, ან გატანისას შეკვეთა მზად დაგხვდება.</li>
         <li>ნივთს ნახავ, შეამოწმებ და მერე გადაიხდი.</li>
       </ul>

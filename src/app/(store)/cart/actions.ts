@@ -16,7 +16,7 @@ export async function getCartProducts(ids: string[]): Promise<ProductCard[]> {
   return getProductsByIds(ids.filter((id) => typeof id === "string" && UUID.test(id)).slice(0, 50));
 }
 
-export type OrderState = { orderId?: number; total?: number; error?: string };
+export type OrderState = { orderId?: number; total?: number; deliveryFee?: number; error?: string };
 
 export async function placeOrder(_previous: OrderState, form: FormData): Promise<OrderState> {
   // Hidden field that only bots fill in.
@@ -44,6 +44,9 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
     address: pickup ? `გატანა: ${site.pickup.address}` : String(form.get("address") ?? "").slice(0, 600),
     note: String(form.get("note") ?? "").slice(0, 1000),
   };
+  // The order total in the database covers the products; the courier fee is added on top and noted on the order.
+  const deliveryFee = pickup ? 0 : site.deliveryFee;
+  if (deliveryFee) customer.note = `[მიტანა +${deliveryFee} ₾] ${customer.note}`.trim();
 
   // Only the server can place orders: the function is closed to customers' browsers.
   const { data, error } = await service.rpc("place_order", {
@@ -75,8 +78,8 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
 
   const order = data as PlacedOrder;
   // Runs after the customer already sees the confirmation, so a slow Telegram never delays checkout.
-  after(() => sendTelegram(orderMessage(order, { ...customer, name: customer.name.trim() })));
+  after(() => sendTelegram(orderMessage(order, { ...customer, name: customer.name.trim() }, deliveryFee)));
 
   updateTag(CATALOG_TAG);
-  return { orderId: order.order_id, total: order.total };
+  return { orderId: order.order_id, total: order.total + deliveryFee, deliveryFee };
 }

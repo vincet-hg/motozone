@@ -32,6 +32,8 @@ export const site = {
     mapUrl: "https://www.google.com/maps/search/?api=1&query=%E1%83%90%E1%83%A6%E1%83%9B%E1%83%90%E1%83%A8%E1%83%94%E1%83%9C%E1%83%94%E1%83%91%E1%83%9A%E1%83%98%E1%83%A1+%E1%83%AE%E1%83%94%E1%83%98%E1%83%95%E1%83%90%E1%83%9C%E1%83%98+67%2C+%E1%83%93%E1%83%98%E1%83%A6%E1%83%9D%E1%83%9B%E1%83%98%2C+%E1%83%97%E1%83%91%E1%83%98%E1%83%9A%E1%83%98%E1%83%A1%E1%83%98",
   },
   address: "თბილისი, დიღომი, აღმაშენებლის 67",
+  // Courier delivery anywhere in Tbilisi, in lari. Pickup is free.
+  deliveryFee: 7,
   // Days a buyer has to return an order bought online (the consumer protection law gives 14).
   returnDays: 14,
   // Short promises in the bar above the menu and in the homepage banners. Keep them true.
@@ -40,7 +42,7 @@ export const site = {
   pickupShort: "გატანა დიღომიდან",
   deliveryBanner: {
     title: "მიწოდება თბილისის მასშტაბით",
-    text: "შეკვეთის შემდეგ დაგირეკავთ დასადასტურებლად და კურიერი პირდაპირ მისამართზე მოგიტანს. გადაიხდი მიღებისას.",
+    text: "კურიერი შეკვეთას პირდაპირ მისამართზე მოგიტანს 7 ₾-ად. გადაიხდი მიღებისას, გატანა დიღომიდან უფასოა.",
   },
   supportBanner: {
     title: "გჭირდება რჩევა?",

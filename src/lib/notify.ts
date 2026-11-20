@@ -28,7 +28,11 @@ export type PlacedOrder = {
   low_stock: { name: string; stock: number }[];
 };
 
-export function orderMessage(order: PlacedOrder, customer: { name: string; phone: string; city: string; address: string; note: string }) {
+export function orderMessage(
+  order: PlacedOrder,
+  customer: { name: string; phone: string; city: string; address: string; note: string },
+  deliveryFee = 0,
+) {
   const lines = [
     `🛒 <b>ახალი შეკვეთა #${order.order_id}</b>`,
     "",
@@ -38,7 +42,9 @@ export function orderMessage(order: PlacedOrder, customer: { name: string; phone
     customer.note ? `📝 ${escape(customer.note)}` : "",
     "",
     ...order.items.map((item) => `• ${escape(item.name)} × ${item.qty} = ${formatPrice(item.price * item.qty)}`),
-    `<b>ჯამი: ${formatPrice(order.total)}</b>`,
+    ...(deliveryFee
+      ? [`მიტანა: ${formatPrice(deliveryFee)}`, `<b>სულ: ${formatPrice(order.total + deliveryFee)}</b>`]
+      : [`<b>ჯამი: ${formatPrice(order.total)}</b>`]),
   ];
   if (order.low_stock.length > 0) {
     lines.push("", "⚠️ <b>მარაგი იწურება:</b>", ...order.low_stock.map((item) => `• ${escape(item.name)}: დარჩა ${item.stock}`));

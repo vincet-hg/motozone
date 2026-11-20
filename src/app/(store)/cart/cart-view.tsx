@@ -48,7 +48,7 @@ export function CartView() {
       <div className="mt-6 max-w-md rounded-card border border-line bg-card p-6">
         <h2 className="text-xl font-extrabold text-neon">შეკვეთა მიღებულია</h2>
         <p className="mt-2">შეკვეთის ნომერი: #{state.orderId}</p>
-        <p>ჯამი: {formatPrice(state.total ?? 0)}</p>
+        <p>ჯამი: {formatPrice(state.total ?? 0)}{state.deliveryFee ? ` (მიტანის ჩათვლით)` : ""}</p>
         <p className="mt-2 text-sm text-muted">დასადასტურებლად დაგირეკავთ მითითებულ ნომერზე.</p>
         <Link href="/" className="mt-4 inline-block text-neon underline">
           პროდუქტებზე დაბრუნება
@@ -125,10 +125,20 @@ export function CartView() {
       </ul>
 
       <form action={action} onSubmit={keepValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-bold">ჯამი</h2>
-          <span className="text-2xl font-bold text-neon">{formatPrice(total)}</span>
-        </div>
+        <dl className="space-y-1.5 text-sm">
+          <div className="flex justify-between text-muted">
+            <dt>პროდუქტები</dt>
+            <dd className="text-fg">{formatPrice(total)}</dd>
+          </div>
+          <div className="flex justify-between text-muted">
+            <dt>{method === "delivery" ? "მიტანა თბილისში" : "გატანა დიღომიდან"}</dt>
+            <dd className="text-fg">{method === "delivery" ? formatPrice(site.deliveryFee) : "უფასო"}</dd>
+          </div>
+          <div className="flex items-baseline justify-between border-t border-line pt-2">
+            <dt className="text-base font-bold text-fg">სულ</dt>
+            <dd className="text-2xl font-bold text-neon">{formatPrice(total + (method === "delivery" ? site.deliveryFee : 0))}</dd>
+          </div>
+        </dl>
         <input type="hidden" name="items" value={JSON.stringify(cart)} />
         <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
         <label className="text-sm">
@@ -144,8 +154,8 @@ export function CartView() {
           <div className="mt-1 grid grid-cols-2 gap-2">
             {(
               [
-                ["delivery", "მიტანა", "თბილისის მასშტაბით"],
-                ["pickup", "გატანა", `დიღომი, ${site.pickup.hours}`],
+                ["delivery", "მიტანა", `თბილისში, ${site.deliveryFee} ₾`],
+                ["pickup", "გატანა", `დიღომი, უფასოდ`],
               ] as const
             ).map(([value, title, hint]) => (
               <label
@@ -173,7 +183,7 @@ export function CartView() {
           შენიშვნა (არასავალდებულო)
           <input name="note" maxLength={500} className={`${input} mt-1`} />
         </label>
-        <p className="text-sm text-muted">{method === "delivery" ? "გადახდა მიტანისას. მიწოდების ფასს შეკვეთის დადასტურებისას გეტყვით." : "გადახდა გატანისას."}</p>
+        <p className="text-sm text-muted">{method === "delivery" ? "გადახდა მიტანისას, კურიერთან." : "გადახდა გატანისას."}</p>
         {unavailable && <p className="text-sm font-medium">წაშალე პროდუქტი, რომელიც მარაგში აღარ არის.</p>}
         {state.error && (
           <p role="alert" className="rounded-lg border border-accent/50 bg-accent/10 p-2 text-sm font-medium text-fg">
