@@ -125,3 +125,70 @@ set role anon;
 select pg_temp.check(pg_temp.fails($$select * from public.profiles$$), 'visitors cannot read details');
 select pg_temp.check(pg_temp.fails($$select * from public.wishlist_items$$), 'visitors cannot read wishlists');
 reset role;
+
+-- ---------------------------------------------------------------- users page and the super admin
+insert into auth.users (id, email) values ('33333333-3333-3333-3333-333333333333', 'owner@test');
+insert into public.admins (user_id, super) values ('33333333-3333-3333-3333-333333333333', true);
+
+-- An ordinary admin sees the accounts but cannot change who is an admin.
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+set request.jwt.claims = '{"aal":"aal2"}';
+set role authenticated;
+select pg_temp.check(public.admin_access() = 'admin', 'an admin row gives admin access');
+select pg_temp.check((select count(*) from public.admin_users()) = 3, 'admins see every account');
+select pg_temp.check((select role from public.admin_users() where id = '33333333-3333-3333-3333-333333333333') = 'super', 'the list marks the super admin');
+select pg_temp.check(pg_temp.fails($$select public.set_admin('22222222-2222-2222-2222-222222222222', true)$$), 'an ordinary admin cannot add admins');
+select pg_temp.check(pg_temp.fails($$select public.set_admin('33333333-3333-3333-3333-333333333333', false)$$), 'an ordinary admin cannot remove the super admin');
+select pg_temp.check(pg_temp.fails($$delete from public.admins$$), 'admins cannot be removed directly');
+reset role;
+
+-- The super admin adds and removes admins, and cannot be removed, even by themselves.
+set request.jwt.claim.sub = '33333333-3333-3333-3333-333333333333';
+set role authenticated;
+select pg_temp.check(public.is_super_admin(), 'the owner is the super admin');
+select public.set_admin('22222222-2222-2222-2222-222222222222', true);
+select pg_temp.check((select role from public.admin_users() where id = '22222222-2222-2222-2222-222222222222') = 'admin', 'the super admin adds an admin');
+select public.set_admin('22222222-2222-2222-2222-222222222222', false);
+select pg_temp.check((select role from public.admin_users() where id = '22222222-2222-2222-2222-222222222222') is null, 'the super admin removes an admin');
+select pg_temp.check(pg_temp.fails($$select public.set_admin('33333333-3333-3333-3333-333333333333', false)$$), 'the super admin cannot be removed');
+reset role;
+
+set request.jwt.claims = '{"aal":"aal1"}';
+set role authenticated;
+select pg_temp.check(pg_temp.fails($$select public.set_admin('22222222-2222-2222-2222-222222222222', true)$$), 'the super admin needs the second step too');
+reset role;
+
+select pg_temp.check(pg_temp.fails($$delete from public.admins where user_id = '33333333-3333-3333-3333-333333333333'$$), 'the super admin row cannot be deleted');
+select pg_temp.check(pg_temp.fails($$update public.admins set super = false$$), 'the super admin cannot be demoted');
+
+-- A customer sees no accounts and is not an admin while the test switch is off.
+set request.jwt.claim.sub = '22222222-2222-2222-2222-222222222222';
+set request.jwt.claims = '{"aal":"aal2"}';
+set role authenticated;
+select pg_temp.check(public.admin_access() is null, 'a customer has no admin access');
+select pg_temp.check((select count(*) from public.admin_users()) = 0, 'customers see no accounts');
+select pg_temp.check(pg_temp.fails($$select * from public.settings$$), 'customers cannot read the settings');
+select pg_temp.check(pg_temp.fails($$update public.settings set every_account_is_admin = true$$), 'customers cannot change the settings');
+reset role;
+
+set role anon;
+select pg_temp.check(pg_temp.fails($$select public.admin_users()$$), 'visitors cannot list accounts');
+reset role;
+
+-- A test project: every signed-in account is an admin, still only with the second step, and none is super.
+update public.settings set every_account_is_admin = true;
+set role authenticated;
+select pg_temp.check(public.admin_access() = 'admin', 'test switch: a customer reaches the admin');
+select pg_temp.check(public.is_admin() and not public.is_super_admin(), 'test switch: admin but not super');
+select pg_temp.check(pg_temp.fails($$select public.set_admin('11111111-1111-1111-1111-111111111111', false)$$), 'test switch: cannot remove admins');
+reset role;
+set request.jwt.claims = '{"aal":"aal1"}';
+set role authenticated;
+select pg_temp.check(not public.is_admin(), 'test switch: still needs the second step');
+reset role;
+set request.jwt.claim.sub = '';
+set request.jwt.claims = '';
+set role anon;
+select pg_temp.check(not public.is_admin(), 'test switch: visitors are not admins');
+reset role;
+update public.settings set every_account_is_admin = false;

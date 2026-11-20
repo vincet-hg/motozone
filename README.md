@@ -56,11 +56,15 @@ Do this once per environment.
    `npx supabase migration repair --status applied 20261101000000 --remote`, then run `db push --remote`.
 3. Create your admin login:
    - In **Authentication > Users**, click **Add user** and enter your email and a strong password.
-   - In **SQL Editor**, run this with your email:
+   - In **SQL Editor**, run this with your email. It makes you the super admin: the only one who adds
+     or removes admins (in the admin, **Users**), and whom nobody can remove:
      ```sql
-     insert into public.admins (user_id)
-     select id from auth.users where email = 'you@example.com';
+     insert into public.admins (user_id, super)
+     select id, true from auth.users where email = 'you@example.com';
      ```
+   - **Test project only** (staging): to let every account made on the test store into the test admin, run
+     `update public.settings set every_account_is_admin = true;`. Never run it on production. Each project
+     keeps its own admins, so nothing done in the test admin reaches production.
 4. In **Authentication > Sign In / Providers**, keep **Allow new users to sign up** on: customers create
    their own accounts. A new account is never an admin; admin access needs a row in `public.admins`
    and the second sign-in step. Then set up customer sign-in as described in *Customer accounts* below.

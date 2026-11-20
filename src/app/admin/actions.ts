@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { CATALOG_TAG } from "@/lib/catalog";
 import { DEMO_COOKIE, DEMO_SESSION, isDemo } from "@/lib/demo";
+import { demoSignIn } from "@/lib/demo-accounts";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/demo-data";
 import { slugify } from "@/lib/format";
 import { costChangeNotice } from "@/lib/margin";
@@ -88,7 +89,12 @@ export async function login(_previous: FormState, form: FormData): Promise<FormS
   }
 
   if (isDemo) {
-    if (text(form, "email") !== DEMO_EMAIL || form.get("password") !== DEMO_PASSWORD) {
+    // The built-in demo admin, or any account made on the demo store (demo mode is a test environment).
+    const email = text(form, "email").toLowerCase();
+    const password = String(form.get("password") ?? "");
+    const builtIn = email === DEMO_EMAIL.toLowerCase() && password === DEMO_PASSWORD;
+    const customer = builtIn ? null : demoSignIn(email, password);
+    if (!builtIn && (!customer || customer.confirmed === false)) {
       return { error: "ელფოსტა ან პაროლი არასწორია." };
     }
     (await cookies()).set(DEMO_COOKIE, DEMO_SESSION, { httpOnly: true, sameSite: "lax", path: "/" });
@@ -102,8 +108,8 @@ export async function login(_previous: FormState, form: FormData): Promise<FormS
   });
   if (error) return { error: "ელფოსტა ან პაროლი არასწორია." };
 
-  const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", data.user.id).maybeSingle();
-  if (!admin) {
+  const { data: access } = await supabase.rpc("admin_access");
+  if (!access) {
     await supabase.auth.signOut();
     return { error: "ამ ანგარიშს ადმინისტრატორის უფლება არ აქვს." };
   }
@@ -402,4 +408,22 @@ export async function deleteSubscriber(form: FormData) {
   const supabase = await requireAdmin();
   await supabase.from("newsletter_subscribers").delete().eq("id", Number(text(form, "id")));
   redirect("/admin/subscribers");
+}
+
+// Users page: only the super admin adds or removes admins. The database checks the same (set_admin).
+export async function setAdmin(form: FormData) {
+  const supabase = await requireAdmin();
+  const back = text(form, "back").startsWith("/admin/users") ? text(form, "back") : "/admin/users";
+  const join = back.includes("?") ? "&" : "?";
+  const admin = text(form, "admin") === "1";
+  const { error } = await supabase.rpc("set_admin", { p_user_id: text(form, "user_id"), p_admin: admin });
+  if (error) {
+    const message = error.message.includes("super_admin_protected")
+      ? "მთავარი ადმინის უფლებას ვერავინ მოხსნის."
+      : error.message.includes("not_allowed")
+        ? "ადმინებს მხოლოდ მთავარი ადმინი ნიშნავს და ხსნის."
+        : "ცვლილება ვერ შეინახა. სცადე თავიდან.";
+    redirect(`${back}${join}error=${encodeURIComponent(message)}`);
+  }
+  redirect(`${back}${join}saved=${admin ? "granted" : "revoked"}`);
 }

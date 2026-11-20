@@ -28,8 +28,8 @@ export async function requirePasswordSession() {
   const { data: auth } = await supabase.auth.getClaims();
   const id = auth?.claims?.sub;
   if (!id) redirect("/admin/login");
-  const { data } = await supabase.from("admins").select("user_id").eq("user_id", id).maybeSingle();
-  if (!data) redirect("/admin/login?denied=1");
+  const { data: access } = await supabase.rpc("admin_access");
+  if (!access) redirect("/admin/login?denied=1");
   return { supabase, user: { id } };
 }
 
@@ -48,8 +48,8 @@ export async function requireAdmin() {
   if (!claims?.sub) redirect("/admin/login");
   if (claims.aal !== "aal2") redirect("/admin/mfa");
 
-  const { data } = await supabase.from("admins").select("user_id").eq("user_id", claims.sub).maybeSingle();
-  if (!data) redirect("/admin/login?denied=1");
+  const { data: access } = await supabase.rpc("admin_access");
+  if (!access) redirect("/admin/login?denied=1");
 
   return supabase;
 }
