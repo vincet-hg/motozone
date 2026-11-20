@@ -60,7 +60,7 @@ export function Newsletter() {
                 disabled={pending}
                 className="h-12 shrink-0 rounded-full bg-gradient-to-r from-accent to-accent-hover px-7 font-bold text-white shadow-[0_10px_30px_-10px_rgba(227,18,11,0.8)] transition-colors duration-200 hover:bg-accent-hover disabled:opacity-60"
               >
-                {pending ? "იგზავნება..." : "შემატყობინე"}
+                {pending ? "იგზავნება..." : "გაგზავნა"}
               </button>
             </div>
             {state.error && (
