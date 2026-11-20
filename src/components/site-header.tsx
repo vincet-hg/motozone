@@ -2,9 +2,9 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { AccountLink, ActiveButton, CartLink, Disclosure, HiddenOnHome, NavLink, WishlistLink } from "./header-parts";
+import { AccountLink, ActiveButton, CartLink, Disclosure, HiddenOnHome, MobileAccountLinks, NavLink, WishlistLink } from "./header-parts";
 import { CategoryIcon, SaleIcon } from "./category-icons";
-import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon, UserIcon } from "./icons";
+import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon } from "./icons";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
 import { iconButton } from "./styles";
@@ -120,7 +120,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         {/* Neon hairline along the bottom edge. */}
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/45 to-transparent" />
 
-        <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-1.5 px-2.5 min-[360px]:gap-2 sm:px-4 lg:h-[76px] lg:gap-3">
+        <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-1.5 px-2.5 min-[390px]:gap-2 sm:px-4 lg:h-[76px] lg:gap-3">
           <Disclosure className="lg:hidden" summaryLabel="მენიუ" summaryClassName={`${iconButton}`} summary={<MenuIcon className="size-5" />}>
             <nav aria-label="მენიუ" className="absolute inset-x-0 top-full max-h-[80dvh] overflow-y-auto border-y border-line bg-bg px-3 pt-3 pb-5 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.9)] backdrop-blur-xl">
               <NavLink href="/" className={mobileLink} activeClassName="bg-card text-neon">მთავარი</NavLink>
@@ -151,13 +151,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                   </NavLink>
                 ))}
               </div>
-              <NavLink href="/account" className={`${mobileLink} mt-1 border-t border-line pt-3`} activeClassName="bg-card text-neon">
-                <span className="flex items-center gap-2">
-                  <UserIcon className="optical-center size-5 text-neon" />
-                  ჩემი ანგარიში
-                </span>
-                <ChevronIcon className="size-4 -rotate-90 text-muted" />
-              </NavLink>
+              <MobileAccountLinks linkClassName={mobileLink} />
               <a href={site.phoneHref} className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover py-3 font-semibold text-white">
                 <PhoneIcon className="size-5" />
                 {site.phone}
@@ -166,7 +160,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </Disclosure>
 
           <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 rounded-xl lg:mx-0 lg:mr-2">
-            <Logo className="h-10 w-auto min-[360px]:h-12 drop-shadow-[0_0_14px_rgba(227,18,11,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
+            <Logo className="h-10 w-auto min-[390px]:h-12 drop-shadow-[0_0_14px_rgba(227,18,11,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
@@ -215,7 +209,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1.5 min-[360px]:gap-2 lg:ml-auto">
+          <div className="flex items-center gap-1 min-[390px]:gap-2 lg:ml-auto">
             {/* The homepage has its own large search in the hero, so the header one is left out there. */}
             <HiddenOnHome>
               <SearchForm className="hidden w-[250px] xl:flex" />
@@ -226,15 +220,14 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
               </Disclosure>
             </HiddenOnHome>
             <WishlistLink />
-            <AccountLink className="hidden min-[390px]:flex" />
+            <AccountLink />
             <CartLink />
             <a
               href={site.phoneHref}
-              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px xl:flex"
+              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px min-[1440px]:flex"
             >
               <PhoneIcon className="size-4" />
-              <span className="hidden min-[1360px]:inline">{site.phone}</span>
-              <span className="min-[1360px]:hidden">დარეკვა</span>
+              დარეკვა
             </a>
           </div>
         </div>

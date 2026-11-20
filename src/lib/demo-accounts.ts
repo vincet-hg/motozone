@@ -8,10 +8,11 @@ import type { Profile } from "./types";
 // standing in for Supabase Auth and the profiles and wishlist_items tables.
 
 export const DEMO_CUSTOMER_COOKIE = "motozone-demo-customer";
-// The SMS code the demo accepts; a real project sends one by SMS.
+// The one code the demo accepts for SMS and email codes; a real project sends a fresh one each time.
 export const DEMO_PHONE_CODE = "123456";
 
-type DemoUser = { id: string; email: string | null; phone: string | null; password: string | null; created_at: string };
+// confirmed: false until the email code is entered (accounts from before this field count as confirmed).
+type DemoUser = { id: string; email: string | null; phone: string | null; password: string | null; created_at: string; confirmed?: boolean };
 type Accounts = { users: DemoUser[]; profiles: (Profile & { user_id: string })[]; wishlist: { user_id: string; product_id: string }[] };
 
 const FILE = path.join(process.cwd(), ".demo-data", "accounts.json");
@@ -49,7 +50,7 @@ export function demoUser(id: string | undefined) {
 export function demoSignUp(email: string, password: string) {
   const data = read();
   if (data.users.some((user) => user.email === email)) return { error: "user_already_exists" as const };
-  const user: DemoUser = { id: randomUUID(), email, phone: null, password: hash(password), created_at: new Date().toISOString() };
+  const user: DemoUser = { id: randomUUID(), email, phone: null, password: hash(password), created_at: new Date().toISOString(), confirmed: false };
   data.users.push(user);
   write(data);
   return { user };
@@ -58,6 +59,18 @@ export function demoSignUp(email: string, password: string) {
 export function demoSignIn(email: string, password: string) {
   const user = read().users.find((item) => item.email === email);
   return user && matches(password, user.password) ? user : null;
+}
+
+export function demoUserByEmail(email: string) {
+  return read().users.find((item) => item.email === email) ?? null;
+}
+
+export function demoConfirm(email: string) {
+  const data = read();
+  const user = data.users.find((item) => item.email === email);
+  if (user) user.confirmed = true;
+  write(data);
+  return user ?? null;
 }
 
 // Signs in by phone, creating the account on first use, as Supabase does.
