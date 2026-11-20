@@ -36,7 +36,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
         <OrderCards orders={orders} empty="ამ სტატუსით შეკვეთა არ არის." />
       </div>
 
-      <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
+      <div className="mt-4 hidden overflow-x-auto rounded-2xl sm:block border border-a-line bg-a-card shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
             <tr>
