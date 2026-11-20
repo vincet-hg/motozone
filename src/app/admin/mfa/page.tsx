@@ -4,7 +4,7 @@ import { isDemo } from "@/lib/demo";
 import { requirePasswordSession } from "@/lib/supabase-server";
 import { MfaChallenge, MfaSetupForm } from "./mfa-forms";
 
-export const metadata: Metadata = { title: "ორფაქტორიანი შესვლა", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "ორ ეტაპიანდა", robots: { index: false, follow: false } };
 
 // Second sign-in step. Admin access, in the app and in the database, needs this step.
 export default async function MfaPage() {
