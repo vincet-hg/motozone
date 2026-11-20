@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
 import type { Order } from "@/lib/types";
-import { formatDate } from "../orders/status";
+import { OrderTime } from "./order-time";
 import { StatusBadge } from "./status-badge";
 
 // Phone layout for an order list: one tappable card per order instead of a wide table.
@@ -23,7 +23,7 @@ export function OrderCards({ orders, empty }: { orders: Order[]; empty: string }
             <div className="mt-2 flex items-end justify-between gap-3">
               <div className="min-w-0 text-sm">
                 <p className="truncate font-medium text-a-text">{order.customer_name}</p>
-                <p className="mt-0.5 text-xs text-a-muted">{formatDate(order.created_at)}</p>
+                <OrderTime value={order.created_at} className="mt-0.5 text-xs" />
               </div>
               <span className="shrink-0 text-base font-bold">{formatPrice(order.total)}</span>
             </div>
