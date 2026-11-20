@@ -46,14 +46,14 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
 
   if (state.orderId) {
     return (
-      <div className="mx-auto mt-6 max-w-lg rounded-card border border-neon/30 bg-card p-6 text-center shadow-[0_0_60px_-30px_rgba(227,18,11,0.9)] sm:p-8">
-        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_30px_-6px_rgba(227,18,11,0.9)]">
+      <div role="status" className="mx-auto mt-6 max-w-lg rounded-card border border-emerald-400/30 bg-card p-6 text-center shadow-[0_0_60px_-30px_rgba(34,197,94,0.9)] sm:p-8">
+        <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-[0_0_30px_-6px_rgba(34,197,94,0.9)]">
           <CheckIcon className="size-7" />
         </span>
         <h2 className="mt-4 text-2xl font-extrabold">შეკვეთა მიღებულია!</h2>
         <p className="mt-1 text-muted">
           შეკვეთა <span className="font-bold text-fg">#{state.orderId}</span> · სულ{" "}
-          <span className="font-bold text-neon">{formatPrice(state.total ?? 0)}</span>
+          <span className="font-bold text-fg">{formatPrice(state.total ?? 0)}</span>
         </p>
         <p className="mt-4 rounded-btn border border-line bg-bg px-4 py-3 text-sm leading-6 text-fg/90">
           დასადასტურებლად დაგირეკავთ. შეკვეთის ეტაპს ნებისმიერ დროს ნახავ ანგარიშში, „ჩემი შეკვეთები“-ში.

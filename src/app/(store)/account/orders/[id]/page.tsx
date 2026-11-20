@@ -7,7 +7,7 @@ import { getCustomerOrder, requireCustomer } from "@/lib/account";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { site } from "@/lib/site";
 import { formatDate } from "../../../../admin/(panel)/orders/status";
-import { OrderProgress, StatusBadge, statusHint } from "../../order-status";
+import { HINT_TONES, OrderProgress, StatusBadge, statusHint } from "../../order-status";
 
 export const metadata: Metadata = { title: "შეკვეთა", robots: { index: false, follow: false } };
 
@@ -36,7 +36,7 @@ export default async function OrderPage({ params }: PageProps<"/account/orders/[
         <div className="mt-6">
           <OrderProgress order={order} />
         </div>
-        <p className={`mt-5 rounded-btn border px-3.5 py-3 text-sm leading-6 ${order.status === "cancelled" ? "border-line bg-bg text-muted" : "border-neon/30 bg-accent/10 text-fg"}`}>
+        <p className={`mt-5 rounded-btn border px-3.5 py-3 text-sm leading-6 ${HINT_TONES[order.status]}`}>
           {statusHint(order)}
         </p>
       </section>
