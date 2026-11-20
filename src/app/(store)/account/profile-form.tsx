@@ -2,6 +2,7 @@
 
 import { keepValues } from "@/lib/keep-values";
 import { useActionState, useEffect } from "react";
+import { useFormToast } from "@/components/toaster";
 import { refreshAccount } from "@/lib/account-state";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
 import type { Profile } from "@/lib/types";
@@ -10,6 +11,7 @@ import { updateProfile } from "./actions";
 
 export function ProfileForm({ profile }: { profile: Profile }) {
   const [state, action, pending] = useActionState<AuthState, FormData>(updateProfile, {});
+  useFormToast(state);
   // The header shows the name, so it looks again after a save.
   useEffect(() => {
     if (state.info) refreshAccount();

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { addToCart } from "@/lib/cart";
+import { toast } from "./toaster";
 import { CartIcon, CheckIcon } from "./icons";
 
 export function AddToCart({ id, stock, large = false }: { id: string; stock: number; large?: boolean }) {
@@ -14,8 +15,13 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
   }, [added]);
 
   function add() {
-    addToCart(id, stock);
-    setAdded(true);
+    const result = addToCart(id, stock);
+    if (result === "added") {
+      setAdded(true);
+      toast("პროდუქტი დაემატა კალათაში.");
+    } else {
+      toast(result === "limit" ? "მარაგში მეტი აღარ არის: კალათაში უკვე ყველა ცალია." : "ეს პროდუქტი ამჟამად მარაგში არ არის.", "error");
+    }
   }
 
   const Icon = added ? CheckIcon : CartIcon;

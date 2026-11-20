@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { keepValues } from "@/lib/keep-values";
 import { useActionState, useState } from "react";
+import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
 import { PasswordInput } from "@/components/password-input";
 import { type AuthState, resetPasswordWithCode, sendPasswordReset } from "../login/actions";
@@ -11,6 +12,8 @@ import { type AuthState, resetPasswordWithCode, sendPasswordReset } from "../log
 export function ResetForm() {
   const [sent, sendAction, sending] = useActionState<AuthState, FormData>(sendPasswordReset, {});
   const [reset, resetAction, resetting] = useActionState<AuthState, FormData>(resetPasswordWithCode, {});
+  useFormToast(sent);
+  useFormToast(reset);
   const [restart, setRestart] = useState(0);
   const email = reset.email ?? sent.email ?? "";
   const step = (reset.step ?? sent.step) === "code" && restart === 0 ? "code" : "email";

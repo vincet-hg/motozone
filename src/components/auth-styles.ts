@@ -6,4 +6,5 @@ export const authButton =
 export const authSecondary =
   "flex h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-btn border border-line bg-card font-semibold text-fg transition-colors duration-200 hover:border-neon/50";
 export const authError = "rounded-btn border border-accent/40 bg-accent/10 px-3 py-2.5 text-sm text-fg";
-export const authInfo = "rounded-btn border border-neon/30 bg-neon/10 px-3 py-2.5 text-sm text-fg";
+// Success and instructions are green, so they never look like an error (authError is red).
+export const authInfo = "rounded-btn border border-emerald-400/30 bg-emerald-400/10 px-3 py-2.5 text-sm text-fg";

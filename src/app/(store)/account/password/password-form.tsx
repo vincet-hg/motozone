@@ -2,12 +2,14 @@
 
 import { keepValues } from "@/lib/keep-values";
 import { useActionState } from "react";
+import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
 import { PasswordInput } from "@/components/password-input";
 import { type AuthState, updatePassword } from "../../login/actions";
 
 export function PasswordForm() {
   const [state, action, pending] = useActionState<AuthState, FormData>(updatePassword, {});
+  useFormToast(state);
   if (state.info) return <p role="status" className={authInfo}>{state.info}</p>;
   return (
     <form action={action} onSubmit={keepValues(action)} className="space-y-3">

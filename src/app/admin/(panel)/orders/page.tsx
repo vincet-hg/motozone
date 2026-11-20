@@ -4,8 +4,9 @@ import { requireAdmin } from "@/lib/supabase-server";
 import { tab } from "../../styles";
 import type { Order, OrderStatus } from "@/lib/types";
 import { OrderCards } from "../_ui/order-cards";
+import { OrderTime } from "../_ui/order-time";
 import { StatusBadge } from "../_ui/status-badge";
-import { formatDate, STATUS_LABELS, STATUSES } from "./status";
+import { STATUS_LABELS, STATUSES } from "./status";
 
 export default async function AdminOrdersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   const { status } = await searchParams;
@@ -41,7 +42,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
           <thead>
             <tr>
               <th className="px-4 py-3 font-medium">ნომერი</th>
-              <th className="px-4 py-3 font-medium">თარიღი</th>
+              <th className="px-4 py-3 font-medium">შემოვიდა</th>
               <th className="px-4 py-3 font-medium">მომხმარებელი</th>
               <th className="px-4 py-3 font-medium">ტელეფონი</th>
               <th className="px-4 py-3 font-medium">ჯამი</th>
@@ -56,7 +57,9 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                     #{order.id}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-a-soft">{formatDate(order.created_at)}</td>
+                <td className="px-4 py-3">
+                  <OrderTime value={order.created_at} />
+                </td>
                 <td className="px-4 py-3">{order.customer_name}</td>
                 <td className="px-4 py-3">{order.phone}</td>
                 <td className="px-4 py-3 font-medium">{formatPrice(order.total)}</td>

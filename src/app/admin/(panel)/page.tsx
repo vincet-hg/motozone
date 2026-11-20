@@ -7,7 +7,7 @@ import { LineChart } from "./_ui/line-chart";
 import { Icons } from "./_ui/icons";
 import { OrderCards } from "./_ui/order-cards";
 import { StatusBadge } from "./_ui/status-badge";
-import { formatDate } from "./orders/status";
+import { OrderTime } from "./_ui/order-time";
 
 const MONTHS = ["იან", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"];
 const money = (value: number) => formatPrice(Math.round(Number(value) * 100) / 100);
@@ -164,7 +164,7 @@ export default async function AdminOverviewPage() {
             <thead>
               <tr>
                 <th className="px-4 py-3 font-medium">ნომერი</th>
-                <th className="px-4 py-3 font-medium">თარიღი</th>
+                <th className="px-4 py-3 font-medium">შემოვიდა</th>
                 <th className="px-4 py-3 font-medium">მომხმარებელი</th>
                 <th className="px-4 py-3 font-medium">ჯამი</th>
                 <th className="px-4 py-3 font-medium">სტატუსი</th>
@@ -178,7 +178,9 @@ export default async function AdminOverviewPage() {
                       #{order.id}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-a-soft">{formatDate(order.created_at)}</td>
+                  <td className="px-4 py-3">
+                    <OrderTime value={order.created_at} />
+                  </td>
                   <td className="px-4 py-3">{order.customer_name}</td>
                   <td className="px-4 py-3 font-medium">{formatPrice(order.total)}</td>
                   <td className="px-4 py-3">
