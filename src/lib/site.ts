@@ -27,11 +27,13 @@ export const site = {
   hours: "ყოველდღე 10:00–22:00",
   // There is no shop yet; buyers can pick an order up here.
   pickup: {
-    address: "თბილისი, დიღომი, აღმაშენებლის 67",
+    address: "დავით აღმაშენებლის ხეივანი 190",
+    // Shown under the address so a first-time visitor finds the entrance.
+    landmark: "„არქის“ კორპუსები, პორშე ცენტრის მოპირდაპირედ",
     hours: "11:00–17:00",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=%E1%83%90%E1%83%A6%E1%83%9B%E1%83%90%E1%83%A8%E1%83%94%E1%83%9C%E1%83%94%E1%83%91%E1%83%9A%E1%83%98%E1%83%A1+%E1%83%AE%E1%83%94%E1%83%98%E1%83%95%E1%83%90%E1%83%9C%E1%83%98+67%2C+%E1%83%93%E1%83%98%E1%83%A6%E1%83%9D%E1%83%9B%E1%83%98%2C+%E1%83%97%E1%83%91%E1%83%98%E1%83%9A%E1%83%98%E1%83%A1%E1%83%98",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=David+Aghmashenebeli+Alley+190%2C+Tbilisi",
   },
-  address: "თბილისი, დიღომი, აღმაშენებლის 67",
+  address: "თბილისი, დავით აღმაშენებლის ხეივანი 190",
   // Courier delivery anywhere in Tbilisi, in lari. Pickup is free.
   deliveryFee: 7,
   // Days a buyer has to return an order bought online (the consumer protection law gives 14).

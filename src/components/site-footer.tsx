@@ -74,6 +74,7 @@ export function SiteFooter({ categories }: { categories: Category[] }) {
                 <PinIcon className={contactIcon} />
                 <span>
                   გატანა: {site.pickup.address}
+                  <span className="block text-xs">{site.pickup.landmark}</span>
                   <span className="block text-xs">ყოველდღე {site.pickup.hours} · რუკაზე ნახვა ↗</span>
                 </span>
               </a>

@@ -176,7 +176,7 @@ export function CartView() {
           </label>
         ) : (
           <p className="rounded-btn border border-line bg-bg p-3 text-sm leading-6 text-muted">
-            გაიტანე მისამართიდან: <span className="text-fg">{site.pickup.address}</span>, ყოველდღე {site.pickup.hours}. მოსვლამდე დაგირეკავთ, როცა შეკვეთა მზად იქნება.
+            გაიტანე მისამართიდან: <span className="text-fg">{site.pickup.address}</span> ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}. მოსვლამდე დაგირეკავთ, როცა შეკვეთა მზად იქნება.
           </p>
         )}
         <label className="text-sm">

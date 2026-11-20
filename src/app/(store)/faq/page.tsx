@@ -42,10 +42,10 @@ const QUESTIONS: { question: string; text: string; answer: React.ReactNode }[] =
   },
   {
     question: "შემიძლია თავად გავიტანო?",
-    text: `კი. გატანა შეიძლება მისამართიდან ${site.pickup.address}, ყოველდღე ${site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე დაგირეკავთ.`,
+    text: `კი. გატანა შეიძლება მისამართიდან ${site.pickup.address} (${site.pickup.landmark}), ყოველდღე ${site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე დაგირეკავთ.`,
     answer: (
       <>
-        კი. გატანა შეიძლება მისამართიდან {site.pickup.address}, ყოველდღე {site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე
+        კი. გატანა შეიძლება მისამართიდან {site.pickup.address} ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}. კალათაში აირჩიე „გატანა“ და მოსვლამდე
         დაგირეკავთ. <a href={site.pickup.mapUrl} target="_blank" rel="noopener" className={link}>რუკაზე ნახვა ↗</a>
       </>
     ),

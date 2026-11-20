@@ -30,6 +30,8 @@ export default function ContactPage() {
         <InfoCard icon={<PinIcon className="size-5" />} title="შეკვეთის გატანა">
           {site.pickup.address}
           <br />
+          {site.pickup.landmark}
+          <br />
           ყოველდღე {site.pickup.hours}.{" "}
           <a href={site.pickup.mapUrl} target="_blank" rel="noopener" className="text-neon underline">
             რუკაზე ნახვა ↗

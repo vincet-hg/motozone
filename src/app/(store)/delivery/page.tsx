@@ -23,7 +23,7 @@ export default function DeliveryPage() {
           {site.deliveryFee} ₾, თბილისის ნებისმიერ მისამართზე, კურიერით.
         </InfoCard>
         <InfoCard icon={<PinIcon className="size-5" />} title="გატანა">
-          უფასოდ, {site.pickup.address}, ყოველდღე {site.pickup.hours}.
+          უფასოდ, {site.pickup.address} ({site.pickup.landmark}), ყოველდღე {site.pickup.hours}.
         </InfoCard>
         <InfoCard icon={<CashIcon className="size-5" />} title="გადახდა">
           მიღებისას. წინასწარ არაფერს იხდი.
