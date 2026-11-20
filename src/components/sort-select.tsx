@@ -20,10 +20,10 @@ export function SortSelect({ value, className }: { value: string; className: str
         className={`h-10 w-full cursor-pointer appearance-none rounded-btn border border-line bg-card pr-10 pl-3 text-sm [color-scheme:dark] transition-colors duration-200 hover:border-neon/40 focus:border-neon/60 focus:outline-none ${selected ? "text-fg" : "text-muted"}`}
       >
         <option value="" disabled hidden>
-          დალაგება
+          ფასი
         </option>
-        <option value="price_asc">ფასი: ზრდადობით</option>
-        <option value="price_desc">ფასი: კლებადობით</option>
+        <option value="price_asc">ფასი ზრდადობით</option>
+        <option value="price_desc">ფასი კლებადობით</option>
       </select>
       <ChevronIcon aria-hidden="true" className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-neon" />
     </span>
