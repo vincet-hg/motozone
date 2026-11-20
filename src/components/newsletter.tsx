@@ -39,7 +39,7 @@ export function Newsletter() {
         {state.ok ? (
           <p role="status" className="flex items-center gap-2 rounded-btn border border-accent/40 bg-accent/10 px-4 py-3 font-semibold">
             <CheckIcon className="size-5 text-neon" />
-            მზადაა! შემდეგ აქციაზე პირველი შენ გაიგებ.
+            გამოწერილია. ახალ აქციებს და პროდუქტებს ელფოსტაზე გამოგიგზავნით.
           </p>
         ) : (
           <form action={action} className="w-full">

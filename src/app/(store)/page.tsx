@@ -84,19 +84,19 @@ export default async function HomePage() {
 
         <CategoryShowcase categories={categories} covers={covers} />
 
-        <section aria-labelledby="popular-title" className="reveal mt-14">
-          <SectionHeading id="popular-title" icon={<StarIcon className="size-5" />} title="ყველაზე გაყიდვადი" subtitle="ჩვენი ყველაზე პოპულარული აქსესუარები" link={{ href: "/search", label: "ყველა" }} />
-          <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
-        </section>
-
-        <PromoBanners />
-
         {arrivals.length > 0 && (
           <section aria-labelledby="new-title" className="reveal mt-14">
             <SectionHeading id="new-title" icon={<SparklesIcon className="size-5" />} title="ახალი პროდუქტები" link={{ href: "/search", label: "ყველა" }} />
             <ProductRow products={arrivals} badgeFor={badgeFor} />
           </section>
         )}
+
+        <section aria-labelledby="popular-title" className="reveal mt-14">
+          <SectionHeading id="popular-title" icon={<StarIcon className="size-5" />} title="ყველაზე გაყიდვადი" subtitle="ჩვენი ყველაზე პოპულარული აქსესუარები" link={{ href: "/search", label: "ყველა" }} />
+          <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
+        </section>
+
+        <PromoBanners />
 
         <Link href="/search" prefetch={false} className={moreButton}>
           ყველა პროდუქტის ნახვა
