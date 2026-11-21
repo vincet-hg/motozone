@@ -5,6 +5,8 @@ import { JsonLd } from "@/components/json-ld";
 import { Newsletter } from "@/components/newsletter";
 import type { CardBadge } from "@/components/product-card";
 import { ProductGrid } from "@/components/product-grid";
+import { ProductCard } from "@/components/product-card";
+import { Carousel } from "@/components/carousel";
 import { ProductRow } from "@/components/product-row";
 import { PromoBanners } from "@/components/promo-banners";
 import { SearchHero } from "@/components/search-hero";
@@ -93,7 +95,15 @@ export default async function HomePage() {
 
         <section aria-labelledby="popular-title" className="reveal mt-14">
           <SectionHeading id="popular-title" icon={<StarIcon className="size-5" />} title="ყველაზე გაყიდვადი" subtitle="ჩვენი ყველაზე პოპულარული აქსესუარები" link={{ href: "/search", label: "ყველა" }} />
-          <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
+          {popular.products.length > 0 ? (
+            <Carousel label="ყველაზე გაყიდვადი პროდუქტები">
+              {popular.products.map((product, index) => (
+                <ProductCard key={product.id} product={product} eager={index < 5} lcp={false} badge={badgeFor(product.id)} />
+              ))}
+            </Carousel>
+          ) : (
+            <ProductGrid products={popular.products} heroAbove badgeFor={badgeFor} />
+          )}
         </section>
 
         <Link href="/search" prefetch={false} className={moreButton}>
