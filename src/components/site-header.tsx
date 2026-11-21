@@ -13,7 +13,7 @@ import { iconButton } from "./styles";
 const navItem =
   "relative flex h-full items-center gap-1.5 px-3 whitespace-nowrap text-[14px] font-semibold text-fg/75 transition-colors duration-200 hover:text-white xl:px-4 " +
   "after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:origin-center after:scale-x-0 after:rounded-t-full after:bg-gradient-to-r after:from-accent after:to-neon after:transition-transform after:duration-300 hover:after:scale-x-100 xl:after:inset-x-4";
-const navActive = "text-white after:scale-x-100 after:shadow-[0_0_14px_2px_rgba(255,81,72,0.7)]";
+const navActive = "text-white after:scale-x-100 after:shadow-[0_0_8px_0_rgba(255,81,72,0.35)]";
 // Category in the desktop dropdown: lit on hover, and kept lit (border, tint, dot, arrow) on its own page.
 const dropdownItem =
   "group/item flex items-center justify-between gap-2 rounded-xl border border-transparent px-2.5 py-2 text-sm text-fg/80 transition-all duration-200 hover:border-line hover:bg-card-hover hover:text-white aria-[current=page]:border-neon/35 aria-[current=page]:bg-accent/15 aria-[current=page]:font-semibold aria-[current=page]:text-white";
@@ -61,7 +61,7 @@ function SearchForm({ className = "", autoFocus = false }: { className?: string;
       <button
         type="submit"
         aria-label="ძებნა"
-        className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_14px_-4px_rgba(227,18,11,0.9)] transition-transform duration-200 hover:scale-105"
+        className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-hover text-white shadow-[0_0_8px_-4px_rgba(227,18,11,0.5)] transition-transform duration-200 hover:scale-105"
       >
         <ArrowIcon className="size-4" />
       </button>
@@ -77,7 +77,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
   return (
     <>
       {/* Service bar. Keep these promises true for your shop (see src/lib/site.ts). */}
-      <div className="relative border-b border-line bg-[linear-gradient(90deg,#0b0d10_0%,#2a0d0b_50%,#0b0d10_100%)] text-[13px] text-fg/80">
+      <div className="relative border-b border-line bg-[linear-gradient(90deg,#0b0d10_0%,#1a0f0e_50%,#0b0d10_100%)] text-[13px] text-fg/80">
         <div className="mx-auto flex h-9 max-w-7xl items-center gap-4 px-4 whitespace-nowrap lg:gap-5">
           {/* Phones: one promise at a time, sliding up every three seconds. */}
           <div className="relative h-5 flex-1 overflow-hidden sm:hidden">
@@ -116,9 +116,9 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         </div>
       </div>
 
-      <header className="sticky top-0 z-30 bg-bg/80 shadow-[0_18px_40px_-28px_rgba(227,18,11,0.75)] backdrop-blur-xl">
+      <header className="sticky top-0 z-30 bg-bg/80 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.8)] backdrop-blur-xl">
         {/* Neon hairline along the bottom edge. */}
-        <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/45 to-transparent" />
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/20 to-transparent" />
 
         <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-1.5 px-2.5 min-[390px]:gap-2 sm:px-4 lg:h-[76px] lg:gap-3">
           <Disclosure className="lg:hidden" summaryLabel="მენიუ" summaryClassName={`${iconButton}`} summary={<MenuIcon className="size-5" />}>
@@ -160,7 +160,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
           </Disclosure>
 
           <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 rounded-xl lg:mx-0 lg:mr-2">
-            <Logo className="h-10 w-auto min-[390px]:h-12 drop-shadow-[0_0_14px_rgba(227,18,11,0.35)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
+            <Logo className="h-10 w-auto min-[390px]:h-12 drop-shadow-[0_0_8px_rgba(227,18,11,0.15)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
           </Link>
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
@@ -224,7 +224,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             <CartLink />
             <a
               href={site.phoneHref}
-              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_8px_22px_-10px_rgba(227,18,11,0.95)] transition-transform duration-200 hover:-translate-y-px min-[1440px]:flex"
+              className="ml-1 hidden h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-4 text-sm font-semibold whitespace-nowrap text-white shadow-[0_4px_12px_-8px_rgba(227,18,11,0.6)] transition-transform duration-200 hover:-translate-y-px min-[1440px]:flex"
             >
               <PhoneIcon className="size-4" />
               დარეკვა
