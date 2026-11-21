@@ -4,8 +4,18 @@ import { isDemo, isDemoAdmin } from "@/lib/demo";
 
 // Runs on /admin and the customer account pages only, so the rest of the storefront never pays for it.
 // It keeps the session cookie fresh (pages cannot write cookies) and guards /admin.
+//
+// ADMIN_HOST (production only, e.g. admin.scooterland.ge) gives the admin its own address: that address
+// opens the admin, and on every other address /admin does not exist (the 404 page). Without it, as in
+// previews and on localhost, the admin stays at /admin.
 export async function proxy(request: NextRequest) {
   const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
+  const adminHost = process.env.ADMIN_HOST;
+  if (adminHost && !isDemo) {
+    const host = (request.headers.get("host") ?? "").split(":")[0];
+    if (host === adminHost && request.nextUrl.pathname === "/") return NextResponse.redirect(new URL("/admin", request.url));
+    if (host !== adminHost && isAdminPath) return NextResponse.rewrite(new URL("/admin-is-elsewhere", request.url));
+  }
   if (isDemo) {
     return !isAdminPath || isDemoAdmin(request.cookies) || request.nextUrl.pathname === "/admin/login"
       ? NextResponse.next({ request })
@@ -35,4 +45,15 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
-export const config = { matcher: ["/admin", "/admin/:path*", "/account", "/account/:path*", "/login", "/cart"] };
+export const config = {
+  matcher: [
+    "/admin",
+    "/admin/:path*",
+    "/account",
+    "/account/:path*",
+    "/login",
+    "/cart",
+    // The admin address's home page, so it can open the admin. The store's home page is not matched.
+    { source: "/", has: [{ type: "host", value: "admin\\..*" }] },
+  ],
+};

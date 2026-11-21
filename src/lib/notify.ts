@@ -49,6 +49,8 @@ export function orderMessage(
   if (order.low_stock.length > 0) {
     lines.push("", "⚠️ <b>მარაგი იწურება:</b>", ...order.low_stock.map((item) => `• ${escape(item.name)}: დარჩა ${item.stock}`));
   }
-  if (site.url) lines.push("", `${site.url}/admin/orders/${order.order_id}`);
+  // The admin has its own address in production (ADMIN_HOST); the link goes there.
+  const adminBase = process.env.ADMIN_HOST ? `https://${process.env.ADMIN_HOST}` : site.url;
+  if (adminBase) lines.push("", `${adminBase}/admin/orders/${order.order_id}`);
   return lines.filter((line, index, all) => line !== "" || all[index - 1] !== "").join("\n");
 }
