@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { addToCart } from "@/lib/cart";
+import { requireSignIn } from "./login-prompt";
 import { toast } from "./toaster";
 import { CartIcon, CheckIcon } from "./icons";
 
@@ -15,6 +16,7 @@ export function AddToCart({ id, stock, large = false }: { id: string; stock: num
   }, [added]);
 
   function add() {
+    if (!requireSignIn({ type: "cart", id, stock })) return;
     const result = addToCart(id, stock);
     if (result === "added") {
       setAdded(true);
