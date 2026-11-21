@@ -3,11 +3,11 @@
 import { Children, useCallback, useEffect, useRef, useState } from "react";
 
 // A row of cards that moves on by itself every few seconds and can be moved by hand: arrows, swipe,
-// trackpad or keyboard. It pauses while the visitor points at it, touches it, or the tab is hidden,
+// trackpad or keyboard. It waits a few seconds after the visitor moves it, and while the tab is hidden,
 // and does not move by itself for visitors who prefer reduced motion. At the end it goes back to the start.
 
 const INTERVAL = 4000;
-const PAUSE_AFTER_TOUCH = 8000;
+const PAUSE_AFTER_TOUCH = 5000;
 
 function Arrow({ dir, onClick, disabled }: { dir: "prev" | "next"; onClick: () => void; disabled: boolean }) {
   return (
@@ -30,7 +30,6 @@ function Arrow({ dir, onClick, disabled }: { dir: "prev" | "next"; onClick: () =
 export function Carousel({ children, label }: { children: React.ReactNode; label: string }) {
   const track = useRef<HTMLDivElement>(null);
   const pausedUntil = useRef(0);
-  const hovering = useRef(false);
   const [edges, setEdges] = useState({ start: true, end: false });
   const [page, setPage] = useState({ index: 0, count: 1 });
   const items = Children.toArray(children);
@@ -102,7 +101,7 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => {
-      if (document.hidden || hovering.current || Date.now() < pausedUntil.current) return;
+      if (document.hidden || Date.now() < pausedUntil.current) return;
       const el = track.current;
       if (!el || el.scrollWidth <= el.clientWidth + 4) return;
       // Only move while the row is on screen.
@@ -126,8 +125,6 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
       aria-roledescription="კარუსელი"
       aria-label={label}
       className="relative"
-      onMouseEnter={() => (hovering.current = true)}
-      onMouseLeave={() => (hovering.current = false)}
       onFocusCapture={pauseByTouch}
       onKeyDown={(event) => {
         if (event.key === "ArrowRight") byHand(1);
@@ -139,7 +136,10 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
         ref={track}
         onScroll={measure}
         onPointerDown={pauseByTouch}
-        onWheel={pauseByTouch}
+        onWheel={(event) => {
+          // Only sideways scrolling moves the row; scrolling the page up or down over it does not pause it.
+          if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) pauseByTouch();
+        }}
         onTouchStart={pauseByTouch}
         className="no-scrollbar -mx-3 flex snap-x snap-mandatory scroll-px-3 gap-2.5 overflow-x-auto px-3 pb-2 sm:-mx-4 sm:scroll-px-4 sm:gap-4 sm:px-4 md:mx-0 md:scroll-px-0 md:px-0"
       >
