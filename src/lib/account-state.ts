@@ -16,6 +16,11 @@ export function setAccountState(next: AccountState) {
   listeners.forEach((listener) => listener());
 }
 
+// The current state outside React, for click handlers.
+export function getAccountState() {
+  return state;
+}
+
 export function useAccount() {
   return useSyncExternalStore(
     (listener) => {

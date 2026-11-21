@@ -11,6 +11,10 @@ export function toggleWishlist(id: string) {
   wishlist.set(items.some((item) => item.id === id) ? items.filter((item) => item.id !== id) : [...items, { id }]);
 }
 
+export function addToWishlist(id: string) {
+  if (!wishlist.get().some((item) => item.id === id)) wishlist.set([...wishlist.get(), { id }]);
+}
+
 export function removeFromWishlist(id: string) {
   wishlist.set(wishlist.get().filter((item) => item.id !== id));
 }
