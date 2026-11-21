@@ -27,7 +27,11 @@ function Arrow({ dir, onClick, disabled }: { dir: "prev" | "next"; onClick: () =
   );
 }
 
-export function Carousel({ children, label }: { children: React.ReactNode; label: string }) {
+const PRODUCT_WIDTHS =
+  "w-[46%] sm:w-[31%] md:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-3rem)/4)] xl:w-[calc((100%-4rem)/5)]";
+
+// itemClassName sets how wide each card is per screen size (the default fits product cards).
+export function Carousel({ children, label, itemClassName = PRODUCT_WIDTHS }: { children: React.ReactNode; label: string; itemClassName?: string }) {
   const track = useRef<HTMLDivElement>(null);
   const pausedUntil = useRef(0);
   const [edges, setEdges] = useState({ start: true, end: false });
@@ -141,7 +145,7 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
           if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) pauseByTouch();
         }}
         onTouchStart={pauseByTouch}
-        className="no-scrollbar -mx-3 flex snap-x snap-mandatory scroll-px-3 gap-2.5 overflow-x-auto px-3 pb-2 sm:-mx-4 sm:scroll-px-4 sm:gap-4 sm:px-4 md:mx-0 md:scroll-px-0 md:px-0"
+        className="no-scrollbar -mx-3 flex snap-x snap-mandatory scroll-px-3 gap-2.5 overflow-x-auto px-3 pt-1.5 pb-2 sm:-mx-4 sm:scroll-px-4 sm:gap-4 sm:px-4 md:mx-0 md:scroll-px-0 md:px-0"
       >
         {items.map((item, index) => (
           <div
@@ -149,7 +153,7 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
             role="group"
             aria-roledescription="სლაიდი"
             aria-label={`${index + 1} / ${items.length}`}
-            className="w-[46%] shrink-0 snap-start sm:w-[31%] md:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-3rem)/4)] xl:w-[calc((100%-4rem)/5)]"
+            className={`shrink-0 snap-start ${itemClassName}`}
           >
             {item}
           </div>
