@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { getAccountSummary, saveWishlist, syncWishlist } from "@/app/(store)/account/actions";
 import { hasSessionCookie, setAccountState, useAccount } from "@/lib/account-state";
+import { clearCart, useCart } from "@/lib/cart";
 import { replaceWishlist, useWishlist } from "@/lib/wishlist";
 
 // Finds out who is signed in, on every page change (signing in or out moves to another page), and keeps
@@ -54,9 +55,16 @@ export function AccountWatcher() {
     return () => clearTimeout(timer);
   }, [ids, userId]);
 
+  // Adding to the cart or favourites needs an account, so a signed-out visitor keeps neither: this also
+  // removes what was added before sign-in was required, and what stays on a shared device after signing out.
+  // A customer's favourites are saved in their account and come back when they sign in again.
+  const cart = useCart();
   useEffect(() => {
-    if (account.status === "out") synced.current = last.current = null;
-  }, [account.status]);
+    if (account.status !== "out") return;
+    synced.current = last.current = null;
+    if (cart.length > 0) clearCart();
+    if (wishlist.length > 0) replaceWishlist([]);
+  }, [account.status, cart.length, wishlist.length]);
 
   return null;
 }
