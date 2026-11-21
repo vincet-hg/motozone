@@ -20,7 +20,7 @@ function Pill({ href, active, children }: { href: string; active: boolean; child
 export function CategoryNav({ categories, active }: { categories: Category[]; active?: string }) {
   return (
     <nav aria-label="კატეგორიები">
-      <div className="no-scrollbar mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-3 sm:px-4">
+      <div className="no-scrollbar mx-auto flex max-w-7xl gap-2.5 overflow-x-auto px-3 pt-6 pb-4 sm:gap-3 sm:px-4 md:pt-8 md:pb-5">
         <Pill href="/" active={!active}>
           <AccessoriesIcon className="optical-center size-4 shrink-0" />
           ყველა
