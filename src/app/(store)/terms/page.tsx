@@ -4,7 +4,11 @@ import { BadgeIcon } from "@/components/icons";
 import { InfoPage } from "@/components/info-page";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "მომსახურების პირობები", alternates: { canonical: "/terms" } };
+export const metadata: Metadata = {
+  title: "მომსახურების პირობები",
+  description: `${site.name}-ში შეკვეთის, გადახდის, მიწოდებისა და დაბრუნების პირობები.`,
+  alternates: { canonical: "/terms" },
+};
 
 const h2 = "mt-6 text-lg font-bold";
 const link = "text-neon underline hover:text-neon";
@@ -18,7 +22,7 @@ export default function TermsPage() {
         </p>
 
         <h2 className={h2}>შეკვეთა</h2>
-        <p>შეკვეთის შემდეგ დაგირეკავთ დასადასტურებლად. შეკვეთა ძალაშია დადასტურების შემდეგ. თუ პროდუქტი მარაგში აღარ აღმოჩნდა, გაცნობებთ და შეკვეთას გავაუქმებთ ან შემცვლელს შემოგთავაზებთ.</p>
+        <p>შეკვეთის გასაფორმებლად საჭიროა ანგარიში. შეკვეთის შემდეგ დაგირეკავთ დასადასტურებლად. შეკვეთა ძალაშია დადასტურების შემდეგ. თუ პროდუქტი მარაგში აღარ აღმოჩნდა, გაცნობებთ და შეკვეთას გავაუქმებთ ან შემცვლელს შემოგთავაზებთ.</p>
 
         <h2 className={h2}>ფასი და გადახდა</h2>
         <p>ფასები მითითებულია ლარში და მოიცავს დღგ-ს, თუ ის ვრცელდება. გადახდა ხდება ნივთის მიღებისას, კურიერთან ან გატანისას. მიტანა თბილისში ღირს {site.deliveryFee} ₾, გატანა უფასოა.</p>
