@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { isLiveSite, site } from "@/lib/site";
 import { Suspense } from "react";
-import { NavigationLoader } from "@/components/navigation-loader";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { Toaster } from "@/components/toaster";
 import "./globals.css";
 
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Toaster />
         <Suspense fallback={null}>
-          <NavigationLoader />
+          <NavigationProgress />
         </Suspense>
       </body>
     </html>

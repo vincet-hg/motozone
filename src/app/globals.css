@@ -220,16 +220,25 @@ summary::-webkit-details-marker {
 .splash-spin { animation: spin-slow 2.4s linear infinite; }
 .splash-spin-rev { animation: spin-slow 3.6s linear infinite reverse; }
 
-/* Loading screen while moving to a slow page (see src/components/navigation-loader.tsx). */
-@keyframes route-in {
-  from { opacity: 0; }
+/* Thin bar along the top while the next page loads (see src/components/navigation-progress.tsx). */
+.navigation-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 110;
+  height: 3px;
+  pointer-events: none;
+  view-transition-name: navigation-progress;
 }
-@keyframes route-out {
-  to { opacity: 0; visibility: hidden; }
+.navigation-progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(90deg, #e3120b, #ff5148);
+  box-shadow: 0 0 10px #ff5148, 0 0 4px #e3120b;
 }
-.route-loader { view-transition-name: route-loader; animation: route-in 0.15s ease both; }
-.route-loader[data-state="hide"] { animation: route-out 0.2s ease forwards; }
-.route-loader[data-instant][data-state="show"] { animation: none; }
+/* Fast at first, then slower and slower: it never reaches the end until the page is there. */
+.navigation-progress[data-state="loading"] .navigation-progress-bar { width: 85%; transition: width 8s cubic-bezier(0.08, 0.8, 0.2, 1); }
+.navigation-progress[data-state="done"] .navigation-progress-bar { width: 100%; opacity: 0; transition: width 0.2s ease-out, opacity 0.25s ease 0.2s; }
 
 /* Fade between pages (see src/components/page-transition.tsx). The header and admin menu stay still. */
 @keyframes page-fade-in {
@@ -242,8 +251,8 @@ summary::-webkit-details-marker {
 ::view-transition-new(.page-enter) { animation: page-fade-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both; }
 ::view-transition-group(site-header),
 ::view-transition-group(admin-header),
-::view-transition-group(admin-aside),
-::view-transition-group(route-loader) { animation: none; z-index: 100; }
+::view-transition-group(admin-aside) { animation: none; z-index: 100; }
+::view-transition-group(navigation-progress) { animation: none; z-index: 110; }
 ::view-transition-old(site-header),
 ::view-transition-old(admin-header),
 ::view-transition-old(admin-aside) { display: none; }

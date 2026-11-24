@@ -48,7 +48,7 @@ export function FirstLoadScreen() {
   );
 }
 
-// The loader picture: logo, rings and progress bar. Also shown by NavigationLoader while a page loads.
+// The loader picture: logo, rings and progress bar.
 export function LoadingGraphic({ preload }: { preload?: boolean }) {
   // useId can contain characters that url(#...) does not accept.
   const gradient = `loader-${useId().replace(/[^\w-]/g, "")}`;
