@@ -5,7 +5,9 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { LoaderArt } from "./splash";
 
 // Fast pages never show the loader: it waits this long before fading in.
-const DELAY_MS = 300;
+const DELAY_MS = 150;
+// Once up, it stays at least this long, so it never blinks.
+const MIN_SHOW_MS = 500;
 const FADE_MS = 200;
 // If a click never leads anywhere (an error, a cancelled navigation), the loader leaves on its own.
 const GIVE_UP_MS = 15000;
@@ -83,18 +85,24 @@ export function NavigationLoader() {
 
   // off → show (after DELAY_MS) → hide (fading for FADE_MS) → off.
   const [phase, setPhase] = useState<"off" | "show" | "hide">("off");
+  const shownAt = useRef(0);
   useEffect(() => {
     if (busy) {
-      const timer = setTimeout(() => setPhase("show"), DELAY_MS);
+      const timer = setTimeout(() => {
+        if (phase !== "show") shownAt.current = performance.now();
+        setPhase("show");
+      }, phase === "show" ? 0 : DELAY_MS);
       return () => clearTimeout(timer);
     }
-    const fade = setTimeout(() => setPhase((current) => (current === "off" ? "off" : "hide")), 0);
-    const remove = setTimeout(() => setPhase("off"), FADE_MS);
+    if (phase === "off") return;
+    const wait = phase === "show" ? Math.max(0, shownAt.current + MIN_SHOW_MS - performance.now()) : 0;
+    const fade = setTimeout(() => setPhase("hide"), wait);
+    const remove = setTimeout(() => setPhase("off"), wait + FADE_MS);
     return () => {
       clearTimeout(fade);
       clearTimeout(remove);
     };
-  }, [busy]);
+  }, [busy, phase]);
 
   if (phase === "off") return null;
 
@@ -102,7 +110,7 @@ export function NavigationLoader() {
     <div
       role="status"
       aria-label="იტვირთება"
-      data-state={busy ? "show" : phase}
+      data-state={busy || phase === "show" ? "show" : "hide"}
       className="route-loader fixed inset-0 z-[95] flex items-center justify-center overflow-hidden bg-bg/85 backdrop-blur-md"
     >
       <LoaderArt />
