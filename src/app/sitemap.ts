@@ -12,11 +12,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const newest = products[0]?.updated_at ? new Date(products[0].updated_at) : new Date();
   const categoryUpdated = (id: string) => products.find((product) => product.category_id === id)?.updated_at;
 
+  // An empty category is a thin page for Google: it joins the sitemap once it has a product.
+  const filled = categories.filter((category) => categoryUpdated(category.id));
+
   return [
     { url: absolute("/"), lastModified: newest, changeFrequency: "daily", priority: 1 },
-    ...categories.map((category) => ({
+    ...filled.map((category) => ({
       url: absolute(`/category/${category.slug}`),
-      lastModified: new Date(categoryUpdated(category.id) ?? newest),
+      lastModified: new Date(categoryUpdated(category.id)!),
       changeFrequency: "daily" as const,
       priority: 0.8,
     })),

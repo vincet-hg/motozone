@@ -9,7 +9,7 @@ import { ProductGrid } from "@/components/product-grid";
 import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
 import { absolute, breadcrumbs, clip } from "@/lib/seo";
-import { site } from "@/lib/site";
+import { isLiveSite, site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -22,12 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = (await getCategories()).find((item) => item.slug === slug);
   if (!category) return {};
+  // Kept out of search while empty, so Google does not count a page with no products.
+  const { total } = await getProducts({ categoryId: category.id });
   const description = clip(category.description || `${category.name}: ფასები, მარაგი და მიწოდება თბილისში, გადახდა მიღებისას. ${site.name}.`);
   return {
     title: category.name,
     description,
     alternates: { canonical: `/category/${category.slug}` },
     openGraph: { title: category.name, description, url: `/category/${category.slug}` },
+    ...(total === 0 && isLiveSite && { robots: { index: false, follow: true } }),
   };
 }
 
