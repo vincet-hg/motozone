@@ -111,7 +111,7 @@ export function NavigationLoader() {
       role="status"
       aria-label="იტვირთება"
       data-state={busy || phase === "show" ? "show" : "hide"}
-      className="route-loader fixed inset-0 z-[95] flex items-center justify-center overflow-hidden bg-bg/85 backdrop-blur-md"
+      className="route-loader fixed inset-0 z-[95] flex items-center justify-center overflow-hidden bg-bg"
     >
       <LoaderArt />
     </div>
