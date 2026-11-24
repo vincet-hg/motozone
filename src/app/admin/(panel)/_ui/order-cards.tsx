@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, orderDelivery } from "@/lib/format";
 import type { Order } from "@/lib/types";
 import { OrderTime } from "./order-time";
 import { StatusBadge } from "./status-badge";
@@ -25,7 +25,7 @@ export function OrderCards({ orders, empty }: { orders: Order[]; empty: string }
                 <p className="truncate font-medium text-a-text">{order.customer_name}</p>
                 <OrderTime value={order.created_at} className="mt-0.5 text-xs" />
               </div>
-              <span className="shrink-0 text-base font-bold">{formatPrice(order.total)}</span>
+              <span className="shrink-0 text-base font-bold">{formatPrice(orderDelivery(order).toPay)}</span>
             </div>
           </Link>
         </li>

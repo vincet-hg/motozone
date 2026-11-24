@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, orderDelivery } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
 import type { MonthReport, Order, Product, ProductCost } from "@/lib/types";
 import { card, pageTitle, primaryButton, sectionTitle, tableWrap } from "../styles";
@@ -182,7 +182,7 @@ export default async function AdminOverviewPage() {
                     <OrderTime value={order.created_at} />
                   </td>
                   <td className="px-4 py-3">{order.customer_name}</td>
-                  <td className="px-4 py-3 font-medium">{formatPrice(order.total)}</td>
+                  <td className="px-4 py-3 font-medium">{formatPrice(orderDelivery(order).toPay)}</td>
                   <td className="px-4 py-3">
                     <StatusBadge status={order.status} />
                   </td>

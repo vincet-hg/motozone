@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cache } from "react";
 import { isDemo } from "./demo";
 import { DEMO_CUSTOMER_COOKIE, demoProfile, demoSaveProfile, demoSetWishlist, demoUser, demoWishlist } from "./demo-accounts";
+import { orderDelivery } from "./format";
 import { createAdminClient } from "./supabase-server";
 import { service } from "./supabase-service";
 import type { Customer, Order, Profile } from "./types";
@@ -99,12 +100,12 @@ async function withItems(orders: Order[]): Promise<CustomerOrder[]> {
   const byId = new Map(((products ?? []) as { id: string; slug: string; images: string[] }[]).map((product) => [product.id, product]));
 
   return orders.map((order) => {
-    const fee = /^\[მიტანა \+(\d+(?:\.\d+)?) ₾\]\s*/.exec(order.note ?? "");
+    const delivery = orderDelivery(order);
     return {
       ...order,
       total: Number(order.total),
-      deliveryFee: fee ? Number(fee[1]) : 0,
-      customerNote: fee ? order.note.slice(fee[0].length) : order.note ?? "",
+      deliveryFee: delivery.fee,
+      customerNote: delivery.note,
       pickup: order.address.startsWith("გატანა:"),
       items: rows
         .filter((row) => row.order_id === order.id)

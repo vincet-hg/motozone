@@ -6,6 +6,14 @@ export function imageUrl(path: string) {
   return IMAGE_BASE + path;
 }
 
+// The courier fee is not part of the order total in the database: checkout writes it at the
+// start of the note, as "[მიტანა +7 ₾] ...". This reads it back, with the customer's own note.
+export function orderDelivery(order: { note?: string | null; total: number | string }) {
+  const match = /^\[მიტანა \+(\d+(?:\.\d+)?) ₾\]\s*/.exec(order.note ?? "");
+  const fee = match ? Number(match[1]) : 0;
+  return { fee, note: match ? (order.note ?? "").slice(match[0].length) : order.note ?? "", toPay: Number(order.total) + fee };
+}
+
 export function formatPrice(value: number) {
   return `${Number.isInteger(Number(value)) ? Number(value) : Number(value).toFixed(2)} ₾`;
 }

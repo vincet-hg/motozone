@@ -149,7 +149,8 @@ order brings a product down to its low-stock level, the message says so.
   keep the old one. The selling price changes only when you change it.
 - Every order line stores the cost at the moment of sale, so past profit stays correct.
 - **Reports** show revenue, cost and profit by month and the most profitable products. Cancelled
-  orders are left out.
+  orders are left out. The courier fee stays with the shop, so monthly revenue and profit include it;
+  the most profitable products count only what the products earned.
 - For stock you had before purchases were recorded, enter its cost once on the product page under
   **Set cost by hand**. Orders placed before this have no cost and count as full profit in reports.
 

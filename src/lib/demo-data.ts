@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { crc32, deflateSync } from "node:zlib";
 import { demoAdminUsers, demoSetAdmin } from "./demo-accounts";
+import { orderDelivery } from "./format";
 import type { AuditEntry, Category, Order, OrderItem, OrderStatus, Product, ProductCost, Promotion, Purchase, StockAdjustment, Subscriber } from "./types";
 
 // Stands in for the part of the Supabase client this app uses, backed by JSON files in .demo-data/.
@@ -818,11 +819,13 @@ function soldLines(args: Row) {
   return db.order_items.filter((item) => orders.has(item.order_id)).map((item) => ({ item, order: orders.get(item.order_id)! }));
 }
 
+// The courier fee stays with the shop: counted once per order, as in the database's sales_report.
 function salesReport(args: Row) {
   const months = new Map<string, { month: string; orders: Set<number>; units: number; revenue: number; cost: number }>();
   for (const { item, order } of soldLines(args)) {
     const month = `${localDay(order.created_at).slice(0, 7)}-01`;
     const row = months.get(month) ?? { month, orders: new Set(), units: 0, revenue: 0, cost: 0 };
+    if (!row.orders.has(order.id)) row.revenue += orderDelivery(order).fee;
     row.orders.add(order.id);
     row.units += item.qty;
     row.revenue += item.price * item.qty;
