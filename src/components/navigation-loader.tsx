@@ -1,10 +1,11 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { LoaderArt } from "./splash";
 
-// Fast pages never show the loader: it waits this long before fading in.
+// After a click the old page stays up this long before the loader covers it, so pages that are
+// already loaded open without it. A page that shows its loading.tsx gets the loader at once.
 const DELAY_MS = 150;
 // Once up, it stays at least this long, so it never blinks.
 const MIN_SHOW_MS = 500;
@@ -24,13 +25,20 @@ const changeLoadingScreens = (by: number) => {
   listeners.forEach((listener) => listener());
 };
 
-// Put in a loading.tsx: keeps the loader up while that page's data is still on the way.
+// Put in a loading.tsx: shows the loader and keeps it up while that page's data is still on the way.
 export function PageLoading() {
-  useEffect(() => {
+  // A layout effect, so the loader is up before the browser paints the empty page.
+  useLayoutEffect(() => {
     changeLoadingScreens(1);
     return () => changeLoadingScreens(-1);
   }, []);
-  return null;
+  // Drawn with the empty page itself, so there is no moment without the loader. NavigationLoader
+  // sits on top of it and fades out once the page is there.
+  return (
+    <div aria-hidden="true" className="fixed inset-0 z-[94] flex items-center justify-center overflow-hidden bg-bg">
+      <LoaderArt />
+    </div>
+  );
 }
 
 // The site's loading screen, shown when moving to another page takes longer than DELAY_MS.
@@ -86,12 +94,16 @@ export function NavigationLoader() {
   // off → show (after DELAY_MS) → hide (fading for FADE_MS) → off.
   const [phase, setPhase] = useState<"off" | "show" | "hide">("off");
   const shownAt = useRef(0);
+  // Faded in after a click, or put up at once over a loading page.
+  const [instant, setInstant] = useState(false);
   useEffect(() => {
     if (busy) {
+      if (phase === "show") return;
       const timer = setTimeout(() => {
-        if (phase !== "show") shownAt.current = performance.now();
+        shownAt.current = performance.now();
+        setInstant(screens);
         setPhase("show");
-      }, phase === "show" ? 0 : DELAY_MS);
+      }, screens ? 0 : DELAY_MS);
       return () => clearTimeout(timer);
     }
     if (phase === "off") return;
@@ -102,15 +114,17 @@ export function NavigationLoader() {
       clearTimeout(fade);
       clearTimeout(remove);
     };
-  }, [busy, phase]);
+  }, [busy, phase, screens]);
 
-  if (phase === "off") return null;
+  // A loading.tsx on screen means the page is not there yet: cover it right away, without fading in.
+  if (phase === "off" && !screens) return null;
 
   return (
     <div
       role="status"
       aria-label="იტვირთება"
       data-state={busy || phase === "show" ? "show" : "hide"}
+      data-instant={(phase === "off" ? screens : instant) || undefined}
       className="route-loader fixed inset-0 z-[95] flex items-center justify-center overflow-hidden bg-bg"
     >
       <LoaderArt />

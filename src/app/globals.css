@@ -227,8 +227,9 @@ summary::-webkit-details-marker {
 @keyframes route-out {
   to { opacity: 0; visibility: hidden; }
 }
-.route-loader { view-transition-name: route-loader; animation: route-in 0.25s ease both; }
+.route-loader { view-transition-name: route-loader; animation: route-in 0.15s ease both; }
 .route-loader[data-state="hide"] { animation: route-out 0.2s ease forwards; }
+.route-loader[data-instant][data-state="show"] { animation: none; }
 
 /* Fade between pages (see src/components/page-transition.tsx). The header and admin menu stay still. */
 @keyframes page-fade-in {
