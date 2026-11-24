@@ -58,8 +58,8 @@ export const site = {
     phone: process.env.NEXT_PUBLIC_AUTH_PHONE === "1" || (process.env.NODE_ENV === "development" && !process.env.NEXT_PUBLIC_SUPABASE_URL),
   },
   // Leave a link empty ("") to hide its icon.
-  facebook: "https://www.facebook.com/scooterland.ge",
-  instagram: "https://www.instagram.com/scooterland.ge",
-  tiktok: "",
+  facebook: "https://www.facebook.com/profile.php?id=61596736472243",
+  instagram: "https://www.instagram.com/scooterland2026",
+  tiktok: "https://www.tiktok.com/@scooterland2026",
   youtube: "",
 };
