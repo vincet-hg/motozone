@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Splash } from "@/components/splash";
 import { AccountWatcher } from "@/components/account-watcher";
 import { LoginPrompt } from "@/components/login-prompt";
+import { PageTransition } from "@/components/page-transition";
 import { getCategories } from "@/lib/catalog";
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +15,9 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       <AccountWatcher />
       <LoginPrompt />
       <SiteHeader categories={categories} />
-      <div className="flex-1">{children}</div>
+      <div className="flex-1">
+        <PageTransition>{children}</PageTransition>
+      </div>
       <SiteFooter categories={categories} />
     </>
   );

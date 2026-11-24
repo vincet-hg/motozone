@@ -116,7 +116,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         </div>
       </div>
 
-      <header className="sticky top-0 z-30 bg-bg/80 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+      <header style={{ viewTransitionName: "site-header" }} className="sticky top-0 z-30 bg-bg/80 shadow-[0_8px_20px_-16px_rgba(0,0,0,0.8)] backdrop-blur-xl">
         {/* Neon hairline along the bottom edge. */}
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/20 to-transparent" />
 

@@ -220,6 +220,38 @@ summary::-webkit-details-marker {
 .splash-spin { animation: spin-slow 2.4s linear infinite; }
 .splash-spin-rev { animation: spin-slow 3.6s linear infinite reverse; }
 
+/* Loading screen while moving to a slow page (see src/components/navigation-loader.tsx). */
+@keyframes route-in {
+  from { opacity: 0; }
+}
+@keyframes route-out {
+  to { opacity: 0; visibility: hidden; }
+}
+.route-loader { view-transition-name: route-loader; animation: route-in 0.25s ease both; }
+.route-loader[data-state="hide"] { animation: route-out 0.2s ease forwards; }
+
+/* Fade between pages (see src/components/page-transition.tsx). The header and admin menu stay still. */
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+@keyframes page-fade-out {
+  to { opacity: 0; }
+}
+::view-transition-old(.page-exit) { animation: page-fade-out 0.12s ease-in both; }
+::view-transition-new(.page-enter) { animation: page-fade-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both; }
+::view-transition-group(site-header),
+::view-transition-group(admin-header),
+::view-transition-group(admin-aside),
+::view-transition-group(route-loader) { animation: none; z-index: 100; }
+::view-transition-old(site-header),
+::view-transition-old(admin-header),
+::view-transition-old(admin-aside) { display: none; }
+::view-transition-new(site-header),
+::view-transition-new(admin-header),
+::view-transition-new(admin-aside) { animation: none; }
+/* Clicks during the short fade still reach the page. */
+::view-transition { pointer-events: none; }
+
 /* Slowly drifting particles for the hero background. */
 .starfield {
   background-image:
@@ -242,6 +274,12 @@ summary::-webkit-details-marker {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
   *,
   *::before,
   *::after {

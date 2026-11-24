@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { isLiveSite, site } from "@/lib/site";
+import { Suspense } from "react";
+import { NavigationLoader } from "@/components/navigation-loader";
 import { Toaster } from "@/components/toaster";
 import "./globals.css";
 
@@ -47,6 +49,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">
         {children}
         <Toaster />
+        <Suspense fallback={null}>
+          <NavigationLoader />
+        </Suspense>
       </body>
     </html>
   );

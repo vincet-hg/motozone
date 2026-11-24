@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Logo } from "./logo";
 
 // Shortest time the loading screen stays up, so it reads as an intro rather than a flash.
@@ -43,6 +43,17 @@ export function Splash() {
       data-ready={ready || undefined}
       className="splash fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-bg"
     >
+      <LoaderArt preload />
+    </div>
+  );
+}
+
+// The loader picture: logo, rings and progress bar. Also shown by NavigationLoader while a page loads.
+export function LoaderArt({ preload }: { preload?: boolean }) {
+  // useId can contain characters that url(#...) does not accept.
+  const gradient = `loader-${useId().replace(/[^\w-]/g, "")}`;
+  return (
+    <>
       <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(227,18,11,0.22),transparent_55%)]" />
       <div aria-hidden="true" className="starfield absolute inset-0 opacity-60" />
 
@@ -52,14 +63,14 @@ export function Splash() {
           <div aria-hidden="true" className="splash-spin-rev absolute inset-[9%] rounded-full border-2 border-transparent border-t-neon/70 border-r-accent/40" />
           <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-[4%] -rotate-90">
             <defs>
-              <linearGradient id="splash-g" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id={gradient} x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stopColor="#e3120b" />
                 <stop offset="1" stopColor="#ff5148" />
               </linearGradient>
             </defs>
-            <circle cx="50" cy="50" r="41" fill="none" stroke="url(#splash-g)" strokeWidth="1.6" strokeLinecap="round" strokeDasharray="258" className="splash-sweep" />
+            <circle cx="50" cy="50" r="41" fill="none" stroke={`url(#${gradient})`} strokeWidth="1.6" strokeLinecap="round" strokeDasharray="258" className="splash-sweep" />
           </svg>
-          <Logo className="splash-logo relative h-auto w-[190px] sm:w-[230px]" sizes="230px" preload />
+          <Logo className="splash-logo relative h-auto w-[190px] sm:w-[230px]" sizes="230px" preload={preload} />
         </div>
 
         <div aria-hidden="true" className="mt-4 h-1 w-44 overflow-hidden rounded-full bg-white/10">
@@ -67,6 +78,6 @@ export function Splash() {
         </div>
         <p className="mt-4 text-[11px] font-semibold tracking-[0.35em] text-muted uppercase">Everything for your ride</p>
       </div>
-    </div>
+    </>
   );
 }
