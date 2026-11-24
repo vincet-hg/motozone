@@ -9,6 +9,7 @@ import { demoSignIn } from "@/lib/demo-accounts";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/demo-data";
 import { slugify } from "@/lib/format";
 import { costChangeNotice } from "@/lib/margin";
+import { lockedError, recordFailure, recordSuccess } from "@/lib/login-lockout";
 import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
 import { createAdminClient, requireAdmin, requirePasswordSession } from "@/lib/supabase-server";
 import type { Spec } from "@/lib/types";
@@ -84,13 +85,16 @@ async function uniqueSlug(supabase: Admin, table: "products" | "categories", nam
 export async function login(_previous: FormState, form: FormData): Promise<FormState> {
   // Supabase limits sign-ins too. This stops password guessing earlier, per address and per account.
   const ip = await getClientIp();
-  if (!isDemo && (!(await isWithinRateLimit("login-ip", ip, 20, 900)) || !(await isWithinRateLimit("login-email", text(form, "email"), 8, 900)))) {
+  if (!isDemo && !(await isWithinRateLimit("login-ip", ip, 20, 900))) {
     return { error: "ძალიან ბევრი მცდელობაა. სცადე 15 წუთში." };
   }
+  // Wrong passwords lock the account for longer each time (see src/lib/login-lockout.ts).
+  const email = text(form, "email").toLowerCase();
+  const locked = isDemo ? null : await lockedError("admin", email);
+  if (locked) return { error: locked };
 
   if (isDemo) {
     // The built-in demo admin, or any account made on the demo store (demo mode is a test environment).
-    const email = text(form, "email").toLowerCase();
     const password = String(form.get("password") ?? "");
     const builtIn = email === DEMO_EMAIL.toLowerCase() && password === DEMO_PASSWORD;
     const customer = builtIn ? null : demoSignIn(email, password);
@@ -103,10 +107,12 @@ export async function login(_previous: FormState, form: FormData): Promise<FormS
 
   const supabase = await createAdminClient();
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: text(form, "email"),
+    email,
     password: String(form.get("password") ?? ""),
   });
-  if (error) return { error: "ელფოსტა ან პაროლი არასწორია." };
+  if (error?.code === "over_request_rate_limit") return { error: "ძალიან ბევრი მცდელობაა. სცადე 15 წუთში." };
+  if (error) return { error: (await recordFailure("admin", email)) ?? "ელფოსტა ან პაროლი არასწორია." };
+  await recordSuccess("admin", email);
 
   const { data: access } = await supabase.rpc("admin_access");
   if (!access) {

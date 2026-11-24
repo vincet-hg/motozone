@@ -9,7 +9,7 @@ export async function getClientIp() {
   return list.get("x-forwarded-for")?.split(",")[0]?.trim() || list.get("x-real-ip") || "unknown";
 }
 
-const hash = (value: string) => createHash("sha256").update(value).digest("hex").slice(0, 32);
+export const hash = (value: string) => createHash("sha256").update(value).digest("hex").slice(0, 32);
 
 // Returns false once `key` was used `max` times within `windowSeconds`.
 // IPs and emails are hashed, so the table holds no personal data.

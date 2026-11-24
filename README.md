@@ -157,7 +157,7 @@ order brings a product down to its low-stock level, the message says so.
 ## Security
 
 - Admin: password plus authenticator code, checked by the app and by the database (`is_admin()`
-  requires `aal2`). Sign-in attempts are limited per address and per account.
+  requires `aal2`). Sign-in attempts are limited per address. Wrong passwords lock the account (customers too) for longer each time: 3 wrong -> 6 minutes, 3 more -> 15 minutes, 2 more -> 1 hour, 2 more -> 24 hours. A correct password, or a day without a wrong one, clears the count.
 - Checkout: the browser cannot call the order function. The server does it with the secret key,
   after limiting orders per IP. The database still checks prices, stock and phone numbers itself.
 - Every admin change (prices, products, categories, stock, costs, order status) is written to an

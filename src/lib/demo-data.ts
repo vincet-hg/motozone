@@ -894,6 +894,9 @@ const FUNCTIONS: Record<string, (args: Row) => unknown> = {
   top_products: topProducts,
   // Demo mode has one local visitor, so nothing is limited.
   rate_limit_hit: () => true,
+  login_locked_until: () => null,
+  login_failed: () => null,
+  login_succeeded: () => null,
   newsletter_subscribe: newsletterSubscribe,
   popular_product_ids: popularProductIds,
   // Demo mode is a test environment: whoever reaches the demo admin manages it.

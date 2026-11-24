@@ -192,3 +192,29 @@ set role anon;
 select pg_temp.check(not public.is_admin(), 'test switch: visitors are not admins');
 reset role;
 update public.settings set every_account_is_admin = false;
+
+-- ---------------------------------------------------------------- sign-in lockout
+set role anon;
+select pg_temp.check(pg_temp.fails($$select public.login_failed('x')$$), 'visitors cannot touch the lockout');
+select pg_temp.check(pg_temp.fails($$select * from public.login_lockouts$$), 'visitors cannot read the lockout');
+reset role;
+set role authenticated;
+select pg_temp.check(pg_temp.fails($$select public.login_succeeded('x')$$), 'customers cannot clear a lockout');
+reset role;
+
+set role service_role;
+select pg_temp.check(public.login_failed('t') is null and public.login_failed('t') is null, 'two wrong passwords do not lock');
+select pg_temp.check(public.login_failed('t') between now() + interval '5 minutes 59 seconds' and now() + interval '6 minutes 1 second', 'third locks for 6 minutes');
+select pg_temp.check(public.login_locked_until('t') is not null, 'locked after three');
+select pg_temp.check(public.login_failed('t') is null and public.login_failed('t') is null, 'fourth and fifth do not lock');
+select pg_temp.check(public.login_failed('t') > now() + interval '14 minutes', 'sixth locks for 15 minutes');
+select pg_temp.check(public.login_failed('t') is null, 'seventh does not lock');
+select pg_temp.check(public.login_failed('t') > now() + interval '59 minutes', 'eighth locks for 1 hour');
+select pg_temp.check(public.login_failed('t') is null, 'ninth does not lock');
+select pg_temp.check(public.login_failed('t') > now() + interval '23 hours', 'tenth locks for 24 hours');
+select public.login_succeeded('t');
+select pg_temp.check(public.login_locked_until('t') is null, 'a correct password clears the lock');
+select public.login_failed('old'); select public.login_failed('old');
+update public.login_lockouts set last_failure_at = now() - interval '2 days' where key = 'old';
+select pg_temp.check(public.login_failed('old') is null, 'old wrong passwords are forgotten after a day');
+reset role;

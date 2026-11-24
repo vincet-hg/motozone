@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { toE164 } from "@/lib/account";
 import { isDemo } from "@/lib/demo";
 import { DEMO_CUSTOMER_COOKIE, DEMO_PHONE_CODE, demoConfirm, demoPhoneSignIn, demoSetPassword, demoSignIn, demoSignUp, demoUserByEmail } from "@/lib/demo-accounts";
+import { lockedError, recordFailure, recordSuccess } from "@/lib/login-lockout";
 import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
 import { site } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase-server";
@@ -41,6 +42,9 @@ export async function signInWithEmail(_: AuthState, form: FormData): Promise<Aut
   const password = String(form.get("password") ?? "");
   if (!email || !password) return { error: "შეიყვანე ელფოსტა და პაროლი." };
   if (await tooFast("login")) return { error: SLOW };
+  // Wrong passwords lock the account for longer each time (see src/lib/login-lockout.ts).
+  const locked = await lockedError("customer", email);
+  if (locked) return { error: locked };
 
   if (isDemo) {
     const user = demoSignIn(email, password);
@@ -55,8 +59,11 @@ export async function signInWithEmail(_: AuthState, form: FormData): Promise<Aut
         await supabase.auth.resend({ type: "signup", email });
         return { step: "confirm", email, info: confirmInfo(email), error: "ჯერ დაადასტურე ელფოსტა." };
       }
-      return { error: "ელფოსტა ან პაროლი არასწორია." };
+      // Supabase's own limit is not a wrong password, so it does not count toward the lock.
+      if (error.code === "over_request_rate_limit") return { error: SLOW };
+      return { error: (await recordFailure("customer", email)) ?? "ელფოსტა ან პაროლი არასწორია." };
     }
+    await recordSuccess("customer", email);
   }
   redirect(safeNext(form.get("next")));
 }
@@ -217,6 +224,8 @@ export async function resetPasswordWithCode(_: AuthState, form: FormData): Promi
       if (updateError.code === "weak_password") return { ...back, error: "პაროლი ძალიან მარტივია." };
       return { ...back, error: "პაროლი ვერ შეიცვალა. სცადე თავიდან." };
     }
+    // The email code proves the owner, so a lock from wrong passwords ends here.
+    await recordSuccess("customer", email);
   }
   redirect("/account?password=changed");
 }
