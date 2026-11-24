@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "@/components/product-card";
-import type { ProductCard as Card } from "@/lib/types";
+import type { ProductSummary } from "@/lib/types";
 import { useWishlist } from "@/lib/wishlist";
 import { getCartProducts } from "../cart/actions";
 
 export function WishlistView() {
   const wishlist = useWishlist();
-  const [products, setProducts] = useState<Card[] | null>(null);
+  const [products, setProducts] = useState<ProductSummary[] | null>(null);
   const idKey = useMemo(() => wishlist.map((item) => item.id).sort().join(","), [wishlist]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export function WishlistView() {
   if (!products) return <p className="text-muted">იტვირთება...</p>;
 
   // Keep the order in which products were saved; removed products simply drop out.
-  const ordered = wishlist.map((item) => products.find((p) => p.id === item.id)).filter((p): p is Card => !!p);
+  const ordered = wishlist.map((item) => products.find((candidate) => candidate.id === item.id)).filter((product): product is ProductSummary => !!product);
 
   return (
     <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">

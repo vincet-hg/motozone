@@ -7,11 +7,11 @@ import { getCustomerOrder, requireCustomer } from "@/lib/account";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { site } from "@/lib/site";
 import { formatDate } from "../../../../admin/(panel)/orders/status";
-import { HINT_TONES, OrderProgress, StatusBadge, statusHint } from "../../order-status";
+import { HINT_TONES, OrderProgress, OrderStatusBadge, statusHint } from "../../order-status";
 
 export const metadata: Metadata = { title: "შეკვეთა", robots: { index: false, follow: false } };
 
-export default async function OrderPage({ params }: PageProps<"/account/orders/[id]">) {
+export default async function AccountOrderPage({ params }: PageProps<"/account/orders/[id]">) {
   const { id } = await params;
   const customer = await requireCustomer(`/account/orders/${id}`);
   const order = await getCustomerOrder(customer.id, Number(id));
@@ -31,7 +31,7 @@ export default async function OrderPage({ params }: PageProps<"/account/orders/[
             <h2 className="text-xl font-extrabold">შეკვეთა #{order.id}</h2>
             <p className="text-sm text-muted">{formatDate(order.created_at)}</p>
           </div>
-          <StatusBadge order={order} />
+          <OrderStatusBadge order={order} />
         </div>
         <div className="mt-6">
           <OrderProgress order={order} />

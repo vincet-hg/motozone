@@ -34,7 +34,7 @@ export function useAccount() {
 
 // Supabase keeps the session in sb-<project>-auth-token (split into .0, .1 when long); demo mode in its own cookie.
 export function hasSessionCookie() {
-  return /(?:^|;\s*)(sb-[^=]+-auth-token(?:\.\d+)?|motozone-demo-customer)=/.test(document.cookie);
+  return /(?:^|;\s*)(sb-[^=]+-auth-token(?:\.\d+)?|scooterland-demo-customer)=/.test(document.cookie);
 }
 
 // Asks the header to look again, for example after the customer saves a new name.

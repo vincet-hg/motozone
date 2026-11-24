@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Avatar } from "@/components/header-parts";
+import { Avatar } from "@/components/header-controls";
 import { LogoutIcon } from "@/components/icons";
 import { getProfile, initialOf, requireCustomer } from "@/lib/account";
 import { signOut } from "../login/actions";

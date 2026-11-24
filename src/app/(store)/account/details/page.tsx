@@ -4,7 +4,7 @@ import { ProfileForm } from "../profile-form";
 
 export const metadata: Metadata = { title: "ჩემი მონაცემები", robots: { index: false, follow: false } };
 
-export default async function DetailsPage() {
+export default async function AccountDetailsPage() {
   const customer = await requireCustomer("/account/details");
   const profile = await getProfile(customer.id);
   return (

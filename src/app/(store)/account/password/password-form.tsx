@@ -1,6 +1,6 @@
 "use client";
 
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import { useActionState } from "react";
 import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
@@ -12,7 +12,7 @@ export function PasswordForm() {
   useFormToast(state);
   if (state.info) return <p role="status" className={authInfo}>{state.info}</p>;
   return (
-    <form action={action} onSubmit={keepValues(action)} className="space-y-3">
+    <form action={action} onSubmit={keepFormValues(action)} className="space-y-3">
       <label className="block text-sm">
         ახალი პაროლი
         <PasswordInput name="password" required minLength={8} autoComplete="new-password" className={authInput} wrapperClassName="mt-1.5" />

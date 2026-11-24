@@ -186,7 +186,7 @@ summary::-webkit-details-marker {
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-spin-slow { animation: spin-slow 60s linear infinite; }
 
-/* Loading screen shown on a full page load (see src/components/splash.tsx). */
+/* Loading screen shown on a full page load (see src/components/loading-screen.tsx). */
 @keyframes splash-out {
   to { opacity: 0; visibility: hidden; }
 }

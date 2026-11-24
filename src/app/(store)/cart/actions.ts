@@ -4,15 +4,15 @@ import { updateTag } from "next/cache";
 import { after } from "next/server";
 import { CATALOG_TAG, getProductsByIds } from "@/lib/catalog";
 import { orderMessage, sendTelegram, type PlacedOrder } from "@/lib/notify";
-import { allow, clientIp } from "@/lib/request-guard";
+import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
 import { getCustomer, getProfile, saveProfile } from "@/lib/account";
 import { site } from "@/lib/site";
-import { service } from "@/lib/supabase-service";
-import type { ProductCard } from "@/lib/types";
+import { serviceClient } from "@/lib/supabase-service";
+import type { ProductSummary } from "@/lib/types";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export async function getCartProducts(ids: string[]): Promise<ProductCard[]> {
+export async function getCartProducts(ids: string[]): Promise<ProductSummary[]> {
   if (!Array.isArray(ids)) return [];
   return getProductsByIds(ids.filter((id) => typeof id === "string" && UUID.test(id)).slice(0, 50));
 }
@@ -35,7 +35,7 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
   }
 
   // Ten orders an hour from one address is far beyond a real customer, and stops a script.
-  if (!(await allow("order", await clientIp(), 10, 3600))) {
+  if (!(await isWithinRateLimit("order", await getClientIp(), 10, 3600))) {
     return { error: "ძალიან ბევრი მცდელობაა. სცადე მოგვიანებით ან დაგვირეკე." };
   }
 
@@ -54,7 +54,7 @@ export async function placeOrder(_previous: OrderState, form: FormData): Promise
   if (deliveryFee) customer.note = `[მიტანა +${deliveryFee} ₾] ${customer.note}`.trim();
 
   // Only the server can place orders: the function is closed to customers' browsers.
-  const { data, error } = await service.rpc("place_customer_order", {
+  const { data, error } = await serviceClient.rpc("place_customer_order", {
     p_user_id: account.id,
     p_name: customer.name,
     p_phone: customer.phone,

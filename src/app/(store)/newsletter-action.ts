@@ -1,7 +1,7 @@
 "use server";
 
-import { allow, clientIp } from "@/lib/request-guard";
-import { service } from "@/lib/supabase-service";
+import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
+import { serviceClient } from "@/lib/supabase-service";
 
 export type NewsletterState = { ok?: boolean; error?: string };
 
@@ -11,9 +11,9 @@ export async function subscribe(_previous: NewsletterState, form: FormData): Pro
 
   const email = String(form.get("email") ?? "").trim().slice(0, 254);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
-  if (!(await allow("newsletter", await clientIp(), 5, 3600))) return { error: "ძალიან ბევრი მცდელობაა. სცადე მოგვიანებით." };
+  if (!(await isWithinRateLimit("newsletter", await getClientIp(), 5, 3600))) return { error: "ძალიან ბევრი მცდელობაა. სცადე მოგვიანებით." };
 
-  const { error } = await service.rpc("newsletter_subscribe", { p_email: email });
+  const { error } = await serviceClient.rpc("newsletter_subscribe", { p_email: email });
   if (error) {
     if (error.message.includes("invalid_email")) return { error: "შეიყვანე სწორი ელფოსტა." };
     console.error("newsletter_subscribe failed", error.message);

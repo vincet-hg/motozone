@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import { useActionState, useState } from "react";
 import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput, authSecondary } from "@/components/auth-styles";
@@ -67,7 +67,7 @@ function EmailForm({ next, register }: { next: string; register: boolean }) {
   }
 
   return (
-    <form action={action} onSubmit={keepValues((form) => { setRestart(0); action(form); })} className="space-y-3">
+    <form action={action} onSubmit={keepFormValues((form) => { setRestart(0); action(form); })} className="space-y-3">
       <input type="hidden" name="next" value={next} />
       <label className="block text-sm">
         ელფოსტა
@@ -110,7 +110,7 @@ function ConfirmEmail({ email, next, intro, onBack }: { email: string; next: str
   const error = checked.error ?? resent.error ?? (resent.info ? undefined : intro.error);
   return (
     <div className="space-y-3">
-      <form action={confirmAction} onSubmit={keepValues(confirmAction)} className="space-y-3">
+      <form action={confirmAction} onSubmit={keepFormValues(confirmAction)} className="space-y-3">
         <input type="hidden" name="next" value={next} />
         <input type="hidden" name="email" value={email} />
         <p className="text-sm font-bold">დაადასტურე ელფოსტა</p>
@@ -157,7 +157,7 @@ function PhoneForm({ next }: { next: string }) {
 
   if (step === "code") {
     return (
-      <form action={verifyAction} onSubmit={keepValues(verifyAction)} className="space-y-3">
+      <form action={verifyAction} onSubmit={keepFormValues(verifyAction)} className="space-y-3">
         <input type="hidden" name="next" value={next} />
         <input type="hidden" name="phone" value={phone} />
         {sent.info && !checked.error && <p role="status" className={authInfo}>{sent.info}</p>}
@@ -186,7 +186,7 @@ function PhoneForm({ next }: { next: string }) {
   }
 
   return (
-    <form action={sendAction} onSubmit={keepValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
+    <form action={sendAction} onSubmit={keepFormValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
       <label className="block text-sm">
         მობილურის ნომერი
         <span className="mt-1.5 flex">

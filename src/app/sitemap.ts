@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getCategories, getSitemapProducts } from "@/lib/catalog";
-import { absolute, absoluteImage } from "@/lib/seo";
+import { absoluteUrl, absoluteImageUrl } from "@/lib/seo";
 
 // Rebuilt with the catalog: saving in the admin refreshes it (see CATALOG_TAG), at least hourly otherwise.
 export const revalidate = 3600;
@@ -16,20 +16,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const filled = categories.filter((category) => categoryUpdated(category.id));
 
   return [
-    { url: absolute("/"), lastModified: newest, changeFrequency: "daily", priority: 1 },
+    { url: absoluteUrl("/"), lastModified: newest, changeFrequency: "daily", priority: 1 },
     ...filled.map((category) => ({
-      url: absolute(`/category/${category.slug}`),
+      url: absoluteUrl(`/category/${category.slug}`),
       lastModified: new Date(categoryUpdated(category.id)!),
       changeFrequency: "daily" as const,
       priority: 0.8,
     })),
     ...products.map((product) => ({
-      url: absolute(`/product/${product.slug}`),
+      url: absoluteUrl(`/product/${product.slug}`),
       lastModified: new Date(product.updated_at),
       changeFrequency: "weekly" as const,
       priority: 0.7,
-      images: product.images.slice(0, 3).map(absoluteImage),
+      images: product.images.slice(0, 3).map(absoluteImageUrl),
     })),
-    ...PAGES.map((path) => ({ url: absolute(path), changeFrequency: "monthly" as const, priority: 0.3 })),
+    ...PAGES.map((path) => ({ url: absoluteUrl(path), changeFrequency: "monthly" as const, priority: 0.3 })),
   ];
 }

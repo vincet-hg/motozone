@@ -4,7 +4,7 @@ import { formatPrice, orderDelivery } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
 import type { Order, OrderItem } from "@/lib/types";
 import { changeOrderStatus } from "../../../actions";
-import { StatusBadge } from "../../_ui/status-badge";
+import { AdminOrderStatusBadge } from "../../_ui/order-status-badge";
 import { formatDate, STATUS_LABELS, STATUSES } from "../status";
 
 export default async function AdminOrderPage({
@@ -32,7 +32,7 @@ export default async function AdminOrderPage({
       </Link>
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold tracking-tight">შეკვეთა #{order.id}</h1>
-        <StatusBadge status={order.status} />
+        <AdminOrderStatusBadge status={order.status} />
       </div>
       <p className="text-sm text-a-soft">{formatDate(order.created_at)}</p>
       {error && <p role="alert" className="mt-3 rounded-xl border border-a-red/30 bg-a-red/10 p-3 text-sm text-[#ff8a94]">{error}</p>}

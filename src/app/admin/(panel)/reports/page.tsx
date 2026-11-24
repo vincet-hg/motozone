@@ -39,7 +39,7 @@ function period(search: Search) {
 const money = (value: number) => formatPrice(Math.round(Number(value) * 100) / 100);
 const percent = (profit: number, revenue: number) => (revenue > 0 ? `${Math.round((profit / revenue) * 1000) / 10}%` : "-");
 
-export default async function ReportsPage({ searchParams }: { searchParams: Promise<Search> }) {
+export default async function AdminReportsPage({ searchParams }: { searchParams: Promise<Search> }) {
   const range = period(await searchParams);
   const supabase = await requireAdmin();
   const [{ data: monthRows }, { data: topRows }, { data: products }, { data: costRows }, { count: newOrders }] = await Promise.all([

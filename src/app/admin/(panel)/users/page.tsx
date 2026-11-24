@@ -18,7 +18,7 @@ function RoleBadge({ role }: { role: AdminUser["role"] }) {
 }
 
 // Every account on the site. Any admin sees the list; only the super admin adds or removes admins.
-export default async function UsersPage({ searchParams }: { searchParams: Promise<Search> }) {
+export default async function AdminUsersPage({ searchParams }: { searchParams: Promise<Search> }) {
   const { q = "", page = "1", error, saved } = await searchParams;
   const supabase = await requireAdmin();
   const current = Math.max(1, Math.floor(Number(page)) || 1);

@@ -5,7 +5,7 @@ import { tab } from "../../styles";
 import type { Order, OrderStatus } from "@/lib/types";
 import { OrderCards } from "../_ui/order-cards";
 import { OrderTime } from "../_ui/order-time";
-import { StatusBadge } from "../_ui/status-badge";
+import { AdminOrderStatusBadge } from "../_ui/order-status-badge";
 import { STATUS_LABELS, STATUSES } from "./status";
 
 export default async function AdminOrdersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
@@ -64,7 +64,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
                 <td className="px-4 py-3">{order.phone}</td>
                 <td className="px-4 py-3 font-medium">{formatPrice(orderDelivery(order).toPay)}</td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={order.status} />
+                  <AdminOrderStatusBadge status={order.status} />
                 </td>
               </tr>
             ))}

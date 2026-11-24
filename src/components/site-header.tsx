@@ -2,7 +2,7 @@ import Form from "next/form";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import type { Category } from "@/lib/types";
-import { AccountLink, ActiveButton, CartLink, Disclosure, HiddenOnHome, MobileAccountLinks, NavLink, WishlistLink } from "./header-parts";
+import { AccountLink, SectionMenuButton, CartLink, DropdownMenu, HiddenOnHome, MobileAccountLinks, NavLink, WishlistLink } from "./header-controls";
 import { CategoryIcon, SaleIcon } from "./category-icons";
 import { ArrowIcon, CashIcon, ChevronIcon, ClockIcon, MenuIcon, PhoneIcon, PinIcon, SearchIcon, TruckIcon } from "./icons";
 import { Logo } from "./logo";
@@ -121,7 +121,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-neon/20 to-transparent" />
 
         <div className="relative mx-auto flex h-16 max-w-7xl items-center gap-1.5 px-2.5 min-[390px]:gap-2 sm:px-4 lg:h-[76px] lg:gap-3">
-          <Disclosure className="lg:hidden" summaryLabel="მენიუ" summaryClassName={`${iconButton}`} summary={<MenuIcon className="size-5" />}>
+          <DropdownMenu className="lg:hidden" summaryLabel="მენიუ" summaryClassName={`${iconButton}`} summary={<MenuIcon className="size-5" />}>
             <nav aria-label="მენიუ" className="absolute inset-x-0 top-full max-h-[80dvh] overflow-y-auto border-y border-line bg-bg px-3 pt-3 pb-5 shadow-[0_24px_48px_-16px_rgba(0,0,0,0.9)] backdrop-blur-xl">
               <NavLink href="/" className={mobileLink} activeClassName="bg-card text-neon">მთავარი</NavLink>
               <p className="px-3 pt-4 pb-1.5 text-xs font-semibold tracking-wide text-muted uppercase">კატეგორიები</p>
@@ -157,7 +157,7 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
                 {site.phone}
               </a>
             </nav>
-          </Disclosure>
+          </DropdownMenu>
 
           <Link href="/" prefetch={false} aria-label="Scooter Land მთავარი" className="mx-auto shrink-0 rounded-xl lg:mx-0 lg:mr-2">
             <Logo className="h-10 w-auto min-[390px]:h-12 drop-shadow-[0_0_8px_rgba(227,18,11,0.15)] lg:h-14" sizes="(min-width: 1024px) 143px, 123px" />
@@ -165,10 +165,10 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
 
           <nav aria-label="მთავარი მენიუ" className="hidden h-full items-stretch lg:flex">
             <div className="group relative flex">
-              <ActiveButton prefix="/category/" className={`${navItem} cursor-pointer`} activeClassName={navActive}>
+              <SectionMenuButton prefix="/category/" className={`${navItem} cursor-pointer`} activeClassName={navActive}>
                 კატეგორიები
                 <ChevronIcon className="size-4 text-neon transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180" />
-              </ActiveButton>
+              </SectionMenuButton>
               <div className="invisible absolute top-full left-0 z-40 w-[580px] translate-y-2 pt-3 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                 <div className="overflow-hidden rounded-2xl border border-neon/20 bg-card shadow-[0_30px_60px_-20px_rgba(0,0,0,0.9),0_0_40px_-20px_rgba(227,18,11,0.6)]">
                   <div className="h-0.5 bg-gradient-to-r from-accent via-neon to-accent" />
@@ -213,11 +213,11 @@ export function SiteHeader({ categories }: { categories: Category[] }) {
             {/* The homepage has its own large search in the hero, so the header one is left out there. */}
             <HiddenOnHome>
               <SearchForm className="hidden w-[250px] xl:flex" />
-              <Disclosure className="xl:hidden" summaryLabel="ძიება" summaryClassName={`${iconButton}`} summary={<SearchIcon className="size-5" />}>
+              <DropdownMenu className="xl:hidden" summaryLabel="ძიება" summaryClassName={`${iconButton}`} summary={<SearchIcon className="size-5" />}>
                 <div className="absolute inset-x-0 top-full border-y border-line bg-bg p-3">
                   <SearchForm className="mx-auto max-w-2xl" autoFocus />
                 </div>
-              </Disclosure>
+              </DropdownMenu>
             </HiddenOnHome>
             <WishlistLink />
             <AccountLink />

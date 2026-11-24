@@ -1,6 +1,6 @@
 import { discountPercent, formatPrice } from "@/lib/format";
 import { requireAdmin } from "@/lib/supabase-server";
-import type { ProductCard, Promotion } from "@/lib/types";
+import type { ProductSummary, Promotion } from "@/lib/types";
 import { deletePromotion, savePromotion } from "../../actions";
 import { ConfirmButton } from "../../ui";
 import { formatDate } from "../orders/status";
@@ -12,7 +12,7 @@ const field = "mt-1 h-9 w-full rounded-lg border border-a-line bg-a-card px-2 te
 // The value for <input type="datetime-local">, in Tbilisi time (UTC+4).
 const localValue = (iso: string | null) => (iso ? new Date(Date.parse(iso) + 4 * 3600000).toISOString().slice(0, 16) : "");
 
-function status(promotion: Promotion, product: ProductCard | undefined) {
+function status(promotion: Promotion, product: ProductSummary | undefined) {
   if (!product) return { label: "პროდუქტი წაშლილია ან დამალულია", tone: "text-[#ff6b77]" };
   if (!promotion.active) return { label: "გამორთულია", tone: "text-a-muted" };
   if (promotion.ends_at && Date.parse(promotion.ends_at) <= Date.now()) return { label: "დასრულდა", tone: "text-a-muted" };
@@ -20,7 +20,7 @@ function status(promotion: Promotion, product: ProductCard | undefined) {
   return { label: "ჩანს მთავარ გვერდზე", tone: "text-a-green" };
 }
 
-function PromotionFields({ promotion, products }: { promotion?: Promotion; products: ProductCard[] }) {
+function PromotionFields({ promotion, products }: { promotion?: Promotion; products: ProductSummary[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <label className="text-sm sm:col-span-2">
@@ -69,7 +69,7 @@ function PromotionFields({ promotion, products }: { promotion?: Promotion; produ
   );
 }
 
-export default async function PromotionsPage({ searchParams }: { searchParams: Promise<Search> }) {
+export default async function AdminPromotionsPage({ searchParams }: { searchParams: Promise<Search> }) {
   const notice = await searchParams;
   const supabase = await requireAdmin();
   const [{ data: promotionRows }, { data: productRows }] = await Promise.all([
@@ -77,7 +77,7 @@ export default async function PromotionsPage({ searchParams }: { searchParams: P
     supabase.from("products").select("id,slug,name,price,sale_price,final_price,stock,images").eq("active", true).order("name").limit(1000),
   ]);
   const promotions = (promotionRows ?? []) as Promotion[];
-  const products = (productRows ?? []) as ProductCard[];
+  const products = (productRows ?? []) as ProductSummary[];
 
   return (
     <>

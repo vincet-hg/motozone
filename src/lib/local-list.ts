@@ -3,7 +3,8 @@
 import { useSyncExternalStore } from "react";
 
 // A list kept in this browser's localStorage and shared across tabs. Used by the cart and wishlist.
-export function createLocalList<T extends { id: string }>(key: string, isValid: (item: T) => boolean) {
+// legacyKey: the name the list was saved under before (the store used to be called motozone); it is moved over once.
+export function createLocalList<T extends { id: string }>(key: string, legacyKey: string, isValid: (item: T) => boolean) {
   const EMPTY: T[] = [];
   let items: T[] = EMPTY;
   let loaded = false;
@@ -11,6 +12,11 @@ export function createLocalList<T extends { id: string }>(key: string, isValid: 
 
   function load() {
     try {
+      const legacy = localStorage.getItem(legacyKey);
+      if (legacy !== null) {
+        if (localStorage.getItem(key) === null) localStorage.setItem(key, legacy);
+        localStorage.removeItem(legacyKey);
+      }
       const parsed = JSON.parse(localStorage.getItem(key) ?? "[]");
       items = Array.isArray(parsed) ? parsed.filter((item) => typeof item?.id === "string" && isValid(item)) : EMPTY;
     } catch {

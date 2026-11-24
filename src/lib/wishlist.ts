@@ -2,7 +2,7 @@
 
 import { createLocalList } from "./local-list";
 
-const wishlist = createLocalList<{ id: string }>("motozone-wishlist", () => true);
+const wishlist = createLocalList<{ id: string }>("scooterland-wishlist", "motozone-wishlist", () => true);
 
 export const useWishlist = wishlist.useList;
 

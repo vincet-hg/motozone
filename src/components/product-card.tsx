@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { discountPercent, imageUrl } from "@/lib/format";
-import type { ProductCard as Card } from "@/lib/types";
+import type { ProductSummary } from "@/lib/types";
 import { AddToCart } from "./add-to-cart";
 import { Price } from "./price";
 import { WishlistButton } from "./wishlist-button";
@@ -15,7 +15,7 @@ const BADGES: Record<CardBadge, { label: string; className: string }> = {
   popular: { label: "პოპულარული", className: "border border-neon/40 bg-bg/80 text-neon backdrop-blur" },
 };
 
-export function ProductCard({ product, eager, lcp, badge }: { product: Card; eager: boolean; lcp: boolean; badge?: CardBadge }) {
+export function ProductCard({ product, eager, lcp, badge }: { product: ProductSummary; eager: boolean; lcp: boolean; badge?: CardBadge }) {
   const href = `/product/${product.slug}`;
   const discount = discountPercent(product.price, product.sale_price);
   const available = product.stock > 0;

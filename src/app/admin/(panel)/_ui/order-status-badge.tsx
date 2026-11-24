@@ -10,7 +10,7 @@ const TONES: Record<OrderStatus, string> = {
   cancelled: "border-a-red/40 bg-a-red/15 text-[#ff8a94]",
 };
 
-export function StatusBadge({ status }: { status: OrderStatus }) {
+export function AdminOrderStatusBadge({ status }: { status: OrderStatus }) {
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${TONES[status]}`}>
       <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />

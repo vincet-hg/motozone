@@ -6,7 +6,7 @@ import { card, pageTitle, primaryButton, sectionTitle, tableWrap } from "../styl
 import { LineChart } from "./_ui/line-chart";
 import { Icons } from "./_ui/icons";
 import { OrderCards } from "./_ui/order-cards";
-import { StatusBadge } from "./_ui/status-badge";
+import { AdminOrderStatusBadge } from "./_ui/order-status-badge";
 import { OrderTime } from "./_ui/order-time";
 
 const MONTHS = ["იან", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"];
@@ -184,7 +184,7 @@ export default async function AdminOverviewPage() {
                   <td className="px-4 py-3">{order.customer_name}</td>
                   <td className="px-4 py-3 font-medium">{formatPrice(orderDelivery(order).toPay)}</td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={order.status} />
+                    <AdminOrderStatusBadge status={order.status} />
                   </td>
                 </tr>
               ))}

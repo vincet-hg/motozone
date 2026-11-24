@@ -15,7 +15,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { moreButton } from "@/components/styles";
 import { getCategories, getCategoryCovers, getNewProductIds, getPopularProducts, getProducts, getPromotionSlides } from "@/lib/catalog";
 import { discountPercent } from "@/lib/format";
-import { absolute, organization } from "@/lib/seo";
+import { absoluteUrl, organizationJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { alternates: { canonical: "/" }, openGraph: { url: "/" } };
@@ -55,17 +55,17 @@ export default async function HomePage() {
         data={{
           "@context": "https://schema.org",
           "@graph": [
-            organization,
+            organizationJsonLd,
             {
               "@type": "WebSite",
-              "@id": absolute("/#website"),
+              "@id": absoluteUrl("/#website"),
               name: site.name,
               url: site.url,
               inLanguage: "ka",
-              publisher: { "@id": absolute("/#store") },
+              publisher: { "@id": absoluteUrl("/#store") },
               potentialAction: {
                 "@type": "SearchAction",
-                target: { "@type": "EntryPoint", urlTemplate: `${absolute("/search")}?q={search_term_string}` },
+                target: { "@type": "EntryPoint", urlTemplate: `${absoluteUrl("/search")}?q={search_term_string}` },
                 "query-input": "required name=search_term_string",
               },
             },

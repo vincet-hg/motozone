@@ -1,6 +1,6 @@
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { Splash } from "@/components/splash";
+import { FirstLoadScreen } from "@/components/loading-screen";
 import { AccountWatcher } from "@/components/account-watcher";
 import { LoginPrompt } from "@/components/login-prompt";
 import { PageTransition } from "@/components/page-transition";
@@ -11,7 +11,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
 
   return (
     <>
-      <Splash />
+      <FirstLoadScreen />
       <AccountWatcher />
       <LoginPrompt />
       <SiteHeader categories={categories} />

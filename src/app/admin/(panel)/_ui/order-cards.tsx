@@ -2,7 +2,7 @@ import Link from "next/link";
 import { formatPrice, orderDelivery } from "@/lib/format";
 import type { Order } from "@/lib/types";
 import { OrderTime } from "./order-time";
-import { StatusBadge } from "./status-badge";
+import { AdminOrderStatusBadge } from "./order-status-badge";
 
 // Phone layout for an order list: one tappable card per order instead of a wide table.
 export function OrderCards({ orders, empty }: { orders: Order[]; empty: string }) {
@@ -18,7 +18,7 @@ export function OrderCards({ orders, empty }: { orders: Order[]; empty: string }
           >
             <div className="flex items-center justify-between gap-3">
               <span className="font-semibold text-[#ffaaa3]">#{order.id}</span>
-              <StatusBadge status={order.status} />
+              <AdminOrderStatusBadge status={order.status} />
             </div>
             <div className="mt-2 flex items-end justify-between gap-3">
               <div className="min-w-0 text-sm">

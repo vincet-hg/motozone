@@ -9,7 +9,7 @@ const FADE_MS = 500;
 
 // Full-screen loading animation on a full page load or refresh. It sits in the store layout,
 // which stays mounted during in-site navigation, so it does not come back on every click.
-export function Splash() {
+export function FirstLoadScreen() {
   const [state, setState] = useState<"show" | "hide" | "gone">("show");
   const [ready, setReady] = useState(false);
 
@@ -43,13 +43,13 @@ export function Splash() {
       data-ready={ready || undefined}
       className="splash fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-bg"
     >
-      <LoaderArt preload />
+      <LoadingGraphic preload />
     </div>
   );
 }
 
 // The loader picture: logo, rings and progress bar. Also shown by NavigationLoader while a page loads.
-export function LoaderArt({ preload }: { preload?: boolean }) {
+export function LoadingGraphic({ preload }: { preload?: boolean }) {
   // useId can contain characters that url(#...) does not accept.
   const gradient = `loader-${useId().replace(/[^\w-]/g, "")}`;
   return (

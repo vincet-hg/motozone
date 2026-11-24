@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
-import { LoaderArt } from "./splash";
+import { LoadingGraphic } from "./loading-screen";
 
 // After a click the old page stays up this long before the loader covers it, so pages that are
 // already loaded open without it. A page that shows its loading.tsx gets the loader at once.
@@ -13,7 +13,7 @@ const FADE_MS = 200;
 // If a click never leads anywhere (an error, a cancelled navigation), the loader leaves on its own.
 const GIVE_UP_MS = 15000;
 
-// How many loading.tsx screens are on the page right now (each <PageLoading> counts while mounted).
+// How many loading.tsx screens are on the page right now (each <PageLoadingScreen> counts while mounted).
 let loadingScreens = 0;
 const listeners = new Set<() => void>();
 const subscribe = (listener: () => void) => {
@@ -26,7 +26,7 @@ const changeLoadingScreens = (by: number) => {
 };
 
 // Put in a loading.tsx: shows the loader and keeps it up while that page's data is still on the way.
-export function PageLoading() {
+export function PageLoadingScreen() {
   // A layout effect, so the loader is up before the browser paints the empty page.
   useLayoutEffect(() => {
     changeLoadingScreens(1);
@@ -36,7 +36,7 @@ export function PageLoading() {
   // sits on top of it and fades out once the page is there.
   return (
     <div aria-hidden="true" className="fixed inset-0 z-[94] flex items-center justify-center overflow-hidden bg-bg">
-      <LoaderArt />
+      <LoadingGraphic />
     </div>
   );
 }
@@ -127,7 +127,7 @@ export function NavigationLoader() {
       data-instant={(phase === "off" ? screens : instant) || undefined}
       className="route-loader fixed inset-0 z-[95] flex items-center justify-center overflow-hidden bg-bg"
     >
-      <LoaderArt />
+      <LoadingGraphic />
     </div>
   );
 }

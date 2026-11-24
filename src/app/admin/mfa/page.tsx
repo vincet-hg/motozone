@@ -7,7 +7,7 @@ import { MfaChallenge, MfaSetupForm } from "./mfa-forms";
 export const metadata: Metadata = { title: "ორ ეტაპიანდა", robots: { index: false, follow: false } };
 
 // Second sign-in step. Admin access, in the app and in the database, needs this step.
-export default async function MfaPage() {
+export default async function AdminMfaPage() {
   if (isDemo) redirect("/admin");
   const { supabase } = await requirePasswordSession();
 

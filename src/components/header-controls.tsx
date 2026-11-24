@@ -10,7 +10,7 @@ import { useWishlist } from "@/lib/wishlist";
 import { CartIcon, HeartIcon, KeyIcon, LoginIcon, LogoutIcon, PackageIcon, UserIcon } from "./icons";
 import { iconButton } from "./styles";
 
-export function isActive(pathname: string, href: string) {
+export function isCurrentSection(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   if (href === "/search") return ["/search", "/product"].some((prefix) => pathname.startsWith(prefix));
   return pathname.startsWith(href);
@@ -22,7 +22,7 @@ export function NavLink({ href, className, activeClassName, children }: {
   activeClassName: string;
   children: React.ReactNode;
 }) {
-  const active = isActive(usePathname(), href);
+  const active = isCurrentSection(usePathname(), href);
   return (
     <Link href={href} prefetch={false} aria-current={active ? "page" : undefined} className={`${className} ${active ? activeClassName : ""}`}>
       {children}
@@ -31,7 +31,7 @@ export function NavLink({ href, className, activeClassName, children }: {
 }
 
 // A button that looks active while the current page starts with prefix (the categories menu on a category page).
-export function ActiveButton({ prefix, className, activeClassName, children }: {
+export function SectionMenuButton({ prefix, className, activeClassName, children }: {
   prefix: string;
   className: string;
   activeClassName: string;
@@ -51,7 +51,7 @@ export function HiddenOnHome({ children }: { children: React.ReactNode }) {
 }
 
 // A <details> menu that works without JavaScript and closes itself after navigation.
-export function Disclosure({ className, summary, summaryLabel, summaryClassName, children }: {
+export function DropdownMenu({ className, summary, summaryLabel, summaryClassName, children }: {
   className?: string;
   summary: React.ReactNode;
   summaryLabel: string;

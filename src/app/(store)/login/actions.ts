@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { toE164 } from "@/lib/account";
 import { isDemo } from "@/lib/demo";
 import { DEMO_CUSTOMER_COOKIE, DEMO_PHONE_CODE, demoConfirm, demoPhoneSignIn, demoSetPassword, demoSignIn, demoSignUp, demoUserByEmail } from "@/lib/demo-accounts";
-import { allow, clientIp } from "@/lib/request-guard";
+import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
 import { site } from "@/lib/site";
 import { createAdminClient } from "@/lib/supabase-server";
 
@@ -25,7 +25,7 @@ async function demoSession(id: string) {
 }
 
 async function tooFast(scope: string) {
-  return !(await allow(scope, await clientIp(), 10, 600));
+  return !(await isWithinRateLimit(scope, await getClientIp(), 10, 600));
 }
 
 const SLOW = "ძალიან ბევრი მცდელობაა. სცადე რამდენიმე წუთში.";
@@ -116,7 +116,7 @@ export async function confirmEmail(_: AuthState, form: FormData): Promise<AuthSt
 export async function resendConfirmation(_: AuthState, form: FormData): Promise<AuthState> {
   const email = text(form, "email").toLowerCase();
   if (!EMAIL.test(email)) return { error: "დაიწყე თავიდან." };
-  if (!(await allow("resend", email, 3, 3600))) return { step: "confirm", email, error: SLOW };
+  if (!(await isWithinRateLimit("resend", email, 3, 3600))) return { step: "confirm", email, error: SLOW };
   if (!isDemo) {
     const supabase = await createAdminClient();
     await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${site.url}/auth/callback?next=/account` } });
@@ -129,7 +129,7 @@ export async function sendPhoneCode(_: AuthState, form: FormData): Promise<AuthS
   if (!phone) return { error: "შეიყვანე მობილურის ნომერი, მაგალითად 599 12 34 56." };
   if (!site.auth.phone) return { error: "ტელეფონით შესვლა ჯერ ჩართული არ არის." };
   // Each SMS costs money, so codes are limited per visitor and per number.
-  if (!(await allow("sms-ip", await clientIp(), 5, 3600)) || !(await allow("sms-phone", phone, 3, 3600))) return { error: SLOW };
+  if (!(await isWithinRateLimit("sms-ip", await getClientIp(), 5, 3600)) || !(await isWithinRateLimit("sms-phone", phone, 3, 3600))) return { error: SLOW };
 
   if (!isDemo) {
     const supabase = await createAdminClient();
@@ -179,7 +179,7 @@ export async function signInWithGoogle(form: FormData) {
 export async function sendPasswordReset(_: AuthState, form: FormData): Promise<AuthState> {
   const email = text(form, "email").toLowerCase();
   if (!EMAIL.test(email)) return { error: "შეიყვანე სწორი ელფოსტა." };
-  if (await tooFast("reset") || !(await allow("reset-email", email, 3, 3600))) return { error: SLOW };
+  if (await tooFast("reset") || !(await isWithinRateLimit("reset-email", email, 3, 3600))) return { error: SLOW };
   if (!isDemo) {
     const supabase = await createAdminClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${site.url}/auth/callback?next=/account/password` });

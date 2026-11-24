@@ -5,14 +5,14 @@ import { ArrowIcon, PackageIcon } from "@/components/icons";
 import { getCustomerOrders, requireCustomer } from "@/lib/account";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { formatDate } from "../../admin/(panel)/orders/status";
-import { OrderProgress, StatusBadge, statusHint } from "./order-status";
+import { OrderProgress, OrderStatusBadge, statusHint } from "./order-status";
 
 export const metadata: Metadata = {
   title: "ჩემი შეკვეთები",
   robots: { index: false, follow: false },
 };
 
-export default async function OrdersPage({
+export default async function AccountOrdersPage({
   searchParams,
 }: PageProps<"/account">) {
   const customer = await requireCustomer("/account");
@@ -76,7 +76,7 @@ export default async function OrdersPage({
                       {formatDate(order.created_at)}
                     </span>
                   </div>
-                  <StatusBadge order={order} />
+                  <OrderStatusBadge order={order} />
                 </div>
 
                 <div className="mt-3 flex items-center gap-3">

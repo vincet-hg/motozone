@@ -13,7 +13,7 @@ import { Suspense } from "react";
 
 export const metadata: Metadata = { title: "ადმინისტრატორი", robots: { index: false, follow: false } };
 
-export default async function PanelLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminPanelLayout({ children }: { children: React.ReactNode }) {
   const supabase = await requireAdmin();
   const [{ count }, email] = await Promise.all([
     supabase.from("orders").select("id", { count: "exact" }).eq("status", "new").limit(1),

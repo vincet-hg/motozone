@@ -56,7 +56,7 @@ export const HINT_TONES: Record<OrderStatus, string> = {
   cancelled: "border-line bg-bg text-muted",
 };
 
-export function StatusBadge({ order }: { order: CustomerOrder }) {
+export function OrderStatusBadge({ order }: { order: CustomerOrder }) {
   return (
     <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${TONES[order.status]}`}>
       {statusLabel(order)}

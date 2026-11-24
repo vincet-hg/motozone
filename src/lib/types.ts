@@ -6,7 +6,7 @@ export type Category = {
   description: string;
 };
 
-export type ProductCard = {
+export type ProductSummary = {
   id: string;
   slug: string;
   name: string;
@@ -19,7 +19,7 @@ export type ProductCard = {
 
 export type Spec = { label: string; value: string };
 
-export type Product = ProductCard & {
+export type Product = ProductSummary & {
   category_id: string | null;
   description: string;
   specs: Spec[];
@@ -104,7 +104,7 @@ export type Promotion = {
   position: number;
 };
 
-export type PromotionSlide = Promotion & { product: ProductCard };
+export type PromotionSlide = Promotion & { product: ProductSummary };
 
 export type Subscriber = { id: number; email: string; created_at: string };
 

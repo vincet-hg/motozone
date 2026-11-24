@@ -12,7 +12,7 @@ type Search = { saved?: string; warning?: string; error?: string };
 const field = "mt-1 h-9 w-full rounded-lg border border-a-line bg-a-card px-2 text-sm";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export default async function EditProductPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<Search> }) {
+export default async function AdminEditProductPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<Search> }) {
   const [{ id }, notice] = await Promise.all([params, searchParams]);
   if (!UUID.test(id)) notFound();
   const supabase = await requireAdmin();

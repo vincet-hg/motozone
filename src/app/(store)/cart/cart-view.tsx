@@ -7,16 +7,16 @@ import { useFormToast } from "@/components/toaster";
 import { CheckIcon } from "@/components/icons";
 import { clearCart, setCartQty, useCart } from "@/lib/cart";
 import { formatPrice, imageUrl } from "@/lib/format";
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import { site } from "@/lib/site";
-import type { ProductCard, Profile } from "@/lib/types";
+import type { ProductSummary, Profile } from "@/lib/types";
 import { getCartProducts, placeOrder, type OrderState } from "./actions";
 
 const input = "h-11 w-full rounded-btn border border-line bg-bg px-3 text-base text-fg focus:border-accent focus:outline-none";
 
 export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Profile | null }) {
   const cart = useCart();
-  const [products, setProducts] = useState<ProductCard[] | null>(null);
+  const [products, setProducts] = useState<ProductSummary[] | null>(null);
   const [state, action, pending] = useActionState<OrderState, FormData>(placeOrder, {});
   // One toast per order result (the object is rebuilt only when the action returns).
   useFormToast(useMemo(() => ({ error: state.error, info: state.orderId ? `შეკვეთა #${state.orderId} მიღებულია.` : undefined }), [state]));
@@ -42,7 +42,7 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
   useEffect(() => {
     if (!products) return;
     for (const item of cart) {
-      const product = products.find((p) => p.id === item.id);
+      const product = products.find((candidate) => candidate.id === item.id);
       if (product && product.stock > 0 && item.qty > product.stock) setCartQty(item.id, product.stock);
     }
   }, [products, cart]);
@@ -89,7 +89,7 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
 
   if (!products) return <p className="mt-6 text-muted">იტვირთება...</p>;
 
-  const lines = cart.map((item) => ({ item, product: products.find((p) => p.id === item.id) }));
+  const lines = cart.map((item) => ({ item, product: products.find((candidate) => candidate.id === item.id) }));
   const unavailable = lines.some(({ product }) => !product || product.stock === 0);
   const total = lines.reduce((sum, { item, product }) => sum + (product ? product.final_price * item.qty : 0), 0);
   const stepper = "flex size-10 items-center justify-center text-lg disabled:text-line";
@@ -144,7 +144,7 @@ export function CartView({ signedIn, profile }: { signedIn: boolean; profile: Pr
       </ul>
 
       {signedIn ? (
-        <form action={action} onSubmit={keepValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
+        <form action={action} onSubmit={keepFormValues(action)} className="flex h-fit flex-col gap-3 rounded-card border border-line bg-card p-4 sm:p-5">
           <dl className="space-y-1.5 text-sm">
             <div className="flex justify-between text-muted">
               <dt>პროდუქტები</dt>

@@ -2,7 +2,7 @@ import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { discountPercent, formatPrice, imageUrl } from "@/lib/format";
-import type { Category, ProductCard, PromotionSlide } from "@/lib/types";
+import type { Category, ProductSummary, PromotionSlide } from "@/lib/types";
 import { CategoryIcon } from "./category-icons";
 import { SearchIcon } from "./icons";
 
@@ -20,7 +20,7 @@ const FAN = [
 
 // Search-first home hero. The middle card is the product of the first active promotion
 // (Admin › Slider); without one it is the biggest discount or the best seller.
-export function SearchHero({ promotion, products, categories }: { promotion?: PromotionSlide; products: ProductCard[]; categories: Category[] }) {
+export function SearchHero({ promotion, products, categories }: { promotion?: PromotionSlide; products: ProductSummary[]; categories: Category[] }) {
   const featured = promotion?.product ?? products[0];
   const others = products.filter((product) => product.id !== featured?.id).slice(0, 4);
   const fan = featured ? [others[0], others[1], featured, others[2], others[3]] : [];

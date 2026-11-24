@@ -4,7 +4,7 @@ import { createLocalList } from "./local-list";
 
 export type CartItem = { id: string; qty: number };
 
-const cart = createLocalList<CartItem>("motozone-cart", (item) => item.qty > 0);
+const cart = createLocalList<CartItem>("scooterland-cart", "motozone-cart", (item) => item.qty > 0);
 
 export const useCart = cart.useList;
 

@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Price } from "@/components/price";
 import { getCategories, getProductBySlug, getProductSlugs } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
-import { absoluteImage, breadcrumbs, clip, productJsonLd } from "@/lib/seo";
+import { absoluteImageUrl, breadcrumbsJsonLd, clipText, productJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return {};
   const price = formatPrice(product.final_price);
-  const description = clip(product.description ? `${price}. ${product.description}` : `${product.name}, ${price}. მიწოდება თბილისში, გადახდა მიღებისას.`);
+  const description = clipText(product.description ? `${price}. ${product.description}` : `${product.name}, ${price}. მიწოდება თბილისში, გადახდა მიღებისას.`);
   return {
     title: product.name,
     description,
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product.name,
       description,
       url: `/product/${product.slug}`,
-      images: product.images.slice(0, 4).map((image) => ({ url: absoluteImage(image), alt: product.name })),
+      images: product.images.slice(0, 4).map((image) => ({ url: absoluteImageUrl(image), alt: product.name })),
     },
   };
 }
@@ -45,7 +45,7 @@ export default async function ProductPage({ params }: Props) {
     <>
       <JsonLd data={productJsonLd(product, category)} />
       <JsonLd
-        data={breadcrumbs([
+        data={breadcrumbsJsonLd([
           ...(category ? [{ name: category.name, path: `/category/${category.slug}` }] : []),
           { name: product.name, path: `/product/${product.slug}` },
         ])}

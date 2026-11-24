@@ -6,30 +6,32 @@ import { useEffect, useState } from "react";
 // Built by hand from en-GB parts: Georgian month names and a 24-hour clock look the same on the server
 // and in every browser (ka-GE support varies, and a mismatch breaks hydration).
 const MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი", "ივლისი", "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
-const partsFormat = new Intl.DateTimeFormat("en-GB", {
+const tbilisiFormat = new Intl.DateTimeFormat("en-GB", {
   year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "Asia/Tbilisi",
 });
-function parts(date: Date | number) {
-  const get = (type: string) => partsFormat.formatToParts(date).find((part) => part.type === type)?.value ?? "";
+function tbilisiParts(date: Date | number) {
+  const get = (type: string) => tbilisiFormat.formatToParts(date).find((part) => part.type === type)?.value ?? "";
   return { year: get("year"), month: Number(get("month")), day: Number(get("day")), time: `${get("hour")}:${get("minute")}` };
 }
-const clock = { format: (date: Date) => parts(date).time };
-const exact = {
-  format: (date: Date) => {
-    const p = parts(date);
-    return `${p.day} ${MONTHS[p.month - 1]} ${p.year}, ${p.time}`;
-  },
+const formatTime = (date: Date) => tbilisiParts(date).time;
+const formatFullDate = (date: Date) => {
+  const { day, month, year, time } = tbilisiParts(date);
+  return `${day} ${MONTHS[month - 1]} ${year}, ${time}`;
 };
-const day = { format: (date: Date | number) => { const p = parts(date); return `${p.year}-${p.month}-${p.day}`; } };
+// The same text for two moments on the same Tbilisi calendar day.
+const dayKey = (date: Date | number) => {
+  const { day, month, year } = tbilisiParts(date);
+  return `${year}-${month}-${day}`;
+};
 
-function ago(date: Date, now: number) {
+function timeAgo(date: Date, now: number) {
   const minutes = Math.floor((now - date.getTime()) / 60000);
   if (minutes < 1) return "ახლახან";
   if (minutes < 60) return `${minutes} წთ წინ`;
-  if (day.format(date) === day.format(now)) return `დღეს, ${clock.format(date)}`;
-  if (day.format(date) === day.format(now - 86400000)) return `გუშინ, ${clock.format(date)}`;
+  if (dayKey(date) === dayKey(now)) return `დღეს, ${formatTime(date)}`;
+  if (dayKey(date) === dayKey(now - 86400000)) return `გუშინ, ${formatTime(date)}`;
   const days = Math.floor(minutes / 1440);
-  return days < 7 ? `${days} დღის წინ` : exact.format(date);
+  return days < 7 ? `${days} დღის წინ` : formatFullDate(date);
 }
 
 export function OrderTime({ value, className = "" }: { value: string; className?: string }) {
@@ -42,11 +44,11 @@ export function OrderTime({ value, className = "" }: { value: string; className?
     return () => window.clearInterval(timer);
   }, []);
 
-  const fresh = now !== null && now - date.getTime() < 3600000;
+  const isRecent = now !== null && now - date.getTime() < 3600000;
   return (
-    <time dateTime={value} title={exact.format(date)} className={`block leading-tight ${className}`}>
-      <span className={`block font-medium ${fresh ? "text-[#5fe0a0]" : "text-a-text"}`}>{now === null ? clock.format(date) : ago(date, now)}</span>
-      <span className="block text-xs text-a-muted">{exact.format(date)}</span>
+    <time dateTime={value} title={formatFullDate(date)} className={`block leading-tight ${className}`}>
+      <span className={`block font-medium ${isRecent ? "text-[#5fe0a0]" : "text-a-text"}`}>{now === null ? formatTime(date) : timeAgo(date, now)}</span>
+      <span className="block text-xs text-a-muted">{formatFullDate(date)}</span>
     </time>
   );
 }

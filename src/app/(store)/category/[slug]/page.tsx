@@ -8,7 +8,7 @@ import { ListingHeader } from "@/components/listing-header";
 import { ProductGrid } from "@/components/product-grid";
 import { moreButton } from "@/components/styles";
 import { getCategories, getProducts, PAGE_SIZE } from "@/lib/catalog";
-import { absolute, breadcrumbs, clip } from "@/lib/seo";
+import { absoluteUrl, breadcrumbsJsonLd, clipText } from "@/lib/seo";
 import { isLiveSite, site } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!category) return {};
   // Kept out of search while empty, so Google does not count a page with no products.
   const { total } = await getProducts({ categoryId: category.id });
-  const description = clip(category.description || `${category.name}: ფასები, მარაგი და მიწოდება თბილისში, გადახდა მიღებისას. ${site.name}.`);
+  const description = clipText(category.description || `${category.name}: ფასები, მარაგი და მიწოდება თბილისში, გადახდა მიღებისას. ${site.name}.`);
   return {
     title: category.name,
     description,
@@ -44,7 +44,7 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <>
-      <JsonLd data={breadcrumbs([{ name: category.name, path: `/category/${category.slug}` }])} />
+      <JsonLd data={breadcrumbsJsonLd([{ name: category.name, path: `/category/${category.slug}` }])} />
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -53,7 +53,7 @@ export default async function CategoryPage({ params }: Props) {
           itemListElement: products.map((product, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            url: absolute(`/product/${product.slug}`),
+            url: absoluteUrl(`/product/${product.slug}`),
             name: product.name,
           })),
         }}

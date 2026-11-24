@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { isDemo } from "./demo";
 import { demoClient } from "./demo-data";
 import { env } from "./env";
-import type { Category, Product, ProductCard, PromotionSlide } from "./types";
+import type { Category, Product, ProductSummary, PromotionSlide } from "./types";
 
 export const CATALOG_TAG = "catalog";
 export const PAGE_SIZE = 40;
@@ -27,7 +27,7 @@ const cached = isDemo
     });
 
 // For free-text search and the cart, which must not fill the cache or show old stock.
-export const live = isDemo ? (demoClient as never) : createClient(url, anonKey, { auth });
+const uncachedClient = isDemo ? (demoClient as never) : createClient(url, anonKey, { auth });
 
 export type Sort = "newest" | "price_asc" | "price_desc";
 
@@ -47,9 +47,9 @@ export async function getCategories(): Promise<Category[]> {
   return data;
 }
 
-export async function getProducts(query: ProductQuery = {}): Promise<{ products: ProductCard[]; total: number }> {
+export async function getProducts(query: ProductQuery = {}): Promise<{ products: ProductSummary[]; total: number }> {
   const page = query.page ?? 1;
-  const client = query.q ? live : cached;
+  const client = query.q ? uncachedClient : cached;
   let request = client.from("products").select(CARD_COLUMNS, { count: "exact" }).eq("active", true);
 
   if (query.sale) request = request.not("sale_price", "is", null);
@@ -66,7 +66,7 @@ export async function getProducts(query: ProductQuery = {}): Promise<{ products:
     .order("id")
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   if (error) throw new Error(error.message);
-  return { products: data as ProductCard[], total: count ?? 0 };
+  return { products: data as ProductSummary[], total: count ?? 0 };
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -82,11 +82,11 @@ export async function getProductSlugs(): Promise<string[]> {
   return data.map((row) => row.slug);
 }
 
-export async function getProductsByIds(ids: string[]): Promise<ProductCard[]> {
+export async function getProductsByIds(ids: string[]): Promise<ProductSummary[]> {
   if (ids.length === 0) return [];
-  const { data, error } = await live.from("products").select(CARD_COLUMNS).in("id", ids).eq("active", true);
+  const { data, error } = await uncachedClient.from("products").select(CARD_COLUMNS).in("id", ids).eq("active", true);
   if (error) throw new Error(error.message);
-  return data as ProductCard[];
+  return data as ProductSummary[];
 }
 
 export type SitemapProduct = { slug: string; updated_at: string; images: string[]; category_id: string | null };
@@ -129,15 +129,15 @@ export async function getPromotionSlides(): Promise<PromotionSlide[]> {
   });
 }
 
-async function getCachedProductsByIds(ids: string[]): Promise<ProductCard[]> {
+async function getCachedProductsByIds(ids: string[]): Promise<ProductSummary[]> {
   if (ids.length === 0) return [];
   const { data, error } = await cached.from("products").select(CARD_COLUMNS).in("id", ids).eq("active", true);
   if (error) throw new Error(error.message);
-  return data as ProductCard[];
+  return data as ProductSummary[];
 }
 
 // Best sellers of the last 90 days, topped up with the newest products while sales are few.
-export async function getPopularProducts(limit: number): Promise<{ products: ProductCard[]; popularIds: Set<string> }> {
+export async function getPopularProducts(limit: number): Promise<{ products: ProductSummary[]; popularIds: Set<string> }> {
   const { data, error } = await cached.rpc("popular_product_ids", { p_limit: limit });
   if (error) console.error("popular_product_ids", error.message);
   const ids = (error ? [] : (data ?? [])) as string[];

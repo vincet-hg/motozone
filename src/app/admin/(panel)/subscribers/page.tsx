@@ -4,7 +4,7 @@ import { deleteSubscriber } from "../../actions";
 import { ConfirmButton } from "../../ui";
 import { formatDate } from "../orders/status";
 
-export default async function SubscribersPage() {
+export default async function AdminSubscribersPage() {
   const supabase = await requireAdmin();
   const { data } = await supabase.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }).limit(5000);
   const subscribers = (data ?? []) as Subscriber[];

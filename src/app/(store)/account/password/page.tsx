@@ -4,7 +4,7 @@ import { PasswordForm } from "./password-form";
 
 export const metadata: Metadata = { title: "პაროლის შეცვლა", robots: { index: false, follow: false } };
 
-export default async function PasswordPage() {
+export default async function AccountPasswordPage() {
   await requireCustomer("/account/password");
   return (
     <section aria-labelledby="password-title" className="mx-auto max-w-xl rounded-card border border-line bg-card p-5 sm:p-6">

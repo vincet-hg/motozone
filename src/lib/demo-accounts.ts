@@ -7,7 +7,7 @@ import type { AdminUser, Profile } from "./types";
 // Local demo mode only: customer accounts, details and wishlists in .demo-data/accounts.json,
 // standing in for Supabase Auth and the profiles and wishlist_items tables.
 
-export const DEMO_CUSTOMER_COOKIE = "motozone-demo-customer";
+export const DEMO_CUSTOMER_COOKIE = "scooterland-demo-customer";
 // The one code the demo accepts for SMS and email codes; a real project sends a fresh one each time.
 export const DEMO_PHONE_CODE = "123456";
 

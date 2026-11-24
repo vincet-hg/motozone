@@ -39,8 +39,8 @@ export function Toaster() {
   useEffect(() => {
     const add = (event: Event) => {
       const item = (event as CustomEvent<Toast>).detail;
-      setToasts((list) => [...list.filter((t) => t.message !== item.message).slice(-3), item]);
-      window.setTimeout(() => setToasts((list) => list.filter((t) => t.id !== item.id)), item.kind === "success" ? 4500 : 7000);
+      setToasts((list) => [...list.filter((shown) => shown.message !== item.message).slice(-3), item]);
+      window.setTimeout(() => setToasts((list) => list.filter((shown) => shown.id !== item.id)), item.kind === "success" ? 4500 : 7000);
     };
     window.addEventListener(EVENT, add);
     return () => window.removeEventListener(EVENT, add);
@@ -61,7 +61,7 @@ export function Toaster() {
           <button
             type="button"
             aria-label="დახურვა"
-            onClick={() => setToasts((list) => list.filter((t) => t.id !== item.id))}
+            onClick={() => setToasts((list) => list.filter((shown) => shown.id !== item.id))}
             className="-mt-1 -mr-1 shrink-0 cursor-pointer rounded-lg px-2 py-1 text-[#a1a1aa] transition-colors hover:text-white"
           >
             ×

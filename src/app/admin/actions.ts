@@ -9,7 +9,7 @@ import { demoSignIn } from "@/lib/demo-accounts";
 import { DEMO_EMAIL, DEMO_PASSWORD } from "@/lib/demo-data";
 import { slugify } from "@/lib/format";
 import { costChangeNotice } from "@/lib/margin";
-import { allow, clientIp } from "@/lib/request-guard";
+import { isWithinRateLimit, getClientIp } from "@/lib/rate-limit";
 import { createAdminClient, requireAdmin, requirePasswordSession } from "@/lib/supabase-server";
 import type { Spec } from "@/lib/types";
 
@@ -83,8 +83,8 @@ async function uniqueSlug(supabase: Admin, table: "products" | "categories", nam
 
 export async function login(_previous: FormState, form: FormData): Promise<FormState> {
   // Supabase limits sign-ins too. This stops password guessing earlier, per address and per account.
-  const ip = await clientIp();
-  if (!isDemo && (!(await allow("login-ip", ip, 20, 900)) || !(await allow("login-email", text(form, "email"), 8, 900)))) {
+  const ip = await getClientIp();
+  if (!isDemo && (!(await isWithinRateLimit("login-ip", ip, 20, 900)) || !(await isWithinRateLimit("login-email", text(form, "email"), 8, 900)))) {
     return { error: "ძალიან ბევრი მცდელობაა. სცადე 15 წუთში." };
   }
 
@@ -134,7 +134,7 @@ export async function startMfaSetup(): Promise<MfaSetup> {
 
 export async function verifyMfa(_previous: FormState, form: FormData): Promise<FormState> {
   const { supabase, user } = await requirePasswordSession();
-  if (!(await allow("mfa", user.id, 10, 900))) return { error: "ძალიან ბევრი მცდელობაა. სცადე 15 წუთში." };
+  if (!(await isWithinRateLimit("mfa", user.id, 10, 900))) return { error: "ძალიან ბევრი მცდელობაა. სცადე 15 წუთში." };
 
   const code = text(form, "code").replace(/\s/g, "");
   if (!/^\d{6}$/.test(code)) return { error: "შეიყვანე 6-ნიშნა კოდი." };

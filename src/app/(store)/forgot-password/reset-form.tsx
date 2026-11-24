@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import { useActionState, useState } from "react";
 import { useFormToast } from "@/components/toaster";
 import { authButton, authError, authInfo, authInput } from "@/components/auth-styles";
@@ -20,7 +20,7 @@ export function ResetForm() {
 
   if (step === "code") {
     return (
-      <form action={resetAction} onSubmit={keepValues(resetAction)} className="space-y-3">
+      <form action={resetAction} onSubmit={keepFormValues(resetAction)} className="space-y-3">
         <input type="hidden" name="email" value={email} />
         {sent.info && !reset.error && <p role="status" className={authInfo}>{sent.info}</p>}
         <label className="block text-sm">
@@ -55,7 +55,7 @@ export function ResetForm() {
   }
 
   return (
-    <form action={sendAction} onSubmit={keepValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
+    <form action={sendAction} onSubmit={keepFormValues((form) => { setRestart(0); sendAction(form); })} className="space-y-3">
       <label className="block text-sm">
         ელფოსტა
         <input name="email" type="email" required autoComplete="email" defaultValue={email} className={`${authInput} mt-1.5`} />

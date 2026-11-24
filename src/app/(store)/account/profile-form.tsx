@@ -1,6 +1,6 @@
 "use client";
 
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import { useActionState, useEffect } from "react";
 import { useFormToast } from "@/components/toaster";
 import { refreshAccount } from "@/lib/account-state";
@@ -17,7 +17,7 @@ export function ProfileForm({ profile }: { profile: Profile }) {
     if (state.info) refreshAccount();
   }, [state]);
   return (
-    <form action={action} onSubmit={keepValues(action)} className="mt-4 space-y-3">
+    <form action={action} onSubmit={keepFormValues(action)} className="mt-4 space-y-3">
       <label className="block text-sm">
         სახელი და გვარი
         <input name="name" defaultValue={profile.name} maxLength={100} autoComplete="name" className={`${authInput} mt-1.5`} />

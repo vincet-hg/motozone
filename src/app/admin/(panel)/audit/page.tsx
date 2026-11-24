@@ -68,7 +68,7 @@ function link(entry: AuditEntry) {
   return null;
 }
 
-export default async function AuditPage() {
+export default async function AdminAuditPage() {
   const supabase = await requireAdmin();
   const { data } = await supabase.from("audit_log").select("*").order("at", { ascending: false }).limit(300);
   const entries = (data ?? []) as AuditEntry[];

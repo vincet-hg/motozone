@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/supabase-server";
 import type { Category } from "@/lib/types";
 import { ProductForm } from "../product-form";
 
-export default async function NewProductPage() {
+export default async function AdminNewProductPage() {
   const supabase = await requireAdmin();
   const { data } = await supabase.from("categories").select("*").order("position");
 

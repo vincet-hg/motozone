@@ -39,32 +39,32 @@ export function Carousel({ children, label, itemClassName = PRODUCT_WIDTHS }: { 
   const items = Children.toArray(children);
 
   const measure = useCallback(() => {
-    const el = track.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setEdges({ start: el.scrollLeft <= 4, end: el.scrollLeft >= max - 4 });
-    const pages = Math.max(1, Math.ceil(el.scrollWidth / el.clientWidth - 0.05));
-    setPage({ index: max <= 0 ? 0 : Math.round((el.scrollLeft / max) * (pages - 1)), count: pages });
+    const strip = track.current;
+    if (!strip) return;
+    const max = strip.scrollWidth - strip.clientWidth;
+    setEdges({ start: strip.scrollLeft <= 4, end: strip.scrollLeft >= max - 4 });
+    const pages = Math.max(1, Math.ceil(strip.scrollWidth / strip.clientWidth - 0.05));
+    setPage({ index: max <= 0 ? 0 : Math.round((strip.scrollLeft / max) * (pages - 1)), count: pages });
   }, []);
 
   // Glides to a position with an ease-in-out curve. Snapping is switched off while it moves,
   // otherwise the browser pulls the row back to a card edge mid-way.
   const animation = useRef(0);
   const glide = useCallback((target: number, duration: number) => {
-    const el = track.current;
-    if (!el) return;
+    const strip = track.current;
+    if (!strip) return;
     cancelAnimationFrame(animation.current);
-    const from = el.scrollLeft;
+    const from = strip.scrollLeft;
     const distance = target - from;
     if (Math.abs(distance) < 1) return;
     const started = performance.now();
-    el.style.scrollSnapType = "none";
-    const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    strip.style.scrollSnapType = "none";
+    const easeInOut = (share: number) => (share < 0.5 ? 4 * share * share * share : 1 - Math.pow(-2 * share + 2, 3) / 2);
     const frame = (now: number) => {
-      const t = Math.min(1, (now - started) / duration);
-      el.scrollLeft = from + distance * ease(t);
-      if (t < 1) animation.current = requestAnimationFrame(frame);
-      else el.style.scrollSnapType = "";
+      const progress = Math.min(1, (now - started) / duration);
+      strip.scrollLeft = from + distance * easeInOut(progress);
+      if (progress < 1) animation.current = requestAnimationFrame(frame);
+      else strip.style.scrollSnapType = "";
     };
     animation.current = requestAnimationFrame(frame);
   }, []);
@@ -72,15 +72,15 @@ export function Carousel({ children, label, itemClassName = PRODUCT_WIDTHS }: { 
   // One card forward or back; past the end it glides back to the first card.
   const step = useCallback(
     (direction: 1 | -1) => {
-      const el = track.current;
-      if (!el) return;
-      const card = el.firstElementChild as HTMLElement | null;
-      const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-      const width = (card?.offsetWidth ?? el.clientWidth) + gap;
-      const max = el.scrollWidth - el.clientWidth;
-      const current = Math.round(el.scrollLeft / width) * width;
-      if (direction === 1 && el.scrollLeft >= max - 4) glide(0, 1100);
-      else if (direction === -1 && el.scrollLeft <= 4) glide(max, 1100);
+      const strip = track.current;
+      if (!strip) return;
+      const card = strip.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(strip).columnGap) || 0;
+      const width = (card?.offsetWidth ?? strip.clientWidth) + gap;
+      const max = strip.scrollWidth - strip.clientWidth;
+      const current = Math.round(strip.scrollLeft / width) * width;
+      if (direction === 1 && strip.scrollLeft >= max - 4) glide(0, 1100);
+      else if (direction === -1 && strip.scrollLeft <= 4) glide(max, 1100);
       else glide(Math.min(max, Math.max(0, current + direction * width)), 750);
     },
     [glide],
@@ -95,10 +95,10 @@ export function Carousel({ children, label, itemClassName = PRODUCT_WIDTHS }: { 
 
   useEffect(() => {
     measure();
-    const el = track.current;
-    if (!el) return;
+    const strip = track.current;
+    if (!strip) return;
     const observer = new ResizeObserver(measure);
-    observer.observe(el);
+    observer.observe(strip);
     return () => observer.disconnect();
   }, [measure]);
 
@@ -106,10 +106,10 @@ export function Carousel({ children, label, itemClassName = PRODUCT_WIDTHS }: { 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => {
       if (document.hidden || Date.now() < pausedUntil.current) return;
-      const el = track.current;
-      if (!el || el.scrollWidth <= el.clientWidth + 4) return;
+      const strip = track.current;
+      if (!strip || strip.scrollWidth <= strip.clientWidth + 4) return;
       // Only move while the row is on screen.
-      const box = el.getBoundingClientRect();
+      const box = strip.getBoundingClientRect();
       if (box.bottom < 0 || box.top > window.innerHeight) return;
       step(1);
     }, INTERVAL);

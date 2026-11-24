@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { isDemo } from "@/lib/demo";
 import { imageUrl } from "@/lib/format";
-import { keepValues } from "@/lib/keep-values";
+import { keepFormValues } from "@/lib/keep-form-values";
 import type { Category, Product } from "@/lib/types";
 import { saveProduct, type FormState } from "../../actions";
 
@@ -83,13 +83,13 @@ function ImageManager({ initial }: { initial: string[] }) {
             <img src={imageUrl(path)} alt="" className={`size-24 rounded-lg border-2 object-contain bg-white ${index === 0 ? "border-a-violet" : "border-a-line"}`} />
             <div className="mt-1 flex justify-between text-xs">
               {index > 0 ? (
-                <button type="button" className="underline" onClick={() => setImages([path, ...images.filter((p) => p !== path)])}>
+                <button type="button" className="underline" onClick={() => setImages([path, ...images.filter((other) => other !== path)])}>
                   მთავარი
                 </button>
               ) : (
                 <span />
               )}
-              <button type="button" className="text-[#ff6b77] underline" onClick={() => setImages(images.filter((p) => p !== path))}>
+              <button type="button" className="text-[#ff6b77] underline" onClick={() => setImages(images.filter((other) => other !== path))}>
                 წაშლა
               </button>
             </div>
@@ -111,7 +111,7 @@ export function ProductForm({ product, categories }: { product?: Product; catego
   const [state, action, pending] = useActionState<FormState, FormData>(saveProduct, {});
 
   return (
-    <form action={action} onSubmit={keepValues(action)} className="max-w-3xl space-y-4 rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
+    <form action={action} onSubmit={keepFormValues(action)} className="max-w-3xl space-y-4 rounded-2xl border border-a-line bg-a-card p-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.8)]">
       {product && <input type="hidden" name="id" value={product.id} />}
       <label className="block text-sm font-medium text-a-soft">
         სახელი

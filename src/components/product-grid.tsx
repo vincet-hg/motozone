@@ -1,4 +1,4 @@
-import type { ProductCard as Card } from "@/lib/types";
+import type { ProductSummary } from "@/lib/types";
 import { type CardBadge, ProductCard } from "./product-card";
 
 // Set `heroAbove` where a banner photo is the page's main image, so cards do not compete with it.
@@ -7,7 +7,7 @@ export function ProductGrid({
   heroAbove = false,
   badgeFor,
 }: {
-  products: Card[];
+  products: ProductSummary[];
   heroAbove?: boolean;
   badgeFor?: (id: string) => CardBadge | undefined;
 }) {
